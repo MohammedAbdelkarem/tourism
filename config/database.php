@@ -62,6 +62,14 @@ return [
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
+        'backup' => [
+            'driver' => 'mysql',
+            'host' => env('BACKUP_DB_HOST' , '127.0.0.1'),
+            'database' => env('BACKUP_DB' , 'backup'),
+            'username' => env('BACKUP_DB_USERNAME' , 'root'),
+            'password' => env('BACKUP_DB_PASSWORD' , ''),
+            // other configuration options
+        ],
 
         'pgsql' => [
             'driver' => 'pgsql',
