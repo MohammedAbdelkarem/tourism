@@ -58,10 +58,11 @@ class UserController extends Controller
                         'photo' => $request->file('photo')->store('users'),
                     ]
                 ));
-        return response()->json([
-            'message' => 'User successfully registered',
-            'user' => $user
-        ], 201);
+        // return response()->json([
+        //     'message' => 'User successfully registered',
+        //     'user' => $user
+        // ], 201);
+        return $this->SendResponse(response::HTTP_CREATED , 'User successfully registered' );
     }
 
     /**
@@ -78,9 +79,9 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function refresh() {
-        return $this->createNewToken(auth()->refresh());
-    }
+    // public function refresh() {
+    //     return $this->createNewToken(auth()->refresh());
+    // }
     /**
      * Get the authenticated User.
      *
@@ -102,6 +103,11 @@ class UserController extends Controller
         //     'user' => auth()->user()
         // ]);
         return $this->SendResponse(response::HTTP_OK , 'logged in successfully' ,['token' => $token]);
+    }
+    public function softDelete()
+    { $user = auth()->guard('user')->user();
+        $user->delete();
+        return response()->json(['message' => 'User successfully deleted']);
     }
 }
 

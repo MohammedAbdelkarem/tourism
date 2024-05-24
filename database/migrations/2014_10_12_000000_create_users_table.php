@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('photo');
             $table->string('phone')->unique();
             $table->integer('wallet')->default(0);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

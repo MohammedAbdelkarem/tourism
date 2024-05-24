@@ -36,5 +36,6 @@ Route::group([
     Route::post('/register', [UserController::class, 'register']);
     Route::post('/logout', [UserController::class, 'logout']);
     Route::post('/refresh', [UserController::class, 'refresh']);
-    Route::get('/user-profile', [UserController::class, 'userProfile']);    
+    Route::get('/user-profile', [UserController::class, 'userProfile']); 
+    Route::delete('/softDelete', [UserController::class, 'softDelete']);   
 });
