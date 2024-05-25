@@ -9,9 +9,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class AdminLoginRequest extends FormRequest
+class PasswordRequest extends FormRequest
 {
-
     use ResponseTrait;
     /**
      * Determine if the user is authorized to make this request.
@@ -29,7 +28,6 @@ class AdminLoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email',
             'password' => 'required|string|min:6',
         ];
     }
