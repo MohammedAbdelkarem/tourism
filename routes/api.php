@@ -3,6 +3,8 @@
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -17,7 +19,7 @@ use App\Http\Controllers\AuthController;
 
 Route::post('auth/check' , [AuthController::class , 'checkCode']);
 
-//Admin Auth Routes
+//Admin Auth
 
 Route::group(['prefix' => 'auth/admin'], function () {
     Route::post('send' , [AdminController::class , 'sendCode']);
@@ -30,7 +32,13 @@ Route::group([
     'middleware' => ['DbBackup'],
     'prefix' => 'auth/admin'
 ], function ($router) {
-    Route::post('/logout', [AdminController::class, 'logout']);
+    Route::post('/logout', [AadminController::class, 'logout']);
     Route::post('/refresh', [AdminController::class, 'refresh']);
     Route::get('/user-profile', [AdminController::class, 'userProfile']); 
+});
+
+//User Auth
+Route::group(['prefix' => 'auth/user'], function () {
+    Route::post('send' , [UserController::class , 'sendCode']);
+    Route::post('register' , [UserController::class , 'register']);
 });

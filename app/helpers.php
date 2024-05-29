@@ -71,3 +71,18 @@ if(!function_exists('admin_email'))
         return Cache::get('admin_email');
     }
 }
+if(!function_exists('user_email'))
+{
+    function user_email()
+    {
+        return Cache::get('user_email');
+    }
+}
+if(!function_exists('create_token'))
+{
+    function create_token(array $data)
+    {
+        $token = auth()->attempt($data);
+        return $token;
+    }
+}
