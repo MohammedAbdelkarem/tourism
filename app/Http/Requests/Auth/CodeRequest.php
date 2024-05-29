@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Auth;
 
 use App\Traits\ResponseTrait;
 use Illuminate\Foundation\Http\FormRequest;
@@ -8,8 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 // use Illuminate\Support\Facades\Validator;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
-
-class EmailRequest extends FormRequest
+class CodeRequest extends FormRequest
 {
     use ResponseTrait;
     /**
@@ -28,7 +27,7 @@ class EmailRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email'
+            'code' => 'required|min:6'
         ];
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Auth\Admin;
 
 use App\Traits\ResponseTrait;
 use Illuminate\Foundation\Http\FormRequest;
@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class PasswordRequest extends FormRequest
+class EmailRequest extends FormRequest
 {
     use ResponseTrait;
     /**
@@ -28,7 +28,7 @@ class PasswordRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'password' => 'required|string|min:6',
+            'email' => 'required|email'
         ];
     }
 

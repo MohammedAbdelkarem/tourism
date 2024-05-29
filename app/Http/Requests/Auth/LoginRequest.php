@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Auth;
 
 use App\Traits\ResponseTrait;
 use Illuminate\Foundation\Http\FormRequest;
@@ -8,9 +8,8 @@ use Symfony\Component\HttpFoundation\Response;
 // use Illuminate\Support\Facades\Validator;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
-class CodeRequest extends FormRequest
+class LoginRequest extends FormRequest
 {
-    use ResponseTrait;
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -27,7 +26,8 @@ class CodeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'code' => 'required|min:6'
+            'email' => 'required|email',
+            'password' => 'required|string|min:6',
         ];
     }
 

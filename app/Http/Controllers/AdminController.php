@@ -5,9 +5,9 @@ use App\Models\Admin;
 use App\Event\SendEmailEvent;
 use App\Traits\ResponseTrait;
 use Illuminate\Support\Facades\Cache;
-use App\Http\Requests\PasswordRequest;
-use App\Http\Requests\AdminLoginRequest;
+use App\Http\Requests\Auth\PasswordRequest;
 use Symfony\Component\HttpFoundation\Response;
+use App\Http\Requests\Auth\LoginRequest;
 
 class AdminController extends Controller
 {
@@ -17,7 +17,7 @@ class AdminController extends Controller
     {
         // $this->middleware('auth:admin', ['except' => ['login', 'register' , 'sendCode']]);
     }
-    public function login(AdminLoginRequest $request)
+    public function login(LoginRequest $request)
     {
         if (! $token = auth()->attempt($request->only('email' , 'password')))
         {

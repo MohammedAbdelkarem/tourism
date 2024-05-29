@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Traits\ResponseTrait;
-use App\Http\Requests\CodeRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
+use App\Http\Requests\Auth\CodeRequest;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
