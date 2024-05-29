@@ -78,11 +78,4 @@ if(!function_exists('user_email'))
         return Cache::get('user_email');
     }
 }
-if(!function_exists('create_token'))
-{
-    function create_token(array $data)
-    {
-        $token = auth()->attempt($data);
-        return $token;
-    }
-}
+

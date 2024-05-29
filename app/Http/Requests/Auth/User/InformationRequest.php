@@ -31,7 +31,7 @@ class InformationRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'mobile' => ['required'  , 'unique:users,phone' , 'phone:AUTO'],
+            'phone' => ['required'  , 'unique:users,phone' , 'phone:AUTO'],
             'password' => [
                 'required' ,
                 'confirmed' ,

@@ -62,16 +62,11 @@ class UserController extends Controller
     {
         $validatedData = $request->validated();
 
-        $email = user_email();
+        hashing_password($validatedData()->password);
+        
+        User::where('email' , user_email())->update($validatedData);
 
-        $token_data['email'] = $email;
-        $token_data['password'] = $validatedData;
-
-        $token = create_token($token_data);
-
-        // User::where('email' , user_email())->update($validatedData);
-
-        return $this->SendResponse(response::HTTP_CREATED , 'registered successfully' , ['token' => $token]);
+        return $this->SendResponse(response::HTTP_CREATED , 'user registered successfully');
     }
 
     public function updateProfile(Request $request)
