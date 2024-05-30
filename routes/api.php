@@ -32,7 +32,7 @@ Route::group([
     'middleware' => ['DbBackup'],
     'prefix' => 'auth/admin'
 ], function ($router) {
-    Route::post('/logout', [AadminController::class, 'logout']);
+    Route::post('/logout', [AdminController::class, 'logout']);
     Route::post('/refresh', [AdminController::class, 'refresh']);
     Route::get('/user-profile', [AdminController::class, 'userProfile']); 
 });
