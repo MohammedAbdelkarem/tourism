@@ -37,6 +37,11 @@ class Admin extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function scopeadminEmail($query)
+    {
+        return $query->where('email' , admin_email());
+    }
     
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.

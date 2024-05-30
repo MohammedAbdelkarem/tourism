@@ -17,15 +17,26 @@ use App\Models\User;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+//general routes
+
+Route::post('auth/check' , [AuthController::class , 'checkCode']);
+
+//Admin Auth
+
+Route::group(['prefix' => 'auth/admin'], function () {
+    Route::post('send' , [AdminController::class , 'sendCode']);
+    Route::post('register' , [AdminController::class , 'register']);
+    Route::post('login' , [AdminController::class , 'login']);
+    Route::post('reset' , [AdminController::class , 'resetPassword']);
+});
+
 Route::group([
     'middleware' => ['DbBackup'],
     'prefix' => 'auth/admin'
 ], function ($router) {
-    Route::post('/login', [AdminController::class, 'login']);
-    Route::post('/register', [AdminController::class, 'register']);
     Route::post('/logout', [AdminController::class, 'logout']);
     Route::post('/refresh', [AdminController::class, 'refresh']);
-    Route::get('/user-profile', [AdminController::class, 'userProfile']);    
+    Route::get('/user-profile', [AdminController::class, 'userProfile']); 
 });
 
 Route::group([
