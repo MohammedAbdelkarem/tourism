@@ -38,7 +38,7 @@ class User extends Authenticatable implements JWTSubject
         'password' => 'hashed',
     ];
 
-    public function scopeuserEmail($query)
+    public function scopeUserEmail($query)
     {
         return $query->where('email' , user_email());
     }

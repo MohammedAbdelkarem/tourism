@@ -13,10 +13,6 @@ class AdminController extends Controller
 {
 
     use ResponseTrait;
-    public function __construct()
-    {
-        $this->middleware('auth:admin', ['except' => ['login', 'register' , 'sendCode']]);
-    }
     public function login(LoginRequest $request)
     {
         if (! $token = auth()->attempt($request->only('email' , 'password')))

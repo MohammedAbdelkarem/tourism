@@ -9,20 +9,16 @@ use App\Traits\ResponseTrait;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\PasswordRequest;
 use App\Http\Requests\Auth\User\EmailRequest;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Auth\User\EditInfoRequest;
 use App\Http\Requests\Auth\User\InformationRequest;
-
+use App\Http\Resources\User\ProfileResource;
 
 class UserController extends Controller
 {
     use ResponseTrait;
-
-    public function __construct()
-    {
-        $this->middleware('auth:user', ['except' => ['login', 'register' , 'sendCode']]);
-    }
     
     public function sendCode(EmailRequest $request)
     {
@@ -101,24 +97,30 @@ class UserController extends Controller
 
     public function logout()
     {
-        /**
-         * the logout logic from admin controller
-         * 
-         * response
-         */
+        auth()->guard('user')->logout();
+        
+        return $this->SendResponse(response::HTTP_OK , 'logged out successfully');
     }
 
-    public function resetPassword(Request $request)
+    public function resetPassword(PasswordRequest $request)
     {
-        /**
-         * the same logic in the admin
-         */
+        $password = $request->validated()['password'];
+
+        hashing_password($password);
+
+        User::userEmail()->update([
+            'password' => $password
+        ]);
+
+        return $this->SendResponse(response::HTTP_OK , 'password updated successfully');
     }
 
     public function profile()
     {
-        /**
-         * return the user information
-         */
+        $data = auth()->guard('user')->user();
+
+        $data = new ProfileResource($data);
+        
+        return $this->SendResponse(response::HTTP_OK , 'user profile data retrieved successfully' , $data);
     }
 }

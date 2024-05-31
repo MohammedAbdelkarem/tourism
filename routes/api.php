@@ -50,6 +50,7 @@ Route::group(['prefix' => 'user'], function () {
         Route::post('send' , [UserController::class , 'sendCode']);
         Route::post('register' , [UserController::class , 'register']);
         Route::post('login' , [UserController::class , 'login']);
+        Route::post('reset' , [UserController::class , 'resetPassword']);
     });
 
 });
@@ -60,5 +61,7 @@ Route::group(['prefix' => 'user' , 'middleware' => ['auth:user']] , function(){
     
     Route::group(['prefix' => 'auth'], function () {
         Route::post('edit', [UserController::class, 'updateProfile']);
+        Route::post('logout', [UserController::class, 'logout']);
+        Route::get('profile', [UserController::class, 'profile']);
     });
 });
