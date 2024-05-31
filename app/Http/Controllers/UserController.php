@@ -3,111 +3,121 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Admin;
 use App\Traits\ResponseTrait;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\User\EmailRequest;
 use Symfony\Component\HttpFoundation\Response;
+use App\Http\Requests\Auth\User\EditInfoRequest;
+use App\Http\Requests\Auth\User\InformationRequest;
+
 
 class UserController extends Controller
 {
 
     use ResponseTrait;
-    /**
-     * Create a new AuthController instance.
-     *
-     * @return void
-     */
-    public function __construct() {
-        $this->middleware('auth:user', ['except' => ['login', 'register']]);
+
+    public function __construct()
+    {
+        $this->middleware('auth:user', ['except' => ['login', 'register' , 'sendCode']]);
     }
-    public function login(Request $request){
-    	$validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'password' => 'required|string|min:6',
+    
+    public function sendCode(EmailRequest $request)
+    {
+        
+        /**
+         * validation: check if the email is not in the database , or : in the database and deleted at is not null
+         * 
+         * send the verification code via the email
+         * 
+         * store the code in the cache for one hour , also the email
+         * 
+         * response
+         */
+
+        $email = $request->validated()['email'];
+
+        $exists = DB::table('users')
+                    ->where('email', $email)
+                    ->exists();
+
+        $code = RandomCode();
+
+        Cache::forever('user_email' , $email);
+        Cache::put('code' , $code , now()->addHour());
+
+        event(new SendEmailEvent($email , $code));
+
+        if($exists)
+        {
+        User::where('email' , $email)->update([
+            'active' => 'active'
         ]);
-        if ($validator->fails()) {
-            // return response()->json($validator->errors(), 422);
-            return $this->SendResponse(response::HTTP_UNPROCESSABLE_ENTITY , $validator->errors());
         }
-        if (! $token = auth()->guard('user')->attempt($validator->validated())) {
-            // return response()->json(['error' => 'Unauthorized'], 401);
-            return $this->SendResponse(response::HTTP_UNAUTHORIZED , 'wrong email or password');
+        else
+        {
+        User::create([
+            'email' => $email
+            ]);
         }
-        return $this->createNewToken($token);
-    }
-    /**
-     * Register a User.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function register(Request $request) {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|between:2,100',
-            'email' => 'required|string|email|max:100|unique:users',
-            'password' => 'required|string|min:6',
-            'photo' => 'required|image|mimes:jpg,png,jpeg',
-            'phone' => 'required|string|max:17',
-        ]);
-        if($validator->fails()){
-            return response()->json($validator->errors()->toJson(), 400);
-        }
-        $user = User::create(array_merge(
-                    $validator->validated(),
-                    [
-                        'password' => bcrypt($request->password),
-                        'photo' => $request->file('photo')->store('users'),
-                    ]
-                ));
-        // return response()->json([
-        //     'message' => 'User successfully registered',
-        //     'user' => $user
-        // ], 201);
-        return $this->SendResponse(response::HTTP_CREATED , 'User successfully registered' );
+        return $this->SendResponse(response::HTTP_OK , 'email sended successfully');
     }
 
-    /**
-     * Log the user out (Invalidate the token).
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function logout() {
-        auth()->guard('user')->logout();
-        return response()->json(['message' => 'User successfully signed out']);
+    public function register(InformationRequest $request)
+    {
+        $validatedData = $request->validated();
+
+        hashing_data($validatedData);
+        
+        User::where('email' , user_email())->update($validatedData);
+
+        return $this->SendResponse(response::HTTP_CREATED , 'user registered successfully');
     }
-    /**
-     * Refresh a token.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    // public function refresh() {
-    //     return $this->createNewToken(auth()->refresh());
-    // }
-    /**
-     * Get the authenticated User.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function userProfile() {
-        return response()->json(auth()->guard('user')->user());
+
+    public function updateProfile(EditInfoRequest $request)
+    {
+        $validatedData = $request->validated();
+
+        hashing_data($validatedData);
+        
+        User::where('email' , user_email())->update($validatedData);
+
+        return $this->SendResponse(response::HTTP_CREATED , 'user profile updated successfully');
     }
-    /**
-     * Get the token array structure.
-     *
-     * @param  string $token
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function createNewToken($token){
-        // return response()->json([
-        //     'token' => $token,
-        //     'user' => auth()->user()
-        // ]);
+
+    public function login(LoginRequest $request)
+    {
+        if (! $token = auth()->guard('user')->attempt($request->only('email' , 'password')))
+        {
+            return $this->SendResponse(response::HTTP_UNAUTHORIZED , 'wrong email or password');
+        }
+
+        Cache::forever('user_email' , $request->email);
+
         return $this->SendResponse(response::HTTP_OK , 'logged in successfully' ,['token' => $token]);
     }
-    public function softDelete()
-    { $user = auth()->guard('user')->user();
-        $user->delete();
-        return response()->json(['message' => 'User successfully deleted']);
+
+    public function logout()
+    {
+        /**
+         * the logout logic from admin controller
+         * 
+         * response
+         */
+    }
+
+    public function resetPassword(Request $request)
+    {
+        /**
+         * the same logic in the admin
+         */
+    }
+
+    public function profile()
+    {
+        /**
+         * return the user information
+         */
     }
 }
 

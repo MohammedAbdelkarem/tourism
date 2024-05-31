@@ -19,34 +19,48 @@ use App\Models\User;
 */
 //general routes
 
-Route::post('auth/check' , [AuthController::class , 'checkCode']);
+Route::post('checkcode' , [AuthController::class , 'checkCode']);
 
-//Admin Auth
+//Admin without middleware
 
-Route::group(['prefix' => 'auth/admin'], function () {
-    Route::post('send' , [AdminController::class , 'sendCode']);
-    Route::post('register' , [AdminController::class , 'register']);
-    Route::post('login' , [AdminController::class , 'login']);
-    Route::post('reset' , [AdminController::class , 'resetPassword']);
+Route::group(['prefix' => 'admin'], function () {
+
+    Route::group(['prefix' => 'auth'], function () {
+        Route::post('send' , [AdminController::class , 'sendCode']);
+        Route::post('register' , [AdminController::class , 'register']);
+        Route::post('login' , [AdminController::class , 'login']);
+        Route::post('reset' , [AdminController::class , 'resetPassword']);
+    });
+
 });
 
-Route::group([
-    'middleware' => ['DbBackup'],
-    'prefix' => 'auth/admin'
-], function ($router) {
-    Route::post('/logout', [AdminController::class, 'logout']);
-    Route::post('/refresh', [AdminController::class, 'refresh']);
-    Route::get('/user-profile', [AdminController::class, 'userProfile']); 
+
+//Admin with middleware
+Route::group(['prefix' => 'admin' , 'middleware' => ['auth:admin']] , function(){
+    
+    Route::group(['prefix' => 'auth'], function () {
+        Route::post('logout', [AdminController::class, 'logout']); 
+    });
+
 });
 
-Route::group([
-    'middleware' => ['DbBackup'],
-    'prefix' => 'auth/user'
-], function ($router) {
-    Route::post('/login', [UserController::class, 'login']);
-    Route::post('/register', [UserController::class, 'register']);
-    Route::post('/logout', [UserController::class, 'logout']);
-    Route::post('/refresh', [UserController::class, 'refresh']);
-    Route::get('/user-profile', [UserController::class, 'userProfile']); 
-    Route::delete('/softDelete', [UserController::class, 'softDelete']);   
+
+//User without middleware
+Route::group(['prefix' => 'user'], function () {
+
+    Route::group(['prefix' => 'auth'], function () {
+        Route::post('send' , [UserController::class , 'sendCode']);
+        Route::post('register' , [UserController::class , 'register']);
+        Route::post('login' , [UserController::class , 'login']);
+    });
+
+});
+
+
+//User with middleware
+Route::group(['prefix' => 'user' , 'middleware' => ['auth:user']] , function(){
+    
+    Route::group(['prefix' => 'auth'], function () {
+        Route::post('edit', [UserController::class, 'updateProfile']);
+    });
 });

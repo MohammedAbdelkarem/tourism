@@ -5,11 +5,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasFactory, Notifiable, SoftDeletes;
+    use HasFactory, Notifiable;
     /**
      * The attributes that are mass assignable.
      *
@@ -23,7 +22,6 @@ class User extends Authenticatable implements JWTSubject
         'photo',
         'wallet',
     ];
-    protected $dates=['deleted_at'];
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -42,6 +40,11 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function scopeuserEmail($query)
+    {
+        return $query->where('email' , user_email());
+    }
     
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.

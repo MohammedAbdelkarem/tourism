@@ -19,6 +19,13 @@ if(!function_exists('hashing_password'))
         $password = bcrypt($password);
     }
 }
+if(!function_exists('hashing_data'))
+{
+    function hashing_data(&$data):void
+    {
+        $data['password'] = bcrypt($data['password']);
+    }
+}
 
 if(!function_exists('RandomCode'))
 {
