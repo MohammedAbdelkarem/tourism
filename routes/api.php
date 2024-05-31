@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\UserController;
+use App\Http\Controllers\Auth\AdminController;
 
 /*
 |--------------------------------------------------------------------------

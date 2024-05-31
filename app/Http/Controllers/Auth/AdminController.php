@@ -1,13 +1,14 @@
 <?php
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
 use App\Models\Admin;
 use App\Event\SendEmailEvent;
 use App\Traits\ResponseTrait;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
+use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\PasswordRequest;
 use Symfony\Component\HttpFoundation\Response;
-use App\Http\Requests\Auth\LoginRequest;
 
 class AdminController extends Controller
 {

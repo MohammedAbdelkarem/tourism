@@ -1,20 +1,21 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Event\SendEmailEvent;
 use App\Traits\ResponseTrait;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\PasswordRequest;
+use App\Http\Resources\User\ProfileResource;
 use App\Http\Requests\Auth\User\EmailRequest;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Auth\User\EditInfoRequest;
 use App\Http\Requests\Auth\User\InformationRequest;
-use App\Http\Resources\User\ProfileResource;
 
 class UserController extends Controller
 {
