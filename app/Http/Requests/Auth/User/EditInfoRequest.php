@@ -11,9 +11,8 @@ use Illuminate\Contracts\Validation\Validator;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class InformationRequest extends FormRequest
+class EditInfoRequest extends FormRequest
 {
-    use ResponseTrait;
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -31,7 +30,7 @@ class InformationRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'phone' => ['required'  , 'unique:users,phone' , 'phone:AUTO'],
+            'phone' => ['required'  , 'unique:users,id,'.$this->get('id'), 'phone:AUTO'],
             'password' => [
                 'required' ,
                 'confirmed' ,
@@ -65,5 +64,4 @@ class InformationRequest extends FormRequest
             $this->SendResponse(response::HTTP_UNPROCESSABLE_ENTITY , 'validation error' , $validator->errors()->toArray()))
         );
     }
-    
 }
