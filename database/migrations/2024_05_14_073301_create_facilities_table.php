@@ -13,6 +13,15 @@ return new class extends Migration
     {
         Schema::create('facilities', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->nullable();
+            $table->string('photo');
+            $table->enum('type', ['resturant', 'hotel','place']);
+            $table->string('lat');
+            $table->string('long');
+            $table->text('bio');
+            $table->integer('number_of_places');
+            $table->integer('price_per_person');
+            $table->integer('profits')->default(0);
             $table->timestamps();
         });
     }
