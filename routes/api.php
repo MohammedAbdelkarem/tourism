@@ -63,5 +63,6 @@ Route::group(['prefix' => 'user' , 'middleware' => ['auth:user']] , function(){
         Route::post('edit', [UserController::class, 'updateProfile']);
         Route::post('logout', [UserController::class, 'logout']);
         Route::get('profile', [UserController::class, 'profile']);
+        Route::delete('delete', [UserController::class, 'deleteAccount']);
     });
 });

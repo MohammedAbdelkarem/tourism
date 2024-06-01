@@ -39,6 +39,7 @@ class InformationRequest extends FormRequest
                 ->letters()
                 ->numbers()
             ],
+            'photo' => ['image' , 'mimes:png,jpg,jpeg,bmp,svg,gif'],
         ];
     }
 

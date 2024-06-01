@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Response;
 class AuthController extends Controller
 {
     use ResponseTrait;
-    
     public function checkCode(CodeRequest $request)
     {
         $validatedCode = $request->validated()['code'];

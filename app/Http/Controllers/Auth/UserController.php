@@ -16,6 +16,7 @@ use App\Http\Requests\Auth\User\EmailRequest;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Auth\User\EditInfoRequest;
 use App\Http\Requests\Auth\User\InformationRequest;
+use App\Models\UsersBackup;
 
 class UserController extends Controller
 {
@@ -23,22 +24,7 @@ class UserController extends Controller
     
     public function sendCode(EmailRequest $request)
     {
-        
-        /**
-         * validation: check if the email is not in the database , or : in the database and deleted at is not null
-         * 
-         * send the verification code via the email
-         * 
-         * store the code in the cache for one hour , also the email
-         * 
-         * response
-         */
-
         $email = $request->validated()['email'];
-
-        $exists = DB::table('users')
-                    ->where('email', $email)
-                    ->exists();
 
         $code = RandomCode();
 
@@ -47,18 +33,6 @@ class UserController extends Controller
 
         event(new SendEmailEvent($email , $code));
 
-        if($exists)
-        {
-        User::where('email' , $email)->update([
-            'active' => 'active'
-        ]);
-        }
-        else
-        {
-        User::create([
-            'email' => $email
-            ]);
-        }
         return $this->SendResponse(response::HTTP_OK , 'email sended successfully');
     }
 
@@ -66,9 +40,18 @@ class UserController extends Controller
     {
         $validatedData = $request->validated();
 
+        $validatedData['photo'] = photoPath($validatedData['photo']);
+        $validatedData['email'] = user_email();
+
         hashing_data($validatedData);
         
-        User::where('email' , user_email())->update($validatedData);
+        User::create($validatedData);
+        UsersBackup::create([
+            'name' =>$validatedData['name'],
+            'photo' =>$validatedData['photo'],
+            'phone' =>$validatedData['phone'],
+            'email' =>$validatedData['email'],
+        ]);
 
         return $this->SendResponse(response::HTTP_CREATED , 'user registered successfully');
     }
@@ -78,7 +61,9 @@ class UserController extends Controller
         $validatedData = $request->validated();
 
         hashing_data($validatedData);
-        
+
+        $validatedData['photo'] = photoPath($validatedData['photo']);
+
         User::where('email' , user_email())->update($validatedData);
 
         return $this->SendResponse(response::HTTP_CREATED , 'user profile updated successfully');
@@ -124,4 +109,19 @@ class UserController extends Controller
         
         return $this->SendResponse(response::HTTP_OK , 'user profile data retrieved successfully' , $data);
     }
+
+    public function deleteAccount()
+    {
+        UsersBackup::userEmail()->update([
+            'active' => 'inactive'
+        ]);
+
+        $this->logout();
+        
+        User::userEmail()->delete();
+
+        return $this->SendResponse(response::HTTP_OK , 'account deleted successfully');
+    }
+
+
 }

@@ -30,19 +30,7 @@ class EmailRequest extends FormRequest
     {
         return [
             'email' => [
-                'required',
-                'email',
-                function ($attribute, $value, $fail) {
-                    $exists = DB::table('users')
-                        ->where('email', $value)
-                        ->where('active' , '=' , 'active')
-                        ->exists();
-    
-                    if ($exists) {
-                        $fail('The email has already been taken');
-                    }
-                }
-            ],
+                'required','email','unique:users,email'],
         ];
     }
 
