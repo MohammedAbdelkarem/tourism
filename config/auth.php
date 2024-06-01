@@ -50,6 +50,11 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+        'guide' => [
+            'driver' => 'jwt',
+            'provider' => 'guides',
+            'hash' => false,
+        ],
     ],
 
     /*
@@ -77,6 +82,10 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+        'guides' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Guide::class,
         ],
 
         // 'users' => [
