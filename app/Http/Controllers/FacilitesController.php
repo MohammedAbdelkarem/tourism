@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 use Symfony\Component\HttpFoundation\Response;
 use App\Models\Facility;
 use Illuminate\Http\Request;
-use Validator;
+use App\Traits\ResponseTrait;
+use Illuminate\Support\Facades\Validator;
 class FacilitesController extends Controller
 {
-
+    use ResponseTrait;
 
     public function __construct()
         {
@@ -17,27 +18,40 @@ class FacilitesController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function GetHotel()
+    public function Hotel()
     {
+        {
+            $hotels = Facility::where('type', 'hotel')->get();
+            if ($hotels->isEmpty()) {
+                return $this->SendResponse(response::HTTP_NOT_FOUND, 'No hotels found');
+            }
+            return $this->SendResponse(response::HTTP_OK, 'hotels retrieved successfully', ['data' => $hotels]);
+        }
         
     }
-    public function Get
-    ()
+    
+    public function Places()
     {
+        {
+            $places = Facility::where('type', 'place')->get();
+            if ($places->isEmpty()) {
+                return $this->SendResponse(response::HTTP_NOT_FOUND, 'No places found');
+            }
+            return $this->SendResponse(response::HTTP_OK, 'places retrieved successfully', ['data' => $places]);
+        }
         
     }
-    public function GetResturant()
-    {
-        
-    }
+    
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function Restaurants()
+{
+    $restaurants = Facility::where('type', 'Restaurant')->get();
+    if ($restaurants->isEmpty()) {
+        return $this->SendResponse(response::HTTP_NOT_FOUND, 'No restaurants found');
     }
+    return $this->SendResponse(response::HTTP_OK, 'Restaurants retrieved successfully', ['data' => $restaurants]);
+}
+
 
     /**
      * Store a newly created resource in storage.
@@ -49,7 +63,7 @@ class FacilitesController extends Controller
             'name' => 'required|string|between:2,100',
             'lat' => 'required|string|max:200',
             'long' => 'required|string|max:200',
-            'bio' => 'required|text',
+            'bio' => 'required|string',
             'photo' => 'required|mimes:jpg,jpeg,png|max:2048',
             'number_of_places' => 'required|integer|min:1',
             'price_per_person' => 'required|integer',
@@ -78,9 +92,13 @@ class FacilitesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Facility $facility)
+    public function AllFacilities()
     {
-        //
+        
+            $facility= Facility::all();
+            return $this->SendResponse(response::HTTP_OK , 'Facility data retrieved successfully' , ['data' => $facility]);
+    
+        
     }
 
     /**
@@ -94,16 +112,45 @@ class FacilitesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Facility $facility)
-    {
-        //
+ /**
+ * Update the specified resource in storage.
+ */
+public function update(Request $request, Facility $facility)
+{
+    $validator = Validator::make($request->all(), [
+        'name' => 'required|string|between:2,100',
+        'lat' => 'required|string|max:200',
+        'long' => 'required|string|max:200',
+        'bio' => 'required|string',
+        'photo' => 'nullable|mimes:jpg,jpeg,png|max:2048',
+        'number_of_places' => 'required|integer|min:1',
+        'price_per_person' => 'required|integer',
+        'type' => 'required|string',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json($validator->errors()->toJson(), 400);
     }
 
+    $facility->update([
+        'name' => $request->name,
+        'photo' => $request->photo,
+        'lat' => $request->lat,
+        'long' => $request->long,
+        'bio' => $request->bio,
+        'type' => $request->type,
+        'number_of_places' => $request->number_of_places,
+        'price_per_person' => $request->price_per_person,
+    ]);
+
+    return $this->SendResponse(response::HTTP_OK, 'Facility updated successfully');
+}
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Facility $facility)
     {
-        //
+        $facility->delete();
+        return response()->json('product deleted successfully');
     }
 }

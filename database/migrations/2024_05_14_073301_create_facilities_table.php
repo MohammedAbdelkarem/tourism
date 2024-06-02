@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->string('photo');
-            $table->enum('type', ['resturant', 'hotel','place']);
+            $table->enum('type', ['restaurant', 'hotel','place']);
             $table->string('lat');
             $table->string('long');
             $table->text('bio');

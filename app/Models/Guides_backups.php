@@ -18,7 +18,7 @@ class Guides_backups extends Model
         'price_per_person_one_day',
         'father_name',
         'mother_name',
-        'ID',
+        'unique_id',
         'birth_place',
         'birth_date',
         'wallet',

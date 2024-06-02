@@ -46,8 +46,8 @@ class GuideController extends Controller
         $validatedData = $request->validated();
 
         $validatedData['photo'] = photoPath($validatedData['photo']);
-        $validatedData['email'] = guide_email();
-
+        // $validatedData['email'] = guide_email();
+        $validatedData['email'] = "mayagritaabouasali@gmail.com";
         hashing_data($validatedData);
         
         Guide::create($validatedData);
