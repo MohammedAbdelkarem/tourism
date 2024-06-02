@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Auth\User;
+namespace App\Http\Requests\Auth\Guide;
 
 use App\Traits\ResponseTrait;
 use Illuminate\Support\Facades\DB;
@@ -30,7 +30,7 @@ class EmailRequest extends FormRequest
     {
         return [
             'email' => [
-                'required','email','unique:users,email'],
+                'required','email','unique:guides,email'],
         ];
     }
 

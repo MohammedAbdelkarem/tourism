@@ -85,4 +85,11 @@ if(!function_exists('user_email'))
         return Cache::get('user_email');
     }
 }
+if(!function_exists('guide_email'))
+{
+    function guide_email()
+    {
+        return Cache::get('guide_email');
+    }
+}
 

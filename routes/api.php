@@ -1,11 +1,10 @@
 <?php
 
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Models\User;
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\UserController;
+use App\Http\Controllers\Auth\AdminController;
+use App\Http\Controllers\Auth\GuideController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,7 +20,7 @@ use App\Models\User;
 
 Route::post('checkcode' , [AuthController::class , 'checkCode']);
 
-//Admin without middleware
+//Admin 
 
 Route::group(['prefix' => 'admin'], function () {
 
@@ -30,19 +29,11 @@ Route::group(['prefix' => 'admin'], function () {
         Route::post('register' , [AdminController::class , 'register']);
         Route::post('login' , [AdminController::class , 'login']);
         Route::post('reset' , [AdminController::class , 'resetPassword']);
-    });
-
-});
-
-
-//Admin with middleware
-Route::group(['prefix' => 'admin' , 'middleware' => ['auth:admin']] , function(){
-    
-    Route::group(['prefix' => 'auth'], function () {
         Route::post('logout', [AdminController::class, 'logout']); 
     });
 
 });
+
 
 
 //User without middleware
@@ -52,6 +43,7 @@ Route::group(['prefix' => 'user'], function () {
         Route::post('send' , [UserController::class , 'sendCode']);
         Route::post('register' , [UserController::class , 'register']);
         Route::post('login' , [UserController::class , 'login']);
+        Route::post('reset' , [UserController::class , 'resetPassword']);
     });
 
 });
@@ -62,5 +54,34 @@ Route::group(['prefix' => 'user' , 'middleware' => ['auth:user']] , function(){
     
     Route::group(['prefix' => 'auth'], function () {
         Route::post('edit', [UserController::class, 'updateProfile']);
+        Route::post('logout', [UserController::class, 'logout']);
+        Route::get('profile', [UserController::class, 'profile']);
+        Route::delete('delete', [UserController::class, 'deleteAccount']);
+    });
+});
+
+
+
+//Guide without middleware
+Route::group(['prefix' => 'guide'], function () {
+
+    Route::group(['prefix' => 'auth'], function () {
+        Route::post('send' , [GuideController::class , 'sendCode']);
+        Route::post('register' , [GuideController::class , 'register']);
+        Route::post('login' , [GuideController::class , 'login']);
+        Route::post('reset' , [GuideController::class , 'resetPassword']);
+    });
+
+});
+
+
+//Guide with middleware
+Route::group(['prefix' => 'guide' , 'middleware' => ['auth:guide']] , function(){
+    
+    Route::group(['prefix' => 'auth'], function () {
+        Route::post('edit', [GuideController::class, 'updateProfile']);
+        Route::post('logout', [GuideController::class, 'logout']);
+        Route::get('profile', [GuideController::class, 'profile']);
+        Route::delete('delete', [GuideController::class, 'deleteAccount']);
     });
 });

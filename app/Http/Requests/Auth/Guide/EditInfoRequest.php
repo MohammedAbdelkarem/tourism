@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Auth\User;
+namespace App\Http\Requests\Auth\Guide;
 
 use App\Traits\ResponseTrait;
 use Illuminate\Support\Facades\DB;
@@ -11,7 +11,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class InformationRequest extends FormRequest
+class EditInfoRequest extends FormRequest
 {
     use ResponseTrait;
     /**
@@ -31,7 +31,7 @@ class InformationRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'phone' => ['required'  , 'unique:users,phone' , 'phone:AUTO'],
+            'phone' => ['required'  , 'unique:guides,id,'.$this->get('id') , 'phone:AUTO'],
             'password' => [
                 'required' ,
                 'confirmed' ,
@@ -39,6 +39,14 @@ class InformationRequest extends FormRequest
                 ->letters()
                 ->numbers()
             ],
+            'status' => 'required',
+            'price_per_person_one_day' => 'required|integer',
+            'father_name' => 'required|integer',
+            'mother_name' => 'required|integer',
+            'unique_id' => 'required|unique:guides,id,'.$this->get('id'),
+            'birth_place' => 'required|string',
+            'birth_date' => 'required|date',
+            'wallet' => 'required|integer',
             'photo' => ['image' , 'mimes:png,jpg,jpeg,bmp,svg,gif'],
         ];
     }

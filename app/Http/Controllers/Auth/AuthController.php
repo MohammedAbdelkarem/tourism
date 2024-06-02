@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
 use App\Traits\ResponseTrait;
 use App\Http\Controllers\Controller;
@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Response;
 class AuthController extends Controller
 {
     use ResponseTrait;
-    
     public function checkCode(CodeRequest $request)
     {
         $validatedCode = $request->validated()['code'];

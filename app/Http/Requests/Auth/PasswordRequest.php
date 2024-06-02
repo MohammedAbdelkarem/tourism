@@ -3,10 +3,11 @@
 namespace App\Http\Requests\Auth;
 
 use App\Traits\ResponseTrait;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\Foundation\Http\FormRequest;
-use Symfony\Component\HttpFoundation\Response;
 // use Illuminate\Support\Facades\Validator;
 use Illuminate\Contracts\Validation\Validator;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class PasswordRequest extends FormRequest
@@ -28,7 +29,13 @@ class PasswordRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'password' => 'required|string|min:6|confirmed',
+            'password' => [
+                'required' ,
+                'confirmed' ,
+                Password::min(8)
+                ->letters()
+                ->numbers()
+            ],
         ];
     }
 

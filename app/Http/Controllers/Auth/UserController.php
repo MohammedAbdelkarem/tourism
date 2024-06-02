@@ -1,45 +1,30 @@
 <?php
-namespace App\Http\Controllers;
+
+namespace App\Http\Controllers\Auth;
+
 use App\Models\User;
-use App\Models\Admin;
+use Illuminate\Http\Request;
+use App\Event\SendEmailEvent;
 use App\Traits\ResponseTrait;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\PasswordRequest;
+use App\Http\Resources\User\ProfileResource;
 use App\Http\Requests\Auth\User\EmailRequest;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Auth\User\EditInfoRequest;
 use App\Http\Requests\Auth\User\InformationRequest;
-
+use App\Models\UsersBackup;
 
 class UserController extends Controller
 {
-
     use ResponseTrait;
-
-    public function __construct()
-    {
-        $this->middleware('auth:user', ['except' => ['login', 'register' , 'sendCode']]);
-    }
     
     public function sendCode(EmailRequest $request)
     {
-        
-        /**
-         * validation: check if the email is not in the database , or : in the database and deleted at is not null
-         * 
-         * send the verification code via the email
-         * 
-         * store the code in the cache for one hour , also the email
-         * 
-         * response
-         */
-
         $email = $request->validated()['email'];
-
-        $exists = DB::table('users')
-                    ->where('email', $email)
-                    ->exists();
 
         $code = RandomCode();
 
@@ -48,18 +33,6 @@ class UserController extends Controller
 
         event(new SendEmailEvent($email , $code));
 
-        if($exists)
-        {
-        User::where('email' , $email)->update([
-            'active' => 'active'
-        ]);
-        }
-        else
-        {
-        User::create([
-            'email' => $email
-            ]);
-        }
         return $this->SendResponse(response::HTTP_OK , 'email sended successfully');
     }
 
@@ -67,9 +40,18 @@ class UserController extends Controller
     {
         $validatedData = $request->validated();
 
+        $validatedData['photo'] = photoPath($validatedData['photo']);
+        $validatedData['email'] = user_email();
+
         hashing_data($validatedData);
         
-        User::where('email' , user_email())->update($validatedData);
+        User::create($validatedData);
+        UsersBackup::create([
+            'name' =>$validatedData['name'],
+            'photo' =>$validatedData['photo'],
+            'phone' =>$validatedData['phone'],
+            'email' =>$validatedData['email'],
+        ]);
 
         return $this->SendResponse(response::HTTP_CREATED , 'user registered successfully');
     }
@@ -79,7 +61,9 @@ class UserController extends Controller
         $validatedData = $request->validated();
 
         hashing_data($validatedData);
-        
+
+        $validatedData['photo'] = photoPath($validatedData['photo']);
+
         User::where('email' , user_email())->update($validatedData);
 
         return $this->SendResponse(response::HTTP_CREATED , 'user profile updated successfully');
@@ -99,26 +83,45 @@ class UserController extends Controller
 
     public function logout()
     {
-        /**
-         * the logout logic from admin controller
-         * 
-         * response
-         */
+        auth()->guard('user')->logout();
+        
+        return $this->SendResponse(response::HTTP_OK , 'logged out successfully');
     }
 
-    public function resetPassword(Request $request)
+    public function resetPassword(PasswordRequest $request)
     {
-        /**
-         * the same logic in the admin
-         */
+        $password = $request->validated()['password'];
+
+        hashing_password($password);
+
+        User::userEmail()->update([
+            'password' => $password
+        ]);
+
+        return $this->SendResponse(response::HTTP_OK , 'password updated successfully');
     }
 
     public function profile()
     {
-        /**
-         * 
-         * return the user information
-         */
-    }
-}
+        $data = auth()->guard('user')->user();
 
+        $data = new ProfileResource($data);
+        
+        return $this->SendResponse(response::HTTP_OK , 'user profile data retrieved successfully' , $data);
+    }
+
+    public function deleteAccount()
+    {
+        UsersBackup::userEmail()->update([
+            'active' => 'inactive'
+        ]);
+
+        $this->logout();
+        
+        User::userEmail()->delete();
+
+        return $this->SendResponse(response::HTTP_OK , 'account deleted successfully');
+    }
+
+
+}
