@@ -95,6 +95,6 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('hotels', [FacilitesController::class, 'Hotel']);
     Route::get('places', [FacilitesController::class, 'Places']);
     //update facility
-    Route::put('/facility/{facility}', [FacilitesController::class, 'update']);
+    Route::post('/facility/{facility}', [FacilitesController::class, 'update']);
     Route::delete('/facilities/{facility}',[FacilitesController::class, 'destroy']);
 });
