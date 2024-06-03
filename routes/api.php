@@ -5,7 +5,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Auth\AdminController;
 use App\Http\Controllers\Auth\GuideController;
-use App\Http\Controllers\FacilitesController;
+use App\Http\Controllers\Admin\FacilitesController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -87,14 +87,14 @@ Route::group(['prefix' => 'guide' , 'middleware' => ['auth:guide']] , function()
 });
 
 Route::group(['prefix' => 'admin'], function () {
-//add facility
-    Route::post('facility/store',[ FacilitesController::class,'store']);
+    //add facility
+    Route::post('facility/store',[ FacilitesController::class,'storeFacility']);
 
-    Route::get('allfacility', [FacilitesController::class,'AllFacilities']);
-    Route::get('restaurants', [FacilitesController::class, 'Restaurants']);
-    Route::get('hotels', [FacilitesController::class, 'Hotel']);
-    Route::get('places', [FacilitesController::class, 'Places']);
+    Route::get('allfacility', [FacilitesController::class,'getFacilities']);
+    Route::get('restaurants', [FacilitesController::class, 'getRestaurants']);
+    Route::get('hotels', [FacilitesController::class, 'getHotels']);
+    Route::get('places', [FacilitesController::class, 'getPlaces']);
     //update facility
-    Route::post('/facility/{facility}', [FacilitesController::class, 'update']);
-    Route::delete('/facilities/{facility}',[FacilitesController::class, 'destroy']);
+    Route::post('/facility/{facility}', [FacilitesController::class, 'updateFacility']);
+    Route::delete('/facilities/{facility}',[FacilitesController::class, 'deleteFacility']);
 });

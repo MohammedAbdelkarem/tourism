@@ -31,13 +31,6 @@ class EditInfoRequest extends FormRequest
         return [
             'name' => 'required',
             'phone' => ['required'  , 'unique:users,id,'.$this->get('id'), 'phone:AUTO'],
-            'password' => [
-                'required' ,
-                'confirmed' ,
-                Password::min(8)
-                ->letters()
-                ->numbers()
-            ],
             'photo' => ['image' , 'mimes:png,jpg,jpeg,bmp,svg,gif'],
         ];
     }

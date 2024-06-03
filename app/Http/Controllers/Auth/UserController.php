@@ -59,10 +59,10 @@ class UserController extends Controller
     public function updateProfile(EditInfoRequest $request)
     {
         $validatedData = $request->validated();
-
-        hashing_data($validatedData);
-
-        $validatedData['photo'] = photoPath($validatedData['photo']);
+        if($request->hasFile('photo'))
+        {
+            $validatedData['photo'] = photoPath($validatedData['photo']);
+        }
 
         User::where('email' , user_email())->update($validatedData);
 

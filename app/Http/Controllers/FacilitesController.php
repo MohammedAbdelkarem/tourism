@@ -161,3 +161,4 @@ public function update(Request $request, Facility $facility)
         return response()->json('product deleted successfully');
     }
 }
+
