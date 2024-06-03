@@ -15,10 +15,10 @@ class Facility extends Model
         'photo',
         'lat',
         'long',
-        'profits',
         'price_per_person',
         'bio',
         'number_of_places',
         'type',
+        'profits',
     ];
 }
