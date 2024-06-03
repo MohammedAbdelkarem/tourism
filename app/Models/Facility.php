@@ -19,6 +19,7 @@ class Facility extends Model
         'bio',
         'number_of_places',
         'type',
+        'country_id',
         'profits',
     ];
 }

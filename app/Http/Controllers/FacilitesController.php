@@ -5,6 +5,8 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Models\Facility;
 use Illuminate\Http\Request;
 use App\Traits\ResponseTrait;
+// use App\Http\Resources\Dashboard\FacilityResource ;
+use App\Http\Resources\Dashboard\FacilityResource as DashboardFacilityResource;
 use Illuminate\Support\Facades\Validator;
 class FacilitesController extends Controller
 {
@@ -68,6 +70,7 @@ class FacilitesController extends Controller
             'number_of_places' => 'required|integer|min:1',
             'price_per_person' => 'required|integer',
             'type' => 'required|string|between:2,100',
+            'country_id' => 'required|integer',
         ]);
 
         if($validator->fails()){
@@ -83,6 +86,7 @@ class FacilitesController extends Controller
                 'type' =>$request->type,
                 'number_of_places' =>$request->number_of_places,
                 'price_per_person' =>$request->price_per_person, 
+                'country_id' =>$request->country_id,
             ]);
     
             return $this->SendResponse(response::HTTP_CREATED , 'facility added successfully');
@@ -96,7 +100,8 @@ class FacilitesController extends Controller
     {
         
             $facility= Facility::all();
-            return $this->SendResponse(response::HTTP_OK , 'Facility data retrieved successfully' , ['data' => $facility]);
+            $data = new DashboardFacilityResource($facility);
+            return $this->SendResponse(response::HTTP_OK , 'Facility data retrieved successfully' ,$data);
     
         
     }
@@ -126,6 +131,7 @@ public function update(Request $request, Facility $facility)
         'number_of_places' => 'required|integer|min:1',
         'price_per_person' => 'required|integer',
         'type' => 'required|string',
+        'country_id' => 'required|integer',
     ]);
 
     if ($validator->fails()) {
@@ -141,6 +147,7 @@ public function update(Request $request, Facility $facility)
         'type' => $request->type,
         'number_of_places' => $request->number_of_places,
         'price_per_person' => $request->price_per_person,
+        'country_id' =>$request->country_id,
     ]);
 
     return $this->SendResponse(response::HTTP_OK, 'Facility updated successfully');
