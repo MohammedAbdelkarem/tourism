@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\IdRequest;
 use App\Models\Trip;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\Request;
@@ -15,7 +16,12 @@ class TripsController extends Controller
     public function getOffers(){}
     public function getRecommended(){}
     public function getThirdthing(){}
-    public function getTripDetails(Request $request)
+
+    public function getTripsList() // should be inplemented depending on the price range , the other thing(vip)
+    {
+        $data = Trip::where('status' , 'active')
+    }
+    public function getTripDetails(IdRequest $request)
     {
         $id = $request->validated()['id'];
 
