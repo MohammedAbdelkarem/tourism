@@ -22,4 +22,9 @@ class Facility extends Model
         'country_id',
         'profits',
     ];
+
+    public function country()
+    {
+        return $this->belongsTo(\App\Models\Country::class);
+    }
 }

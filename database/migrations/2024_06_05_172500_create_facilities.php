@@ -21,8 +21,10 @@ return new class extends Migration
             $table->text('bio')->nullable();
             $table->integer('number_of_places');
             $table->integer('price_per_person');
-            $table->integer('country_id');
             $table->integer('profits')->default(0);
+            $table->float('rate')->default(0);
+            $table->unsignedBigInteger('country_id'); // Define the country_id column
+            $table->foreign('country_id')->references('id')->on('countries')->cascadeOnDelete();
             $table->timestamps();
         });
     }
