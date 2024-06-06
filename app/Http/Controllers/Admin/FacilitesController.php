@@ -7,10 +7,10 @@ use Illuminate\Http\Request;
 use App\Traits\ResponseTrait;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Resources\Dashboard\FacilityResource;
-use App\Http\Resources\Dashboard\FacilityResource as DashboardFacilityresource;
+use App\Http\Resources\Adimn\FacilityResource;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Dashboard\FacilityRequest;
+use App\Http\Resources\Dashboard\FacilityResource as DashboardFacilityresource;
 
 class FacilitesController extends Controller
 {
