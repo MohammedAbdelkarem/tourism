@@ -7,7 +7,10 @@ use Illuminate\Http\Request;
 use App\Traits\ResponseTrait;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\Adimn\FacilityResource;
 use Symfony\Component\HttpFoundation\Response;
+use App\Http\Requests\Dashboard\FacilityRequest;
+use App\Http\Resources\Dashboard\FacilityResource as DashboardFacilityresource;
 
 class FacilitesController extends Controller
 {
@@ -20,7 +23,8 @@ class FacilitesController extends Controller
         if ($hotels->isEmpty()) {
             return $this->SendResponse(response::HTTP_NOT_FOUND, 'No hotels found');
         }
-        return $this->SendResponse(response::HTTP_OK, 'hotels retrieved successfully', ['data' => $hotels]);
+        $data = FacilityResource::collection($hotels);
+        return $this->SendResponse(response::HTTP_OK, 'hotels retrieved successfully',$data);
         
     }
 
@@ -29,8 +33,8 @@ class FacilitesController extends Controller
         $places = Facility::where('type', 'place')->get();
         if ($places->isEmpty()) {
             return $this->SendResponse(response::HTTP_NOT_FOUND, 'No places found');
-        }
-        return $this->SendResponse(response::HTTP_OK, 'places retrieved successfully', ['data' => $places]);
+        }$data = FacilityResource::collection($places);
+        return $this->SendResponse(response::HTTP_OK, 'places retrieved successfully',$data);
     }
 
 
@@ -39,27 +43,11 @@ class FacilitesController extends Controller
         $restaurants = Facility::where('type', 'Restaurant')->get();
         if ($restaurants->isEmpty()) {
             return $this->SendResponse(response::HTTP_NOT_FOUND, 'No restaurants found');
-        }
-        return $this->SendResponse(response::HTTP_OK, 'Restaurants retrieved successfully', ['data' => $restaurants]);
+        }$data = FacilityResource::collection($restaurants);
+        return $this->SendResponse(response::HTTP_OK, 'Restaurants retrieved successfully',  $data);
     }
-    public function storeFacility(Request $request)
+    public function storeFacility(FacilityRequest $request)
     {
-
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|between:2,100',
-            'lat' => 'required|string|max:200',
-            'long' => 'required|string|max:200',
-            'bio' => 'required|string',
-            'photo' => 'required|mimes:jpg,jpeg,png|max:2048',
-            'number_of_places' => 'required|integer|min:1',
-            'price_per_person' => 'required|integer',
-            'type' => 'required|string|between:2,100',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors()->toJson(), 400);
-        }
-
         $facility = Facility::create([
             'name' => $request->name,
             'photo' => $request->photo,
@@ -69,6 +57,7 @@ class FacilitesController extends Controller
             'type' => $request->type,
             'number_of_places' => $request->number_of_places,
             'price_per_person' => $request->price_per_person,
+            'country_id' =>$request->country_id,
         ]);
 
         return $this->SendResponse(response::HTTP_CREATED, 'facility added successfully');
@@ -77,25 +66,13 @@ class FacilitesController extends Controller
     {
 
         $facility = Facility::all();
-        return $this->SendResponse(response::HTTP_OK, 'Facility data retrieved successfully', ['data' => $facility]);
+        $data = FacilityResource::collection($facility);
+        
+        return $this->SendResponse(response::HTTP_OK, 'Facility data retrieved successfully', $data);
     }
-    public function updateFacility(Request $request, Facility $facility)
+    public function updateFacility( FacilityRequest $request, Facility $facility)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|between:2,100',
-            'lat' => 'required|string|max:200',
-            'long' => 'required|string|max:200',
-            'bio' => 'required|string',
-            'photo' => 'nullable|mimes:jpg,jpeg,png|max:2048',
-            'number_of_places' => 'required|integer|min:1',
-            'price_per_person' => 'required|integer',
-            'type' => 'required|string',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors()->toJson(), 400);
-        }
-
+    
         $facility->update([
             'name' => $request->name,
             'photo' => $request->photo,
@@ -105,6 +82,7 @@ class FacilitesController extends Controller
             'type' => $request->type,
             'number_of_places' => $request->number_of_places,
             'price_per_person' => $request->price_per_person,
+            'country_id' =>$request->country_id,
         ]);
 
         return $this->SendResponse(response::HTTP_OK, 'Facility updated successfully');
@@ -115,10 +93,15 @@ class FacilitesController extends Controller
         return response()->json('product deleted successfully');
     }
 
-    public function getFacilityDetails()
+    public function getFacilityDetails(string $id)
     {
-        //what to wend in the request:the id of the facility
+        $facility = Facility::query()
+        ->where('id', $id)
+        ->get();
 
-        //what to response: the facility details
+        
+        $data = FacilityResource::collection($facility);
+        return $this->SendResponse(response::HTTP_OK, 'facility details retrieved successfully',  $data);
     }
+
 }

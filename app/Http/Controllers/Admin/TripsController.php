@@ -11,7 +11,10 @@ class TripsController extends Controller
 {
     use ResponseTrait;
 
-    public function addTrip(){}
+    public function addTrip(){
+
+        
+    }
 
     public function updateTrip(){}
 

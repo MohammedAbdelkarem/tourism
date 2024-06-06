@@ -94,7 +94,9 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('restaurants', [FacilitesController::class, 'getRestaurants']);
     Route::get('hotels', [FacilitesController::class, 'getHotels']);
     Route::get('places', [FacilitesController::class, 'getPlaces']);
+    Route::get('facility/{id}', [FacilitesController::class,'getFacilityDetails']);
     //update facility
     Route::post('/facility/{facility}', [FacilitesController::class, 'updateFacility']);
     Route::delete('/facilities/{facility}',[FacilitesController::class, 'deleteFacility']);
+
 });
