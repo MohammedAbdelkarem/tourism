@@ -12,20 +12,21 @@ class Trip extends Model
     
     protected $fillable = [
         'name',
-        'photo',
         'bio',
+        'photo',
         'rate',
         'price_per_one_old',
-        'status',
-        'price_per_person_new',
-        'offers_ratio',
+        'price_per_one_new',
         'total_price',
-        'first_date',
+        'status',
+        'start_date',
         'end_date',
-        'num_of_person',
-        'num_of_places',
-        'country_id',
+        'number_of_filled_places',
+        'number_of_available_places',
+        'number_of_original_places',
+        'offer_ratio',
         'guide_id',
+        'country_id',
     ];
 
 

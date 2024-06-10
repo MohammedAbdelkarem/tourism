@@ -71,11 +71,11 @@ if(!function_exists('user_id'))
         return User::currentEmail()->pluck('id')->first();
     }
 }
-if(!function_exists('admin_email'))
+if(!function_exists('admin_namea'))
 {
-    function admin_email()
+    function admin_name()
     {
-        return Cache::get('admin_email');
+        return Cache::get('admin_name');
     }
 }
 if(!function_exists('user_email'))

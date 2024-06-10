@@ -18,6 +18,7 @@ class Admin extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
+        'role',
     ];
     /**
      * The attributes that should be hidden for arrays.
@@ -38,9 +39,9 @@ class Admin extends Authenticatable implements JWTSubject
         'password' => 'hashed',
     ];
 
-    public function scopeadminEmail($query)
+    public function scopeadminName($query)
     {
-        return $query->where('email' , admin_email());
+        return $query->where('name' , admin_name());
     }
     
     /**
