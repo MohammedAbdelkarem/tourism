@@ -8,13 +8,15 @@ use App\Traits\ResponseTrait;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\Adimn\FacilityResource;
+use App\Http\Resources\Admin\FacilityDetailsResource;
 use Symfony\Component\HttpFoundation\Response;
-use App\Http\Requests\Dashboard\FacilityRequest;
-use App\Http\Resources\Dashboard\FacilityResource as DashboardFacilityresource;
+use App\Http\Requests\Admin\FacilityRequest;
+// use App\Http\Resources\Dashboard\FacilityResource as DashboardFacilityresource;
 
 class FacilitesController extends Controller
 {
     use ResponseTrait;
+    
 
     //the returned data is gonna be alot of details , so custom the data using resource(return just the name , photo and the id of the facility , do the sam thing with getPlaces and getResturants)
     public function getHotels()
@@ -100,7 +102,7 @@ class FacilitesController extends Controller
         ->get();
 
         
-        $data = FacilityResource::collection($facility);
+        $data = FacilityDetailsResource::collection($facility);
         return $this->SendResponse(response::HTTP_OK, 'facility details retrieved successfully',  $data);
     }
 
