@@ -15,11 +15,12 @@ class Facility extends Model
         'photo',
         'lat',
         'long',
+        'type',
         'price_per_person',
         'bio',
-        'number_of_places',
-        'type',
+        'number_of_places_available',
         'country_id',
+        'rate',
         'profits',
     ];
 

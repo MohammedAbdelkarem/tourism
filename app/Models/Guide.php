@@ -29,6 +29,7 @@ class Guide extends Authenticatable implements JWTSubject
         'birth_date',
         'wallet',
         'photo',
+        'can_change_id',
     ];
     /**
      * The attributes that should be hidden for arrays.
