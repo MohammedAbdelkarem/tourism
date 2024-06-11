@@ -19,7 +19,7 @@ class TripsController extends Controller
 
     public function getTripsList() // should be inplemented depending on the price range , the other thing(vip)
     {
-        $data = Trip::where('status' , 'active')
+        $data = Trip::where('status' , 'active');
     }
     public function getTripDetails(IdRequest $request)
     {
