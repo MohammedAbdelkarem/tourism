@@ -19,12 +19,11 @@ return new class extends Migration
             $table->string('lat');
             $table->string('long');
             $table->text('bio')->nullable();
-            $table->integer('number_of_places');
+            $table->integer('number_of_places_available');
             $table->integer('price_per_person');
             $table->integer('profits')->default(0);
             $table->float('rate')->default(0);
-            $table->unsignedBigInteger('country_id'); // Define the country_id column
-            $table->foreign('country_id')->references('id')->on('countries')->cascadeOnDelete();
+            $table->foreignId('country_id')->constrained('countries')->cascadeOnDelete();
             $table->timestamps();
         });
     }

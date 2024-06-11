@@ -23,6 +23,7 @@ class Guides_backups extends Model
         'birth_date',
         'wallet',
         'photo',
+        'can_change_id',
     ];
 
     public function scopeGuideEmail($query)
