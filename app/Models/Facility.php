@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Country;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Facility extends Model
 {
@@ -20,12 +21,11 @@ class Facility extends Model
         'bio',
         'number_of_places_available',
         'country_id',
-        'rate',
         'profits',
     ];
 
     public function country()
     {
-        return $this->belongsTo(\App\Models\Country::class);
+        return $this->belongsTo(Country::class);
     }
 }

@@ -22,7 +22,6 @@ return new class extends Migration
             $table->integer('number_of_places_available');
             $table->integer('price_per_person');
             $table->integer('profits')->default(0);
-            $table->float('rate')->default(0);
             $table->foreignId('country_id')->constrained('countries')->cascadeOnDelete();
             $table->timestamps();
         });

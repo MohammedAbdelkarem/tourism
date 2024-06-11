@@ -17,7 +17,7 @@ class FacilityFactory extends Factory
      * @return array<string, mixed>
      */
 
-     protected $model = Facility::class;
+    protected $model = Facility::class;
     public function definition(): array
     {
         return [
@@ -30,7 +30,6 @@ class FacilityFactory extends Factory
             'number_of_places_available' => $this->faker->numberBetween(1, 100),
             'price_per_person' => $this->faker->numberBetween(10, 100),
             'profits' => $this->faker->numberBetween(0, 1000),
-            'rate' => $this->faker->randomFloat(2, 0, 5),
             'country_id' => Country::inRandomOrder()->first()->id,
         ];
     }

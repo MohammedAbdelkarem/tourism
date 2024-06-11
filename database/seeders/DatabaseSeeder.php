@@ -18,12 +18,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        Country::factory(10)->create();
-        Facility::factory(10)->create();
-        Guides_backups::factory(10)->create();
-        Trip::factory(10)->create();
+        // Country::factory(10)->create();
+        // Facility::factory(10)->create();
+        // Guides_backups::factory(10)->create();
+        // Trip::factory(10)->create();
         $this->call([
-            AdminSeeder::class
+            // AdminSeeder::class
         ]);
     }
 }

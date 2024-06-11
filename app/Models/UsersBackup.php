@@ -15,6 +15,8 @@ class UsersBackup extends Model
         'photo',
         'phone',
         'password',
+        'wallet',
+        'active',
     ];
 
     public function scopeUserEmail($query)

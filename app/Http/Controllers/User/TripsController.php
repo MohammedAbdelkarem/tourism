@@ -14,12 +14,12 @@ class TripsController extends Controller
 {
     use ResponseTrait;
 
-    public function getHomeOffers()
+    public function getHomeOffers()//for the offers in the home , regardless of the country
     {
         $records = Trip::orderByDesc('offer_ratio')->take(7)->get();
         //resource
     }
-    public function getAllOffers()
+    public function getAllOffers()//to view all the offers when clicking view_all
     {
         $records = Trip::orderByDesc('offer_ratio')->get();
         //resource

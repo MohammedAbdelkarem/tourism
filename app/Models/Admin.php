@@ -9,7 +9,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 class Admin extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable;
-    /**
+    /**fa
      * The attributes that are mass assignable.
      *
      * @var array
@@ -19,6 +19,8 @@ class Admin extends Authenticatable implements JWTSubject
         'email',
         'password',
         'role',
+        'ratio',
+        'wallet',
     ];
     /**
      * The attributes that should be hidden for arrays.

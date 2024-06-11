@@ -24,6 +24,7 @@ class Guides_backups extends Model
         'wallet',
         'photo',
         'can_change_id',
+        'accept_by_admin',
     ];
 
     public function scopeGuideEmail($query)
