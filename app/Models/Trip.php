@@ -4,12 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Country;
-use App\Models\Guide;
+
 class Trip extends Model
 {
     use HasFactory;
-    
+
     protected $fillable = [
         'name',
         'bio',
@@ -25,17 +24,9 @@ class Trip extends Model
         'number_of_available_places',
         'number_of_original_places',
         'offer_ratio',
+        'lat',
+        'long',
         'guide_id',
         'country_id',
     ];
-
-
-    public function country()
-    {
-        return $this->belongsTo(Country::class);
-    }
-    public function guide()
-    {
-        return $this->belongsTo(Guide::class);
-    }
 }

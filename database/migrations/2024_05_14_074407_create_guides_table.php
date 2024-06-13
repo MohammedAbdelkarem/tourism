@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('phone')->unique();
             $table->string('password');
             $table->enum('status',['available' , 'unavailable'])->default('available');
-            $table->integer('price_per_person_one_day');
+            $table->integer('price_per_person_aone_day');
             $table->string('father_name');
             $table->string('mother_name');
             $table->string('unique_id')->unique();
@@ -26,7 +26,8 @@ return new class extends Migration
             $table->string('birth_date');
             $table->integer('wallet');
             $table->string('photo')->nullable();
-            $table->enum('can_change_id' , ['able' , 'unable'])->nullable();
+            $table->enum('can_change_unique_id' , ['able' , 'unable'])->nullable();
+            $table->enum('accept_by_admin' , ['accepted' , 'rejected'])->nullable();
             $table->timestamps();
         });
     }

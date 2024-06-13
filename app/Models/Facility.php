@@ -9,23 +9,16 @@ class Facility extends Model
 {
     use HasFactory;
 
-
     protected $fillable = [
+        'type',
         'name',
         'photo',
         'lat',
         'long',
-        'type',
-        'price_per_person',
         'bio',
-        'number_of_places_available',
-        'country_id',
-        'rate',
+        'number_of_available_places',
+        'price_per_person',
         'profits',
+        'country_id',
     ];
-
-    public function country()
-    {
-        return $this->belongsTo(\App\Models\Country::class);
-    }
 }
