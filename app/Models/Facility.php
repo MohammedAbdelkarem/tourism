@@ -2,30 +2,23 @@
 
 namespace App\Models;
 
-use App\Models\Country;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Facility extends Model
 {
     use HasFactory;
 
-
     protected $fillable = [
+        'type',
         'name',
         'photo',
         'lat',
         'long',
-        'type',
-        'price_per_person',
         'bio',
-        'number_of_places_available',
-        'country_id',
+        'number_of_available_places',
+        'price_per_person',
         'profits',
+        'country_id',
     ];
-
-    public function country()
-    {
-        return $this->belongsTo(Country::class);
-    }
 }

@@ -6,7 +6,6 @@ namespace Database\Seeders;
 
 use App\Models\Country;
 use App\Models\Facility;
-use App\Models\Guide;
 use App\Models\Guides_backups;
 use App\Models\Trip;
 use Illuminate\Database\Seeder;

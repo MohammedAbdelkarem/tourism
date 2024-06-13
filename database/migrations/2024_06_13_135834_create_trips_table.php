@@ -33,7 +33,6 @@ return new class extends Migration
             $table->foreignId('country_id')->constrained('countries')->cascadeOnDelete();
             $table->timestamps();
         });
-        
     }
 
     /**
