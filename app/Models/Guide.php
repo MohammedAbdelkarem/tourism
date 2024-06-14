@@ -27,7 +27,6 @@ class Guide extends Authenticatable implements JWTSubject
         'unique_id',
         'birth_place',
         'birth_date',
-        'wallet',
         'photo',
         'can_change_unique_id',
         'accept_by_admin',
