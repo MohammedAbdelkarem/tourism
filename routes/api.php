@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Auth\AdminController;
 use App\Http\Controllers\Auth\GuideController;
 use App\Http\Controllers\Admin\FacilitesController;
+use App\Http\Controllers\Admin\TripsController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -32,6 +33,23 @@ Route::group(['prefix' => 'admin'], function () {
         Route::post('logout', [AdminController::class, 'logout']); 
     });
 
+        // facility
+        Route::post('facility/store',[ FacilitesController::class,'storeFacility']);
+        Route::get('allfacility', [FacilitesController::class,'getFacilities']);
+        Route::get('restaurants', [FacilitesController::class, 'getRestaurants']);
+        Route::get('hotels', [FacilitesController::class, 'getHotels']);
+        Route::get('places', [FacilitesController::class, 'getPlaces']);
+        Route::get('facility/{id}', [FacilitesController::class,'getFacilityDetails']);
+        Route::post('/facility/{facility}', [FacilitesController::class, 'updateFacility']);
+        Route::delete('/facilities/{facility}',[FacilitesController::class, 'deleteFacility']);
+        
+         //trip
+        Route::post('trip/store',[TripsController::class,'addTrip']);
+        Route::post('/trip/{trip}', [TripsController::class, 'updateTrip']);
+        Route::delete('/trip/{trip}', [TripsController::class, 'deleteTrip']);
+        Route::get('/trip/pending', [TripsController::class, 'getPinnedTrips']);
+        Route::get('/trip/pending', [TripsController::class, 'getPinnedTrips']);
+        Route::get('/trip/pending', [TripsController::class, 'getPinnedTrips']);
 });
 
 
@@ -86,17 +104,6 @@ Route::group(['prefix' => 'guide' , 'middleware' => ['auth:guide']] , function()
     });
 });
 
-Route::group(['prefix' => 'admin'], function () {
-    //add facility
-    Route::post('facility/store',[ FacilitesController::class,'storeFacility']);
 
-    Route::get('allfacility', [FacilitesController::class,'getFacilities']);
-    Route::get('restaurants', [FacilitesController::class, 'getRestaurants']);
-    Route::get('hotels', [FacilitesController::class, 'getHotels']);
-    Route::get('places', [FacilitesController::class, 'getPlaces']);
-    Route::get('facility/{id}', [FacilitesController::class,'getFacilityDetails']);
-    //update facility
-    Route::post('/facility/{facility}', [FacilitesController::class, 'updateFacility']);
-    Route::delete('/facilities/{facility}',[FacilitesController::class, 'deleteFacility']);
 
-});
+

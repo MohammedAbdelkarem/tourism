@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Traits\ResponseTrait;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Resources\Adimn\FacilityResource;
+use App\Http\Resources\Admin\FacilityResource;
 use App\Http\Resources\Admin\FacilityDetailsResource;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Admin\FacilityRequest;
@@ -57,7 +57,7 @@ class FacilitesController extends Controller
             'long' => $request->long,
             'bio' => $request->bio,
             'type' => $request->type,
-            'number_of_places' => $request->number_of_places,
+            'number_of_places_available' => $request->number_of_places_available,
             'price_per_person' => $request->price_per_person,
             'country_id' =>$request->country_id,
         ]);
@@ -82,7 +82,7 @@ class FacilitesController extends Controller
             'long' => $request->long,
             'bio' => $request->bio,
             'type' => $request->type,
-            'number_of_places' => $request->number_of_places,
+            'number_of_places_available' => $request->number_of_places_available,
             'price_per_person' => $request->price_per_person,
             'country_id' =>$request->country_id,
         ]);
@@ -92,7 +92,7 @@ class FacilitesController extends Controller
     public function deleteFacility(Facility $facility)
     {
         $facility->delete();
-        return response()->json('product deleted successfully');
+        return response()->json('facility deleted successfully');
     }
 
     public function getFacilityDetails(string $id)

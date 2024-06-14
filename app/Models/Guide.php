@@ -1,6 +1,5 @@
 <?php
 namespace App\Models;
-use App\Models\Trip;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -72,9 +71,5 @@ class Guide extends Authenticatable implements JWTSubject
         return [];
     }    
     
-    
-    public function trip()
-    {
-      return $this->hasMany(Trip::class, 'guide_id', 'id');
-    }
+   
 }

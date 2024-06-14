@@ -2,29 +2,98 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\Admin\TripRequest;
+use App\Models\Trip;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use App\Http\Resources\Admin\TripResource;
 
 class TripsController extends Controller
 {
     use ResponseTrait;
 
-    public function addTrip(){
+    public function addTrip(TripRequest $request){
+        $Trip = Trip::create([
+            'name' => $request->name,
+            'photo' => $request->photo,
+            'lat' => $request->lat,
+            'long' => $request->long,
+            'bio' => $request->bio,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
+            'guide_id' => $request->guide_id,
+            'country_id' =>$request->country_id,
+        ]);
+        
 
+        return $this->SendResponse(response::HTTP_CREATED, 'trip added successfully');
         
     }
 
-    public function updateTrip(){}
+    public function updateTrip(TripRequest $request, Trip $trip){
 
-    public function deleteTrip(){}
+        $trip->update([
+            'name' => $request->name,
+            'photo' => $request->photo,
+            'lat' => $request->lat,
+            'long' => $request->long,
+            'bio' => $request->bio,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
+            'guide_id' => $request->guide_id,
+            'country_id' =>$request->country_id,
+        ]);
 
-    public function getPinnedTrips(){} //the trips that the admin did not make it active(able to book by the user)
 
-    public function getRunningTrips(){} //the trips that is running currently
+        return $this->SendResponse(response::HTTP_CREATED, 'trip updated successfully');
 
-    public function getFinishidTrips(){} //the trips that has been finished
+    }
 
-    public function getTripDetails(){}
+    public function deleteTrip( Trip $trip){{
+        $trip->delete();
+        return response()->json('trip deleted successfully');
+    }
+
+    }
+
+    public function getPinnedTrips(){
+         $trips = Trip::where('status', 'pending')->get();
+        if ($trips->isEmpty()) {
+            return $this->SendResponse(response::HTTP_NOT_FOUND, 'No trips found');
+        }
+        $data = TripResource::collection($trips);
+        return $this->SendResponse(response::HTTP_OK, 'pending trips retrieved successfully',$data);
+
+    } //the trips that the admin did not make it active(able to book by the user)
+
+    public function getRunningTrips(){
+        $trips = Trip::where('status', 'active')->get();
+        if ($trips->isEmpty()) {
+            return $this->SendResponse(response::HTTP_NOT_FOUND, 'No trips found');
+        }
+        $data = TripResource::collection($trips);
+        return $this->SendResponse(response::HTTP_OK, 'active trips retrieved successfully',$data);
+
+    } //the trips that is running currently
+
+    public function getFinishidTrips(){
+
+        $trips = Trip::where('status', 'finished')->get();
+        if ($trips->isEmpty()) {
+            return $this->SendResponse(response::HTTP_NOT_FOUND, 'No trips found');
+        }
+        $data = TripResource::collection($trips);
+        return $this->SendResponse(response::HTTP_OK, 'finished trips retrieved successfully',$data);
+
+    } //the trips that has been finished
+
+    public function getTripDetails(){
+
+
+
+
+        
+    }
 }

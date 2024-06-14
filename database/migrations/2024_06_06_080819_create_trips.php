@@ -25,7 +25,7 @@ return new class extends Migration
             $table->date('end_date');
             $table->integer('number_of_filled_places')->default(0);
             $table->integer('number_of_available_places')->default(0);
-            $table->integer('number_of_original_places');
+            $table->integer('number_of_original_places')->default(0);
             $table->integer('offer_ratio')->default(0);
             $table->double('lat')->nullable();
             $table->double('long')->nullable();
