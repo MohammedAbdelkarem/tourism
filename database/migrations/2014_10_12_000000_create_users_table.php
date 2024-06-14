@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('available__guides', function (Blueprint $table) {
+        Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->enum('accept_trip' , ['accepted' , 'rejected']);
-            $table->foreignId('guides_backup_id')->constrained('guides_backups')->cascadeOnDelete();
-            $table->foreignId('trip_id')->constrained('trips')->cascadeOnDelete();
+            $table->string('name')->nullable();
+            $table->string('email')->unique();
+            $table->string('phone')->unique()->nullable();
+            $table->string('photo')->nullable();
+            $table->string('password')->nullable();
             $table->timestamps();
         });
     }
@@ -25,6 +27,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('available__guides');
+        Schema::dropIfExists('users');
     }
 };
+

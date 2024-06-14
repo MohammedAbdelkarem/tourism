@@ -5,12 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Facility_Day_Notes extends Model
+class FacilityComment extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'note',
-        'facility__day_id',
+        'comment',
+        'user_backup_id',
+        'facility_id',
     ];
 }
