@@ -2,12 +2,14 @@
 
 namespace Database\Factories;
 
-use App\Models\Guides_backups;
+use App\Models\Guide;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-
-class Guides_backupsFactory extends Factory
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Guide>
+ */
+class GuideFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -15,7 +17,7 @@ class Guides_backupsFactory extends Factory
      * @return array<string, mixed>
      */
 
-    protected $model = Guides_backups::class;
+     protected $model = Guide::class;
     public function definition(): array
     {
         return [
@@ -30,7 +32,6 @@ class Guides_backupsFactory extends Factory
             'unique_id' => $this->faker->unique()->randomNumber(6),
             'birth_place' => $this->faker->city,
             'birth_date' => $this->faker->date(),
-            'wallet' => $this->faker->numberBetween(1000, 10000),
             'photo' => $this->faker->imageUrl,
             'can_change_unique_id' => $this->faker->randomElement(['able', 'unable']),
             'accept_by_admin' => $this->faker->randomElement(['accepted', 'rejected']),

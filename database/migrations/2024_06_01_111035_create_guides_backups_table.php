@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('birth_date');
             $table->integer('wallet');
             $table->string('photo')->nullable();
-            $table->enum('can_change_id' , ['able' , 'unable'])->nullable();
+            $table->enum('can_change_unique_id' , ['able' , 'unable'])->nullable();
             $table->enum('accept_by_admin' , ['accepted' , 'rejected'])->nullable();
             $table->timestamps();
         });

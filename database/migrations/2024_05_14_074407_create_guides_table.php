@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('phone')->unique();
             $table->string('password');
             $table->enum('status',['available' , 'unavailable'])->default('available');
-            $table->integer('price_per_person_aone_day');
+            $table->integer('price_per_person_one_day');
             $table->string('father_name');
             $table->string('mother_name');
             $table->string('unique_id')->unique();

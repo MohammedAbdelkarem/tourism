@@ -22,7 +22,7 @@ class CountryFactory extends Factory
         return [
             'name' => $this->faker->country,
             'photo' => $this->faker->imageUrl,
-            'bio' => $this->faker->paragraph,
+            'bio' => $this->faker->text(rand(10, 50)),
         ];
     }
 }
