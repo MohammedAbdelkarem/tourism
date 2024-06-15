@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Trip;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -31,4 +32,11 @@ class Guides_backups extends Model
     {
         return $query->where('email' , guide_email());
     }
+
+     
+    public function trip()
+    {
+      return $this->hasMany(Trip::class, 'guide_backup_id', 'id');
+    }
+    
 }

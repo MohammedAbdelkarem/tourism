@@ -2,30 +2,30 @@
 
 namespace App\Models;
 
-use App\Models\Facility;
+use App\Models\Trip;
 use App\Models\UsersBackup;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class FacilityRate extends Model
+class TripRate extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'rate',
         'user_backup_id',
-        'facility_id',
+        'trip_id',
     ];
 
-    public function facility()
+    
+    public function trip()
     {
-        return $this->belongsTo(Facility::class);
+        return $this->belongsTo(Trip::class);
     } 
 
-    
     public function usersBackup()
     {
         return $this->belongsTo(UsersBackup::class);
     } 
-    
+
 }

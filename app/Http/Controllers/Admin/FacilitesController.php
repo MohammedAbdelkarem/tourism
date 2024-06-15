@@ -7,14 +7,16 @@ use Illuminate\Http\Request;
 use App\Traits\ResponseTrait;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Resources\Adimn\FacilityResource;
+use App\Http\Resources\Admin\FacilityResource;
+use App\Http\Resources\Admin\FacilityDetailsResource;
 use Symfony\Component\HttpFoundation\Response;
-use App\Http\Requests\Dashboard\FacilityRequest;
-use App\Http\Resources\Dashboard\FacilityResource as DashboardFacilityresource;
+use App\Http\Requests\Admin\FacilityRequest;
+// use App\Http\Resources\Dashboard\FacilityResource as DashboardFacilityresource;
 
 class FacilitesController extends Controller
 {
     use ResponseTrait;
+    
 
     //the returned data is gonna be alot of details , so custom the data using resource(return just the name , photo and the id of the facility , do the sam thing with getPlaces and getResturants)
     public function getHotels()
@@ -55,7 +57,7 @@ class FacilitesController extends Controller
             'long' => $request->long,
             'bio' => $request->bio,
             'type' => $request->type,
-            'number_of_places' => $request->number_of_places,
+            'number_of_places_available' => $request->number_of_places_available,
             'price_per_person' => $request->price_per_person,
             'country_id' =>$request->country_id,
         ]);
@@ -68,7 +70,7 @@ class FacilitesController extends Controller
         $facility = Facility::all();
         $data = FacilityResource::collection($facility);
         
-        return $this->SendResponse(response::HTTP_OK, 'Facility data retrieved successfully', $data);
+        return $this->SendResponse(response::HTTP_OK, 'Facilities retrieved successfully', $data);
     }
     public function updateFacility( FacilityRequest $request, Facility $facility)
     {
@@ -80,7 +82,7 @@ class FacilitesController extends Controller
             'long' => $request->long,
             'bio' => $request->bio,
             'type' => $request->type,
-            'number_of_places' => $request->number_of_places,
+            'number_of_places_available' => $request->number_of_places_available,
             'price_per_person' => $request->price_per_person,
             'country_id' =>$request->country_id,
         ]);
@@ -90,7 +92,7 @@ class FacilitesController extends Controller
     public function deleteFacility(Facility $facility)
     {
         $facility->delete();
-        return response()->json('product deleted successfully');
+        return response()->json('facility deleted successfully');
     }
 
     public function getFacilityDetails(string $id)
@@ -100,7 +102,7 @@ class FacilitesController extends Controller
         ->get();
 
         
-        $data = FacilityResource::collection($facility);
+        $data = FacilityDetailsResource::collection($facility);
         return $this->SendResponse(response::HTTP_OK, 'facility details retrieved successfully',  $data);
     }
 

@@ -8,8 +8,9 @@ use Illuminate\Foundation\Http\FormRequest;
 use Symfony\Component\HttpFoundation\Response;
 // use Illuminate\Support\Facades\Validator;
 use Illuminate\Contracts\Validation\Validator;
+
 use Illuminate\Http\Exceptions\HttpResponseException;
-class FacilityRequest extends FormRequest
+class TripRequest extends FormRequest
 {
     use ResponseTrait; 
     /**
@@ -32,13 +33,32 @@ class FacilityRequest extends FormRequest
             'lat' => 'required|string|max:200',
             'long' => 'required|string|max:200',
             'bio' => 'required|string',
+            'end_date' => 'required|date',
+            'start_date' => 'required|date',
             'photo' => 'required|mimes:jpg,jpeg,png|max:2048',
-            'number_of_places_available' => 'required|integer|min:1',
-            'price_per_person' => 'required|integer',
-            'type' => 'required|string|between:2,100',
+            'guide_id' => 'required|integer',
             'country_id' => 'required|integer',
         ];
+
     }
+
+
+     /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'end_date.date_format' => 'The :attribute must be in the format YYYY-MM-DD.',
+            'tart_date.date_format' => 'The :attribute must be in the format YYYY-MM-DD.',
+        ];
+    }
+
+    //...
+
+
 
     /**
      * Handle a failed validation attempt.
