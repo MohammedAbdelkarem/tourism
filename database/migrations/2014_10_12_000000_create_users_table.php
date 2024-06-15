@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('phone')->unique()->nullable();
             $table->string('photo')->nullable();
             $table->string('password')->nullable();
-            $table->integer('wallet')->default(0);
             $table->timestamps();
         });
     }
@@ -31,3 +30,4 @@ return new class extends Migration
         Schema::dropIfExists('users');
     }
 };
+

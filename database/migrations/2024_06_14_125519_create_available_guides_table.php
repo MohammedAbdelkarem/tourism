@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('facility_rates', function (Blueprint $table) {
+        Schema::create('available_guides', function (Blueprint $table) {
             $table->id();
+            $table->enum('accept_trip' , ['accepted', 'rejected']);
+            $table->foreignId('trip_id')->constrained('trips')->cascadeOnDelete();
+            $table->foreignId('guide_id')->constrained('guides')->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -22,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('facility_rates');
+        Schema::dropIfExists('available_guides');
     }
 };

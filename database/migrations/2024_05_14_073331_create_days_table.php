@@ -13,6 +13,16 @@ return new class extends Migration
     {
         Schema::create('days', function (Blueprint $table) {
             $table->id();
+            $table->enum('name' , 
+            [
+                'Sunday',
+                'Monday',
+                'Tuesday',
+                'Wednesday',
+                'Thursday',
+                'Friday',
+                'Saturday'
+            ]);
             $table->timestamps();
         });
     }

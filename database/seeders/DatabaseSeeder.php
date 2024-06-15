@@ -6,7 +6,6 @@ namespace Database\Seeders;
 
 use App\Models\Country;
 use App\Models\Facility;
-use App\Models\Guide;
 use App\Models\Guides_backups;
 use App\Models\Trip;
 use Illuminate\Database\Seeder;
@@ -18,12 +17,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        Country::factory(10)->create();
-        Facility::factory(10)->create();
-        Guides_backups::factory(10)->create();
-        Trip::factory(10)->create();
+        // Country::factory(10)->create();
+        // Facility::factory(10)->create();
+        // Guides_backups::factory(10)->create();
+        // Trip::factory(10)->create();
         $this->call([
-            AdminSeeder::class
+            // AdminSeeder::class
         ]);
     }
 }

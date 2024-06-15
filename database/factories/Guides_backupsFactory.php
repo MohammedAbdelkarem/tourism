@@ -33,6 +33,7 @@ class Guides_backupsFactory extends Factory
             'wallet' => $this->faker->numberBetween(1000, 10000),
             'photo' => $this->faker->optional()->imageUrl,
             'can_change_id' => $this->faker->optional()->randomElement(['able', 'unable']),
+            'accept_by_admin' => $this->faker->optional()->randomElement(['accepted', 'rejected']),
         ];
     }
 }

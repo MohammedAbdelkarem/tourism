@@ -29,11 +29,10 @@ return new class extends Migration
             $table->integer('offer_ratio')->default(0);
             $table->double('lat')->nullable();
             $table->double('long')->nullable();
-            $table->foreignId('guide_id')->constrained('guides_backups')->cascadeOnDelete();
+            $table->foreignId('guide_backup_id')->constrained('guides_backups')->cascadeOnDelete();
             $table->foreignId('country_id')->constrained('countries')->cascadeOnDelete();
             $table->timestamps();
         });
-        
     }
 
     /**

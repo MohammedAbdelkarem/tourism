@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('available__guides', function (Blueprint $table) {
+        Schema::create('facility_day_notes', function (Blueprint $table) {
             $table->id();
+            $table->string('note');
+            $table->foreignId('facility_day_id')->constrained('facility_days')->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -22,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('available__guides');
+        Schema::dropIfExists('facility_day_notes');
     }
 };

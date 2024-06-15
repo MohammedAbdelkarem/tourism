@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('facility_comments', function (Blueprint $table) {
+        Schema::create('trip_comments', function (Blueprint $table) {
             $table->id();
+            $table->string('comment');
+            $table->foreignId('user_backup_id')->constrained('users_backups')->cascadeOnDelete();
+            $table->foreignId('trip_id')->constrained('trips')->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -22,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('facility_comments');
+        Schema::dropIfExists('trip_comments');
     }
 };

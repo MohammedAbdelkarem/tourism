@@ -13,16 +13,15 @@ return new class extends Migration
     {
         Schema::create('facilities', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
-            $table->string('photo')->nullable();
-            $table->enum('type', ['restaurant', 'hotel','place']);
+            $table->enum('type' , ['Restaurant' , 'Hotel' , 'Place']);
+            $table->string('name');
+            $table->string('photo');
             $table->string('lat');
             $table->string('long');
-            $table->text('bio')->nullable();
-            $table->integer('number_of_places_available');
+            $table->string('bio');
+            $table->integer('number_of_available_places');
             $table->integer('price_per_person');
-            $table->integer('profits')->default(0);
-            $table->float('rate')->default(0);
+            $table->integer('profits');
             $table->foreignId('country_id')->constrained('countries')->cascadeOnDelete();
             $table->timestamps();
         });
