@@ -90,3 +90,4 @@ public function favourites()
 }
 
 }
+
