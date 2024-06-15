@@ -18,7 +18,7 @@ class TripFactory extends Factory
      * @return array<string, mixed>
      */
 
-     protected $model = Trip::class;
+    protected $model = Trip::class;
     public function definition(): array
     {
         return [

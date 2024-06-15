@@ -11,6 +11,6 @@ class Photo extends Model
 
     protected $fillable = [
         'photo',
-        'user_id',
+        'trip_id',
     ];
 }
