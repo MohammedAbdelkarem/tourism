@@ -36,6 +36,7 @@ class Guides_backups extends Model
      
     public function trip()
     {
-      return $this->hasMany(Trip::class, 'guide_id', 'id');
+      return $this->hasMany(Trip::class, 'guide_backup_id', 'id');
     }
+    
 }

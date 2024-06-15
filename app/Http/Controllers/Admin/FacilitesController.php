@@ -70,7 +70,7 @@ class FacilitesController extends Controller
         $facility = Facility::all();
         $data = FacilityResource::collection($facility);
         
-        return $this->SendResponse(response::HTTP_OK, 'Facility data retrieved successfully', $data);
+        return $this->SendResponse(response::HTTP_OK, 'Facilities retrieved successfully', $data);
     }
     public function updateFacility( FacilityRequest $request, Facility $facility)
     {

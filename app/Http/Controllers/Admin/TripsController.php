@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Resources\Admin\TripResource;
+use App\Http\Resources\Admin\TripDetailsResource;
+
+
 
 class TripsController extends Controller
 {
@@ -89,9 +92,27 @@ class TripsController extends Controller
 
     } //the trips that has been finished
 
-    public function getTripDetails(){
+
+    public function getTrips()
+    {
+
+        $trips = Trip::all();
+        $data = TripResource::collection($trips);
+        
+        return $this->SendResponse(response::HTTP_OK, 'trips retrieved successfully', $data);
+    }
 
 
+
+    public function getTripDetails(string $id){
+
+        $trip = Trip::query()
+        ->where('id', $id)
+        ->get();
+
+        
+        $data = TripDetailsResource::collection($trip);
+        return $this->SendResponse(response::HTTP_OK, 'trip details retrieved successfully',  $data);
 
 
         

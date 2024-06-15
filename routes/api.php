@@ -48,9 +48,12 @@ Route::group(['prefix' => 'admin'], function () {
         Route::post('/trip/{trip}', [TripsController::class, 'updateTrip']);
         Route::delete('/trip/{trip}', [TripsController::class, 'deleteTrip']);
         Route::get('/trip/pending', [TripsController::class, 'getPinnedTrips']);
-        Route::get('/trip/pending', [TripsController::class, 'getPinnedTrips']);
-        Route::get('/trip/pending', [TripsController::class, 'getPinnedTrips']);
+        Route::get('/trip/active', [TripsController::class, 'getRunningTrips']);
+        Route::get('/trip/finish', [TripsController::class, 'getFinishidTrips']);
+        Route::get('/trip', [TripsController::class, 'getTrips']);
+        Route::get('/trip/{trip}', [TripsController::class, 'getTripDetails']);
 });
+
 
 
 

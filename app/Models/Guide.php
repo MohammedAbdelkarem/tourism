@@ -5,6 +5,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use App\Models\GuideTransaction;
+use App\Models\AvailableGuide;
 
 class Guide extends Authenticatable implements JWTSubject
 {
@@ -71,5 +73,14 @@ class Guide extends Authenticatable implements JWTSubject
         return [];
     }    
     
-   
+    public function guidTransaction()
+{
+  return $this->hasMany(GuideTransaction::class, 'guide_id', 'id');
+}
+
+public function availableGuide()
+{
+  return $this->hasMany(AvailableGuide::class, 'guide_id', 'id');
+}
+
 }

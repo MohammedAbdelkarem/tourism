@@ -5,6 +5,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use App\Models\Reservatoin;
+use App\Models\UserTransaction;
+use App\Models\Trip;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -60,5 +63,21 @@ class User extends Authenticatable implements JWTSubject
      */
     public function getJWTCustomClaims() {
         return [];
-    }    
+    }   
+    
+    
+    public function reservatoin()
+{
+  return $this->hasMany(Reservatoin::class, 'user_id', 'id');
+}
+
+public function userTransaction()
+{
+  return $this->hasMany(UserTransaction::class, 'user_id', 'id');
+}
+
+public function favourites()
+    {
+        return $this->belongsToMany(Trip::class, 'favourites');
+    }
 }
