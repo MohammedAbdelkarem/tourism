@@ -16,8 +16,8 @@ class Day extends Model
 
 
     public function facilityDay()
-{
-  return $this->hasMany(FacilityDay::class, 'day_id', 'id');
-}
+    {
+    return $this->hasMany(FacilityDay::class, 'day_id', 'id');
+    }
 
 }

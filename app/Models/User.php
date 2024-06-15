@@ -67,16 +67,16 @@ class User extends Authenticatable implements JWTSubject
     
     
     public function reservatoin()
-{
-  return $this->hasMany(Reservatoin::class, 'user_id', 'id');
-}
+    {
+    return $this->hasMany(Reservatoin::class, 'user_id', 'id');
+    }
 
-public function userTransaction()
-{
-  return $this->hasMany(UserTransaction::class, 'user_id', 'id');
-}
+    public function userTransaction()
+    {
+    return $this->hasMany(UserTransaction::class, 'user_id', 'id');
+    }
 
-public function favourites()
+    public function favourites()
     {
         return $this->belongsToMany(Trip::class, 'favourites');
     }

@@ -9,16 +9,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Country extends Model
 {
-    use HasFactory;
+  use HasFactory;
 
-    protected $fillable = [
-        'name',
-        'bio',
-        'photo',
-    ];
+  protected $fillable = [
+    'name',
+    'bio',
+    'photo',
+  ];
 
 
-    public function facility()
+  public function facility()
   {
     return $this->hasMany(Facility::class, 'country_id', 'id');
   }

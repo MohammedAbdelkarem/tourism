@@ -26,24 +26,24 @@ class Facility extends Model
         'country_id',
     ];
 
-public function country()
-{
-    return $this->belongsTo(Country::class);
-}
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
+    }
 
-public function facilityDay()
-{
-  return $this->hasMany(FacilityDay::class, 'facility_id', 'id');
-}
+    public function facilityDay()
+    {
+      return $this->hasMany(FacilityDay::class, 'facility_id', 'id');
+    }
 
 
-public function facilityComment()
-{
-  return $this->hasMany(FacilityComment::class, 'facility_id', 'id');
-}
+    public function facilityComment()
+    {
+      return $this->hasMany(FacilityComment::class, 'facility_id', 'id');
+    }
 
-public function facilityRate()
-{
-  return $this->hasMany(FacilityRate::class, 'facility_id', 'id');
-}
+    public function facilityRate()
+    {
+      return $this->hasMany(FacilityRate::class, 'facility_id', 'id');
+    }
 }

@@ -29,25 +29,25 @@ class UsersBackup extends Model
     }
 
     public function trip_rates()
-{
-  return $this->hasMany(TripRate::class, 'user_backup_id', 'id');
-}
+    {
+      return $this->hasMany(TripRate::class, 'user_backup_id', 'id');
+    }
 
-public function trip_comment()
-{
-  return $this->hasMany(TripComment::class, 'user_backup_id', 'id');
-}
+    public function trip_comment()
+    {
+      return $this->hasMany(TripComment::class, 'user_backup_id', 'id');
+    }
 
 
-public function facilityComment()
-{
-  return $this->hasMany(FacilityComment::class, 'user_backup_id', 'id');
-}
+    public function facilityComment()
+    {
+      return $this->hasMany(FacilityComment::class, 'user_backup_id', 'id');
+    }
 
-public function facilityRate()
-{
-  return $this->hasMany(FacilityRate::class, 'user_backup_id', 'id');
-}
+    public function facilityRate()
+    {
+      return $this->hasMany(FacilityRate::class, 'user_backup_id', 'id');
+    }
 
 
 }

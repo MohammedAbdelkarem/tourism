@@ -41,53 +41,53 @@ class Trip extends Model
 
 
     public function country()
-{
-    return $this->belongsTo(Country::class);
+    {
+        return $this->belongsTo(Country::class);
 
-}
+    }
 
-public function facilityDay()
-{
-  return $this->hasMany(FacilityDay::class, 'trip_id', 'id');
-} 
-
-
-public function reservatoin()
-{
-  return $this->hasMany(Reservatoin::class, 'trip_id', 'id');
-}
+    public function facilityDay()
+    {
+      return $this->hasMany(FacilityDay::class, 'trip_id', 'id');
+    } 
 
 
-public function photo()
-{
-  return $this->hasMany(Photo::class, 'trip_id', 'id');
-}
+    public function reservatoin()
+    {
+      return $this->hasMany(Reservatoin::class, 'trip_id', 'id');
+    }
 
-public function trip_rates()
-{
-  return $this->hasMany(TripRate::class, 'trip_id', 'id');
-}
 
-public function trip_comment()
-{
-  return $this->hasMany(TripComment::class, 'trip_id', 'id');
-}
+    public function photo()
+    {
+      return $this->hasMany(Photo::class, 'trip_id', 'id');
+    }
 
-public function Guides_backups()
-{
-    return $this->belongsTo(Guides_backups::class);
+    public function trip_rates()
+    {
+      return $this->hasMany(TripRate::class, 'trip_id', 'id');
+    }
 
-}
+    public function trip_comment()
+    {
+      return $this->hasMany(TripComment::class, 'trip_id', 'id');
+    }
 
-public function availableGuide()
-{
-    return $this->hasOne(AvailableGuide::class);
-}
+    public function Guides_backups()
+    {
+        return $this->belongsTo(Guides_backups::class);
 
-public function favourites()
-{
-    return $this->belongsToMany(User::class, 'favourites');
-}
+    }
+
+    public function availableGuide()
+    {
+        return $this->hasOne(AvailableGuide::class);
+    }
+
+    public function favourites()
+    {
+        return $this->belongsToMany(User::class, 'favourites');
+    }
 
 }
 

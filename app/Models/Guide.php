@@ -74,13 +74,13 @@ class Guide extends Authenticatable implements JWTSubject
     }    
     
     public function guidTransaction()
-{
-  return $this->hasMany(GuideTransaction::class, 'guide_id', 'id');
-}
+    {
+    return $this->hasMany(GuideTransaction::class, 'guide_id', 'id');
+    }
 
-public function availableGuide()
-{
-  return $this->hasMany(AvailableGuide::class, 'guide_id', 'id');
-}
+    public function availableGuide()
+    {
+    return $this->hasMany(AvailableGuide::class, 'guide_id', 'id');
+    }
 
 }
