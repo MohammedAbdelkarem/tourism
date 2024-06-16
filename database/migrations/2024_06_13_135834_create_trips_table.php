@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('price_per_one_old')->default(0);
             $table->integer('price_per_one_new')->default(0);
             $table->integer('total_price')->default(0);
-            $table->enum('status' , ['pending' , 'active' , 'finished'])->default('pending');
+            $table->enum('status' , ['pending' , 'active' ,'in_progress' , 'finished'])->default('pending');
             $table->date('start_date');
             $table->date('end_date');
             $table->integer('number_of_filled_places')->default(0);

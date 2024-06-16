@@ -29,7 +29,7 @@ class TripFactory extends Factory
             'price_per_one_old' => $this->faker->randomNumber(2),
             'price_per_one_new' => $this->faker->randomNumber(2),
             'total_price' => $this->faker->randomNumber(4),
-            'status' => $this->faker->randomElement(['pending', 'active', 'finished']),
+            'status' => $this->faker->randomElement(['pending' , 'active' ,'in_progress' , 'finished']),
             'start_date' => $this->faker->date(),
             'end_date' => $this->faker->date(),
             'number_of_filled_places' => $this->faker->randomNumber(),

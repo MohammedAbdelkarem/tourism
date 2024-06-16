@@ -32,9 +32,9 @@ class FacilityController extends Controller
     {
         $id = $request->validated()['id'];
 
-        $records = Facility::where('id' , $id)->get();
+        $records = Facility::findOrFail($id);
 
-        $records = UserFacilityDetailsResource::collection($records);
+        $records = new UserFacilityDetailsResource($records);
 
         return $this->SendResponse(response::HTTP_OK , 'facility details retrieved with success' , $records);
     }
