@@ -7,6 +7,8 @@ use App\Http\Controllers\Auth\AdminController;
 use App\Http\Controllers\Auth\GuideController;
 use App\Http\Controllers\Admin\FacilitesController;
 use App\Http\Controllers\Admin\TripsController;
+use App\Http\Controllers\User\FacilityController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -78,6 +80,11 @@ Route::group(['prefix' => 'user' , 'middleware' => ['auth:user']] , function(){
         Route::post('logout', [UserController::class, 'logout']);
         Route::get('profile', [UserController::class, 'profile']);
         Route::delete('delete', [UserController::class, 'deleteAccount']);
+    });
+
+    Route::group(['prefix' => 'facility'], function () {
+        Route::post('getlist', [FacilityController::class, 'getFacilitiesByCountry']);
+        Route::post('details', [FacilityController::class, 'getFacilityDetails']);
     });
 });
 
