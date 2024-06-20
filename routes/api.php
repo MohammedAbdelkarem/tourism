@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\AdminController;
 use App\Http\Controllers\Auth\GuideController;
 use App\Http\Controllers\Admin\FacilitesController;
 use App\Http\Controllers\Admin\TripsController;
+use App\Http\Controllers\Admin\DaysController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -52,6 +53,9 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/trip/finish', [TripsController::class, 'getFinishidTrips']);
         Route::get('/trip', [TripsController::class, 'getTrips']);
         Route::get('/trip/{trip}', [TripsController::class, 'getTripDetails']);
+
+        //day
+        Route::post('/days', [DaysController::class,'addDay']);
 });
 
 

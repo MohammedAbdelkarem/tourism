@@ -14,7 +14,7 @@ class FacilityDay extends Model
     use HasFactory;
 
     protected $fillable = [
-        'data',
+        'date',
         'start_time',
         'end_time',
         'day_id',
