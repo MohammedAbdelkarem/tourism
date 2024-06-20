@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\User;
 
 use Illuminate\Validation\Rules\Password;
 use App\Traits\ResponseTrait;
@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class IdRequest extends FormRequest
+class TripFilterRequest extends FormRequest
 {
     use ResponseTrait;
     /**
@@ -29,7 +29,9 @@ class IdRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => 'required'
+            'start' => 'integer',
+            'end' => 'integer',
+            'country_id' => 'required',
         ];
     }
 

@@ -23,6 +23,7 @@ class Facility extends Model
         'number_of_available_places',
         'price_per_person',
         'profits',
+        'total_rate',
         'country_id',
     ];
 

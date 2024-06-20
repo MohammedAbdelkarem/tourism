@@ -30,6 +30,7 @@ class FacilityFactory extends Factory
             'number_of_available_places' => $this->faker->numberBetween(1, 100),
             'price_per_person' => $this->faker->numberBetween(10, 100),
             'profits' => $this->faker->numberBetween(0, 1000),
+            'total_rate' => $this->faker->randomFloat(2, 0, 5),
             'country_id' => Country::inRandomOrder()->first()->id,
         ];
     }

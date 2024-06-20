@@ -75,7 +75,7 @@ class Trip extends Model
 
     public function Guides_backups()
     {
-        return $this->belongsTo(Guides_backups::class);
+        return $this->belongsTo(Guides_backups::class , 'guide_backup_id');
 
     }
 
@@ -87,6 +87,16 @@ class Trip extends Model
     public function favourites()
     {
         return $this->belongsToMany(User::class, 'favourites');
+    }
+
+    //scopes
+    public function scopeOffer($query)
+    {
+        return $query->where('offer_ratio' , '!=' , '0');
+    }
+    public function scopeActive($query)
+    {
+        return $query->where('status' , 'active');
     }
 
 }
