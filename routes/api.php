@@ -9,8 +9,11 @@ use App\Http\Controllers\Admin\FacilitesController;
 use App\Http\Controllers\Admin\TripsController;
 use App\Http\Controllers\User\FacilityController;
 use App\Http\Controllers\User\TripsController as UserTripsController;
-
+use App\Http\Controllers\Admin\TripsController as AdminTripsController;
 use App\Http\Controllers\Admin\DaysController;
+
+
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
