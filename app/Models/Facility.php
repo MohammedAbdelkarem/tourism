@@ -38,10 +38,6 @@ class Facility extends Model
     }
 
 
-    public function facilityComment()
-    {
-      return $this->hasMany(FacilityComment::class, 'facility_id', 'id');
-    }
 
     public function facilityRate()
     {

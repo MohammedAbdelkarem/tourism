@@ -15,10 +15,7 @@ class FacilityDay extends Model
 
     protected $fillable = [
         'data',
-        'start_time',
-        'end_time',
         'day_id',
-        'facility_id',
         'trip_id',
     ];
 

@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('facility_comments', function (Blueprint $table) {
+        Schema::create('facility_in_days', function (Blueprint $table) {
             $table->id();
-            $table->string('comment');
-            $table->foreignId('user_backup_id')->constrained('users_backups')->cascadeOnDelete();
+            $table->time('start_time');
+            $table->time('end_time');
             $table->foreignId('facility_id')->constrained('facilities')->cascadeOnDelete();
+            $table->foreignId('facility_day_id')->constrained('facility_days')->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('facility_comments');
+        Schema::dropIfExists('facility_in_days');
     }
 };

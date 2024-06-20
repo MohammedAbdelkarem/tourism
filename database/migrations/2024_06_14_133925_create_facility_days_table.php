@@ -14,10 +14,7 @@ return new class extends Migration
         Schema::create('facility_days', function (Blueprint $table) {
             $table->id();
             $table->date('date');
-            $table->time('start_time');
-            $table->time('end_time');
             $table->foreignId('day_id')->constrained('days')->cascadeOnDelete();
-            $table->foreignId('facility_id')->constrained('facilities')->cascadeOnDelete();
             $table->foreignId('trip_id')->constrained('trips')->cascadeOnDelete();
             $table->timestamps();
         });

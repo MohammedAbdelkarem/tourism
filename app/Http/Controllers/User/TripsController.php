@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Traits\ResponseTrait;
 use App\Http\Requests\IdRequest;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\FavRequest;
 use App\Http\Resources\User\CountryResource;
 use App\Http\Resources\User\HomeRecResource;
 use App\Http\Requests\User\TripFilterRequest;
@@ -15,6 +16,7 @@ use App\Http\Resources\User\HomeOfferResource;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Resources\User\TripDetailsResource;
 use App\Http\Resources\User\CountryDetailsResource;
+use App\Models\Favourite;
 
 class TripsController extends Controller
 {
@@ -153,10 +155,23 @@ class TripsController extends Controller
 
         return $this->SendResponse(response::HTTP_OK , 'countries retrieved with success' , $data);
     }
+    // public function addToFav(FavRequest $request)
+    // {
+
+    //     $data['trip_id'] = $request->validated()['trip_id'];
+    //     $data['user_id'] = $request->validated()['user_id'];
+
+    //     Favourite::create($data);
+
+    //     return $this->SendResponse()
+    // }
+    public function getFav(){}
+    public function deleteFav(){}
     public function appointTrip(){}
     public function unAppointTrip(){}
     public function modifyAppointment(){}
     public function getOldTrips(){}
+    
     
 
 }
