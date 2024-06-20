@@ -155,18 +155,32 @@ class TripsController extends Controller
 
         return $this->SendResponse(response::HTTP_OK , 'countries retrieved with success' , $data);
     }
-    // public function addToFav(FavRequest $request)
-    // {
+    public function addToFav(FavRequest $request)
+    {
 
-    //     $data['trip_id'] = $request->validated()['trip_id'];
-    //     $data['user_id'] = $request->validated()['user_id'];
+        $data['trip_id'] = $request->validated()['trip_id'];
+        $data['user_id'] = $request->validated()['user_id'];
 
-    //     Favourite::create($data);
+        Favourite::create($data);
 
-    //     return $this->SendResponse()
-    // }
-    public function getFav(){}
-    public function deleteFav(){}
+        return $this->SendResponse(response::HTTP_OK , 'added to favourites with success');
+    }
+    public function deleteFav(IdRequest $request)
+    {
+        $favid = $request->validated()['id'];
+
+        Favourite::where('id' , $favid)->delete();
+
+        return $this->SendResponse(response::HTTP_OK , 'deleted from favourites with success');
+    }
+    public function getFav(IdRequest $request)
+    {
+        $userId = $request->validated()['id'];
+
+        Favourite::where('user_id' , $userId)->delete();
+
+        return $this->SendResponse(response::HTTP_OK , 'favourites retrieved with success');
+    }
     public function appointTrip(){}
     public function unAppointTrip(){}
     public function modifyAppointment(){}
