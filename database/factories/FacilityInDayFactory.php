@@ -1,15 +1,15 @@
-?php
+<?php
 
 namespace Database\Factories;
 
 use App\Models\Facility;
-use App\Models\UsersBackup;
+use App\Models\FacilityDay;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\FacilityComment>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\FacilityInDay>
  */
-class FacilityCommentFactory extends Factory
+class FacilityInDayFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -20,8 +20,9 @@ class FacilityCommentFactory extends Factory
     {
         return [
             'facility_id' => Facility::inRandomOrder()->first()->id,
-            'user_backup_id' => UsersBackup::inRandomOrder()->first()->id,
-            'comment' => $this->faker->text(rand(10, 50)),
+            'facility_day_id' => FacilityDay::inRandomOrder()->first()->id,
+            'start_time' => $this->faker->time(),
+            'end_time' => $this->faker->time(),
         ];
     }
 }

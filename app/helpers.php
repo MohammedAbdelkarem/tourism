@@ -68,10 +68,10 @@ if(!function_exists('user_id'))
 {
     function user_id()
     {
-        return User::currentEmail()->pluck('id')->first();
+        return User::UserEmail()->pluck('id')->first();
     }
 }
-if(!function_exists('admin_namea'))
+if(!function_exists('admin_name'))
 {
     function admin_name()
     {

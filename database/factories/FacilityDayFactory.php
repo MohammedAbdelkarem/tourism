@@ -23,10 +23,7 @@ class FacilityDayFactory extends Factory
     {
         return [
             'date' => $this->faker->date(),
-            'start_time' => $this->faker->time(),
-            'end_time' => $this->faker->time(),
             'day_id' => Day::inRandomOrder()->first()->id,
-            'facility_id' => Facility::inRandomOrder()->first()->id,
             'trip_id' => Trip::inRandomOrder()->first()->id,
         ];
     }

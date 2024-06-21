@@ -18,7 +18,6 @@ class FacilityDay extends Model
         'start_time',
         'end_time',
         'day_id',
-        'facility_id',
         'trip_id',
     ];
 
