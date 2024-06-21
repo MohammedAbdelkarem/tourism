@@ -1,13 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
+
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Auth\AdminController;
 use App\Http\Controllers\Auth\GuideController;
-use App\Http\Controllers\Admin\FacilitesController;
 use App\Http\Controllers\Admin\TripsController;
 use App\Http\Controllers\User\FacilityController;
+use App\Http\Controllers\Admin\FacilitesController;
 use App\Http\Controllers\User\TripsController as UserTripsController;
 
 /*
@@ -70,6 +72,24 @@ Route::group(['prefix' => 'user'], function () {
         Route::post('reset' , [UserController::class , 'resetPassword']);
     });
 
+    Route::group(['prefix' => 'trip'], function () {
+        Route::get('homeoffers', [UserTripsController::class, 'getHomeOffers']);
+        Route::get('listoffers', [UserTripsController::class, 'getAllOffers']);
+        Route::get('homerec', [UserTripsController::class, 'getHomeRecommended']);
+        Route::get('listrec', [UserTripsController::class, 'getAllRecommended']);
+        Route::post('triplist', [UserTripsController::class, 'getTripsListByCountry']);
+        Route::post('details', [UserTripsController::class, 'getTripDetails']);
+        Route::post('search', [UserTripsController::class, 'search']);
+        Route::get('co', [UserTripsController::class, 'getHomeCountries']);
+        Route::post('codetails', [UserTripsController::class, 'getCountryDetails']);
+        Route::post('countrytrips', [UserTripsController::class, 'getCountryTrips']);
+    });
+
+    Route::group(['prefix' => 'facility'], function () {
+        Route::post('getlist', [FacilityController::class, 'getFacilitiesByCountry']);
+        Route::post('details', [FacilityController::class, 'getFacilityDetails']);
+    });
+
 });
 
 
@@ -83,22 +103,7 @@ Route::group(['prefix' => 'user' , 'middleware' => ['auth:user']] , function(){
         Route::delete('delete', [UserController::class, 'deleteAccount']);
     });
 
-    Route::group(['prefix' => 'facility'], function () {
-        Route::post('getlist', [FacilityController::class, 'getFacilitiesByCountry']);
-        Route::post('details', [FacilityController::class, 'getFacilityDetails']);
-    });
-
-    Route::group(['prefix' => 'trip'], function () {
-        Route::get('homeoffers', [UserTripsController::class, 'getHomeOffers']);
-        Route::get('listoffers', [UserTripsController::class, 'getAllOffers']);
-        Route::get('homerec', [UserTripsController::class, 'getHomeRecommended']);
-        Route::get('listrec', [UserTripsController::class, 'getAllRecommended']);
-        Route::post('triplist', [UserTripsController::class, 'getTripsListByCountry']);
-        Route::post('details', [UserTripsController::class, 'getTripDetails']);
-        Route::post('search', [UserTripsController::class, 'search']);
-        Route::get('co', [UserTripsController::class, 'getHomeCountries']);
-        Route::post('codetails', [UserTripsController::class, 'getCountryDetails']);
-    });
+    
 });
 
 
