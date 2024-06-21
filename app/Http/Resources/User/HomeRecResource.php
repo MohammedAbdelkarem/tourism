@@ -19,6 +19,7 @@ class HomeRecResource extends JsonResource
             'name' => $this->name,
             'photo' => $this->photo,
             'rate' => $this->rate,
+            'favourite' => $this->favourites->count(),
         ];
     }
 }

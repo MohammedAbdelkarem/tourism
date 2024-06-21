@@ -26,6 +26,7 @@ class TripDetailsResource extends JsonResource
             'number_of_available_places' => $this->number_of_available_places,
             'guide' => $this->Guides_backups->name,
             'guide_phone' => $this->Guides_backups->phone,
+            'favourite' => $this->favourites->count(),
             'comments' => CommentResource::collection($this->trip_comment),
         ];
     }

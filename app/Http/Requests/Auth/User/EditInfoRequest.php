@@ -13,6 +13,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 
 class EditInfoRequest extends FormRequest
 {
+    use ResponseTrait;
     /**
      * Determine if the user is authorized to make this request.
      */

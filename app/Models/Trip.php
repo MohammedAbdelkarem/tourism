@@ -98,6 +98,12 @@ class Trip extends Model
     {
         return $query->where('status' , 'active');
     }
+    public function scopeFavourite($query)
+    {
+        return $query->with(['favourites' => function ($query) {
+          $query->where('user_id', user_id());
+      }]);
+    }
 
 }
 

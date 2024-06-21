@@ -34,7 +34,7 @@ class FacilityController extends Controller
 
         $records = Facility::findOrFail($id);
 
-        $records = new UserFacilityDetailsResource($records);
+        // $records = new UserFacilityDetailsResource($records);
 
         return $this->SendResponse(response::HTTP_OK , 'facility details retrieved with success' , $records);
     }

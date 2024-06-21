@@ -36,13 +36,13 @@ class DatabaseSeeder extends Seeder
     {
         Country::factory(10)->create();
 
-        Day::factory(10)->create();
+        Day::factory(7)->create();
 
-        Facility::factory(10)->create();
+        Facility::factory(20)->create();
 
-        Guides_backups::factory(10)->create();
+        Guides_backups::factory(20)->create();
 
-        Guide::factory(10)->create();
+        Guide::factory(20)->create();
 
         User::factory(10)->create();
 
@@ -50,29 +50,29 @@ class DatabaseSeeder extends Seeder
 
         Admin::factory(10)->create();
 
-        Trip::factory(10)->create();
+        Trip::factory(40)->create();
 
-        FacilityDay::factory(10)->create();
+        FacilityDay::factory(20)->create();
 
-        FacilityInDay::factory(10)->create();
+        FacilityInDay::factory(20)->create();
 
-        FacilityDayNotes::factory(10)->create();
+        FacilityDayNotes::factory(20)->create();
 
-        AvailableGuide::factory(10)->create();
+        AvailableGuide::factory(20)->create();
 
-        Reservatoin::factory(10)->create();
+        Reservatoin::factory(20)->create();
 
-        Photo::factory(10)->create();
+        Photo::factory(20)->create();
 
-        Favourite::factory(10)->create();
+        Favourite::factory(20)->create();
 
-        FacilityRate::factory(10)->create();
+        FacilityRate::factory(20)->create();
 
-        TripComment::factory(10)->create();
+        TripComment::factory(20)->create();
 
-        UserTransaction::factory(10)->create();
+        UserTransaction::factory(20)->create();
 
-        GuideTransaction::factory(10)->create();
+        GuideTransaction::factory(20)->create();
 
         $this->call([
             // AdminSeeder::class
