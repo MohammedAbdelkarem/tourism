@@ -29,15 +29,20 @@ class TripRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|between:2,100',
-            'lat' => 'required|string|max:200',
-            'long' => 'required|string|max:200',
-            'bio' => 'required|string',
-            'end_date' => 'required|date',
-            'start_date' => 'required|date',
-            'photo' => 'required|mimes:jpg,jpeg,png|max:2048',
-            'guide_id' => 'required|integer',
-            'country_id' => 'required|integer',
+            'name'          => 'required|string|between:2,100',
+            'lat'           => 'required|numeric',
+            'long'          => 'required|numeric',
+            'bio'           => 'required|string',
+            'end_date'      => 'required|date',
+            'start_date'    => 'required|date',
+            'photo'         => 'required|mimes:jpg,jpeg,png|max:2048',
+            'guide_id'      => 'required|integer',
+            'country_id'    => 'required|integer',
+            'days'          => ['required', 'array'],
+            'days.*.id'     => ['required', 'numeric'],
+            'days.*.date'   => ['required', 'date_format:Y-m-d'],
+            'days.*.facilities' => ['required', ]
+            // 'days.*.faclilifwi.*.kdjfkf'
         ];
 
     }

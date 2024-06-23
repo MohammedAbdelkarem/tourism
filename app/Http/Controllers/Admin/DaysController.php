@@ -30,14 +30,17 @@ class DaysController extends Controller
              $lat = $trip->lat;
              $long = $trip->long;
          
-             $facilities = Facility::selectRaw("*, ST_Distance_Sphere(point(`long`, `lat`), point(?,?)) as distance")
-                 ->addBinding($long)
-                 ->addBinding($lat)
-                 ->having('distance', '<=', 2000) // 2000 meters = 2 kilometers
-                 ->orderBy('distance')
-                 ->get();
-         
 
+            $lat1=$lat+0.05;
+            $lat2=$lat-0.05;
+            $long1=$long+0.05;
+            $long2=$long-0.05;
+
+
+
+            $facilities = Facility::whereBetween('lat', [$lat1, $lat2])
+    ->orderBy('lat')
+    ->get();
                  return $this->SendResponse(response::HTTP_OK, 'Facilities retrieved successfully', $facilities);
           
          }
@@ -58,6 +61,7 @@ class DaysController extends Controller
          // Validate that at least one facility is selected
          $request->validate([
              'selected_facilities' => 'required|array|min:1',
+    
          ]);
      
          foreach ($selectedFacilities as $facilityId) {
@@ -81,7 +85,7 @@ class DaysController extends Controller
          $lat = $trip->lat;
          $long = $trip->long;
      
-         $nearestFacilities = $this->getNearestFacilities($lat, $long);
+        //  $nearestFacilities = $this->getNearestFacilities($lat, $long);
      
          // allow user to select multiple facilities
          $selectedFacilities = $request->input('selected_facilities');

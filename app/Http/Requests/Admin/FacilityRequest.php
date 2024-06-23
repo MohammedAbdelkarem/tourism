@@ -28,15 +28,15 @@ class FacilityRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|between:2,100',
-            'lat' => 'required|string|max:200',
-            'long' => 'required|string|max:200',
-            'bio' => 'required|string',
-            'photo' => 'required|mimes:jpg,jpeg,png|max:2048',
-            'number_of_places_available' => 'required|integer|min:1',
-            'price_per_person' => 'required|integer',
-            'type' => 'required|string|between:2,100',
-            'country_id' => 'required|integer',
+            'name'                       => 'required|string|between:2,100',
+            'lat'                        => 'required|numeric',
+            'long'                       => 'required|numeric',
+            'bio'                        => 'required|string',
+            'photo'                      => 'required|mimes:jpg,jpeg,png|max:2048',
+            'number_of_available_places' => 'required|integer|min:1',
+            'price_per_person'           => 'required|integer',
+            'type'                       => 'required|string|between:2,100',
+            'country_id'                 => 'required|integer',
         ];
     }
 
