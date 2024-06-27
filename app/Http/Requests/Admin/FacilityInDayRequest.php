@@ -4,7 +4,7 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DayRequest extends FormRequest
+class FacilityInDayRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,15 +22,11 @@ class DayRequest extends FormRequest
     public function rules(): array
     {
         return [
-          
-            'date' => 'required|date',
-            'day_id' => 'required|integer',
-            'trip_id' => 'required|integer',
-            // 'start_time' => 'required|date_format:H:i:s',
-            // 'end_time' => 'required|date_format:H:i:s',
-            // 'selected_facilities' => 'required|array|min:1',
-            // 'selected_facilities.*' => 'required|integer|exists:facilities,id',
-   
+              'start_time' => 'required|date_format:H:i:s',
+            'end_time' => 'required|date_format:H:i:s',
+            'facility_id'  => 'required|integer',
+            'facility_day_id'  => 'required|integer',
+            'note'  => 'nullable|string',
         ];
     }
 }

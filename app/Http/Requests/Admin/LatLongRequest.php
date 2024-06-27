@@ -2,10 +2,16 @@
 
 namespace App\Http\Requests\Admin;
 
-use Illuminate\Foundation\Http\FormRequest;
 
+use App\Traits\ResponseTrait;
+use Illuminate\Foundation\Http\FormRequest;
+use Symfony\Component\HttpFoundation\Response;
+// use Illuminate\Support\Facades\Validator;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 class LatLongRequest extends FormRequest
 {
+    use ResponseTrait; 
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -21,53 +27,24 @@ class LatLongRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'lat'           => 'required|numeric',
-            'long'          => 'required|numeric',
-        ];
-    }
-    
-    /**
-     * Normalize the longitude value if it's outside the range of -180 to 180
-     *
-     * @param  string  $key
-     * @param  mixed  $value
-     * @return mixed
-     */
-    public function normalizeLongitude($key, $value)
-    {
-        
-    $value = (float) $value; // cast to float
-    if ($value < -180) {
-        $value += 360;
-    } elseif ($value > 180) {
-        $value -= 360;
-    }
-    return $value;
+        return ['lat'           => 'required|numeric',
+                'long'          => 'required|numeric',
+                ];
     }
 
     /**
-     * Prepare the data for validation
+     * Handle a failed validation attempt.
      *
+     * @param  \Illuminate\Contracts\Validation\Validator  $validator
      * @return void
+     *
+     * @throws \Illuminate\Validation\ValidationException
      */
-    public function prepareForValidation()
-{
-    $this->merge([
-        'lat' => $this->normalizeLatitude('lat', $this->input('lat')),
-        'long' => $this->normalizeLongitude('long', $this->input('long')),
-    ]);
-}
-
-public function normalizeLatitude($key, $value)
-{
-
-    $value = (float) $value; 
-    if ($value < -90) {
-        $value = -90;
-    } elseif ($value > 90) {
-        $value = 90;
+    protected function failedValidation(Validator $validator)
+    {
+        throw (new HttpResponseException(
+            $this->SendResponse(response::HTTP_UNPROCESSABLE_ENTITY , 'validation error' , $validator->errors()->toArray()))
+        );
     }
-    return $value;
 }
-}
+

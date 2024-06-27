@@ -50,11 +50,9 @@ class FacilitesController extends Controller
         $long1=$long+0.05;
         $long2=$long-0.05;
 
-
-
         $facilities = Facility::whereBetween('lat', [$lat1, $lat2])
-->orderBy('lat')
-->get();
+        ->orderBy('lat')
+        ->get();
         return $this->SendResponse(response::HTTP_OK, 'Facilities retrieved successfully', $facilities );
     }
 

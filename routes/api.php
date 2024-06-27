@@ -56,21 +56,30 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('hotels', [FacilitesController::class, 'getHotels']);
     Route::get('places', [FacilitesController::class, 'getPlaces']);
     Route::get('facility/{id}', [FacilitesController::class, 'getFacilityDetails']);
-    Route::post('/facility/{facility}', [FacilitesController::class, 'updateFacility']);
-    Route::delete('/facilities/{facility}', [FacilitesController::class, 'deleteFacility']);
+    Route::post('facility/{facility}', [FacilitesController::class, 'updateFacility']);
+    Route::delete('facilities/{facility}', [FacilitesController::class, 'deleteFacility']);
     Route::post('facilities/nearest', [FacilitesController::class, 'getFacilittesNearest']);
     //trip
     Route::post('trip/store', [TripsController::class, 'addTrip']);
-    Route::post('/trip/{trip}', [TripsController::class, 'updateTrip']);
-    Route::delete('/trip/{trip}', [TripsController::class, 'deleteTrip']);
-    Route::get('/trip/pending', [TripsController::class, 'getPinnedTrips']);
-    Route::get('/trip/active', [TripsController::class, 'getRunningTrips']);
-    Route::get('/trip/finish', [TripsController::class, 'getFinishidTrips']);
-    Route::get('/trip', [TripsController::class, 'getTrips']);
-    Route::get('/trip/{trip}', [TripsController::class, 'getTripDetails']);
+    Route::post('trip/{trip}', [TripsController::class, 'updateTrip']);
+    Route::delete('trip/{trip}', [TripsController::class, 'deleteTrip']);
+    Route::get('trip/pending', [TripsController::class, 'getPinnedTrips']);
+    Route::get('trip/active', [TripsController::class, 'getRunningTrips']);
+    Route::get('trip/finish', [TripsController::class, 'getFinishidTrips']);
+    Route::get('trip', [TripsController::class, 'getTrips']);
+    Route::get('trip/{trip}', [TripsController::class, 'getTripDetails']);
+    Route::get('trip/active/{id}', [TripsController::class, 'activeTrip']);
+    Route::get('trip/in_progress/{id}', [TripsController::class, 'inProgressTrip']);
+    Route::get('trip/finished/{id}', [TripsController::class, 'finishTrip']);
+    //days
+    Route::post('days', [DaysController::class, 'addDay']);
+    Route::post('days/{days}', [DaysController::class, 'updateDay']);
 
-    //day
-    // Route::post('/days', [DaysController::class, 'addDay']);
+    
+
+    //facility in day
+    Route::post('facility_in_day', [DaysController::class, 'addFacilityInDay']);
+    Route::post('facility_in_day/{facilityInDay}', [DaysController::class, 'updateFacilityInDay']);
 });
 
 
