@@ -55,26 +55,7 @@ class TripsController extends Controller
         return $this->SendResponse(response::HTTP_OK , 'recommended list retrieved with success' , $records);
     }
 
-    // public function getTripsList(Request $request) // should be implemented depending on the price range
-    // {
-    //     $startPrice = $request->validated()['start'];
-    //     $endPrice = $request->validated()['end'];
-
-    //     $trips = Trip::Active()->when($startPrice !== null, function ($query) use ($startPrice) {
-    //         return $query->where('price', '>=', $startPrice);
-    //     })
-    //     ->when($endPrice !== null, function ($query) use ($endPrice) {
-    //         return $query->where('price', '<=', $endPrice);
-    //     })
-    //     ->get();
-
-
-    //     if($trips->isEmpty())
-    //     {
-    //         return $this->SendResponse(response::HTTP_OK  , 'no results');
-    //     }
-    //     return $this->SendResponse(response::HTTP_OK , 'results retrieved with success' , $trips);
-    // }
+    
     public function getCountryTrips(IdRequest $request)
     {
         $id = $request->validated()['id'];

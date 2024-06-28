@@ -12,8 +12,6 @@ use App\Models\Trip;
 use App\Models\Guide;
 use App\Models\Country;
 use App\Models\Facility;
-use App\Models\FacilityComment;
-use App\Models\FacilityDayNotes;
 use App\Models\FacilityInDay;
 use App\Models\FacilityRate;
 use App\Models\Favourite;
@@ -55,8 +53,6 @@ class DatabaseSeeder extends Seeder
         FacilityDay::factory(20)->create();
 
         FacilityInDay::factory(20)->create();
-
-        FacilityDayNotes::factory(20)->create();
 
         AvailableGuide::factory(20)->create();
 
