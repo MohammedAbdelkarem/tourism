@@ -115,11 +115,12 @@ class UserController extends Controller
             'active' => 'inactive'
         ]);
 
-        Cache::forget('user_email');
 
         $this->logout();
         
         User::userEmail()->delete();
+
+        Cache::forget('user_email');
 
         return $this->SendResponse(response::HTTP_OK , 'account deleted successfully');
     }
