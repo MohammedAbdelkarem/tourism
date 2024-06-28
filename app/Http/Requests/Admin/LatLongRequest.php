@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 // use Illuminate\Support\Facades\Validator;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
-class FacilityRequest extends FormRequest
+class LatLongRequest extends FormRequest
 {
     use ResponseTrait; 
     /**
@@ -27,17 +27,9 @@ class FacilityRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'name'                       => 'required|string|between:2,100',
-            'lat'                        => 'required|numeric',
-            'long'                       => 'required|numeric',
-            'bio'                        => 'required|string',
-            'photo'                      => 'required|mimes:jpg,jpeg,png|max:2048',
-            'number_of_available_places' => 'required|integer|min:1',
-            'price_per_person'           => 'required|integer',
-            'type'                       => 'required|string|between:2,100',
-            'country_id'                 => 'required|integer',
-        ];
+        return ['lat'           => 'required|numeric',
+                'long'          => 'required|numeric',
+                ];
     }
 
     /**
@@ -55,3 +47,4 @@ class FacilityRequest extends FormRequest
         );
     }
 }
+

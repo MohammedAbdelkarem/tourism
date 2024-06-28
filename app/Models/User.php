@@ -12,18 +12,21 @@ use App\Models\Trip;
 class User extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable;
+    protected $guarded = [
+        'id'
+    ];
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'photo',
-        'phone',
-        'password',
-    ];
+    // protected $fillable = [
+    //     'name',
+    //     'email',
+    //     'photo',
+    //     'phone',
+    //     'password',
+    // ];
     /**
      * The attributes that should be hidden for arrays.
      *

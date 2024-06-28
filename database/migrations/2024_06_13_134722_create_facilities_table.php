@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('bio');
             $table->integer('number_of_available_places');
             $table->integer('price_per_person');
-            $table->integer('profits');
-            $table->double('total_rate');
+            $table->integer('profits')->default(0);
+            $table->double('total_rate')->default(0);
             $table->foreignId('country_id')->constrained('countries')->cascadeOnDelete();
             $table->timestamps();
         });

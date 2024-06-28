@@ -26,7 +26,7 @@ class TripsController extends Controller
             'bio' => $request->bio,
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
-            'guide_id' => $request->guide_id,
+            'guide_backup_id' => $request->guide_backup_id,
             'country_id' =>$request->country_id,
         ]);
         
@@ -45,9 +45,15 @@ class TripsController extends Controller
             'bio' => $request->bio,
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
-            'guide_id' => $request->guide_id,
+            'guide_backup_id' => $request->guide_backup_id,
             'country_id' =>$request->country_id,
+            'offer_ratio' => $request->offer_ratio, 
         ]);
+        $trip->update(['price_per_one_old' => $trip->price_per_one_new]);
+
+    // Calculate new price_per_one_new
+    $newPrice = $trip->price_per_one_old * $request->offer_ratio / 100;
+    $trip->update(['price_per_one_new' => $newPrice]);
 
 
         return $this->SendResponse(response::HTTP_CREATED, 'trip updated successfully');
@@ -117,4 +123,32 @@ class TripsController extends Controller
 
         
     }
+    public function activeTrip( string $id)
+{
+    $trip = Trip::find($id);
+
+    $trip->status = 'active';
+    $trip->save();
+    return $this->SendResponse(response::HTTP_OK, 'Trip activated successfully' );
+  
+}
+
+public function inProgressTrip(string $id)
+{
+    $trip = Trip::find($id);
+
+    $trip->status = 'in_progress';
+    $trip->save();
+    return $this->SendResponse(response::HTTP_OK, 'Trip updated to in progress');
+}
+
+public function finishTrip(string $id)
+{
+    $trip = Trip::find($id);
+
+    $trip->status = 'finished';
+    $trip->save();
+    return $this->SendResponse(response::HTTP_OK, 'Trip marked as finished');
+}
+
 }
