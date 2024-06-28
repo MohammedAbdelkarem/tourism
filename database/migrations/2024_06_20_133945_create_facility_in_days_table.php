@@ -17,6 +17,7 @@ return new class extends Migration
             $table->time('end_time');
             $table->foreignId('facility_id')->constrained('facilities')->cascadeOnDelete();
             $table->foreignId('facility_day_id')->constrained('facility_days')->cascadeOnDelete();
+            $table->string('note')->nullable();
             $table->timestamps();
         });
     }

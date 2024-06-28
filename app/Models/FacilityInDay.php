@@ -14,5 +14,6 @@ class FacilityInDay extends Model
         'end_time',
         'facility_id',
         'facility_day_id',
+        'note',
     ];
 }
