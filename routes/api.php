@@ -5,15 +5,16 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\UserController;
+use App\Http\Controllers\Admin\DaysController;
 use App\Http\Controllers\Auth\AdminController;
 use App\Http\Controllers\Auth\GuideController;
 use App\Http\Controllers\Admin\TripsController;
+use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\User\FacilityController;
 use App\Http\Controllers\Admin\FacilitesController;
 use App\Http\Controllers\User\AppointmentController;
 use App\Http\Controllers\User\TripsController as UserTripsController;
 use App\Http\Controllers\Admin\TripsController as AdminTripsController;
-use App\Http\Controllers\Admin\DaysController;
 
 
 
@@ -83,6 +84,12 @@ Route::group(['prefix' => 'admin'], function () {
     //facility in day
     Route::post('facility_in_day', [DaysController::class, 'addFacilityInDay']);
     Route::post('facility_in_day/{facilityInDay}', [DaysController::class, 'updateFacilityInDay']);
+
+
+    // users
+
+    Route::get('users', [UsersController::class, 'getUsers']);
+    Route::post('wallet/{userId}', [UsersController::class, 'addToWallet']);
 });
 
 

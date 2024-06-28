@@ -24,7 +24,8 @@ class AdminController extends Controller
 
         Cache::forever('admin_name' , $request->name);
 
-        return $this->SendResponse(response::HTTP_OK , 'logged in successfully' ,['token' => $token]);
+        $admin = Admin::where('name', $request->name)->first();
+        return $this->SendResponse(response::HTTP_OK , 'logged in successfully' ,['token' => $token, 'role' => $admin->role]);
     }
 
     public function storeEmail(EmailRequest $request)

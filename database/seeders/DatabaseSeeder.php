@@ -46,8 +46,44 @@ class DatabaseSeeder extends Seeder
 
         UsersBackup::factory(10)->create();
 
-        Admin::factory(10)->create();
+        // Admin::factory(10)->create();
+        
+       
+        Admin::factory()->create([
+        'name' => 'Admin_1' ,
 
+        'email' => 'mayagritaabouasali@gmail.com',
+        'password' => bcrypt('password1'),
+        'role' => 'super_admin',
+        'ratio' => 10,
+        'wallet' => 0,
+        ]);
+        Admin::factory()->create([
+            'name' => 'Admin_2',
+            'email' => null,
+            'password' => bcrypt('password2'),
+            'role' => 'sub_admin',
+            'ratio' => 10,
+            'wallet' => 0,
+        ]);
+
+        Admin::factory()->create([
+            'name' => 'Admin_3',
+            'email' => null,
+            'password' => bcrypt('password3'),
+            'role' => 'sub_admin',
+            'ratio' => 10,
+            'wallet' => 0,
+        ]);
+
+        Admin::factory()->create([
+            'name' => 'Admin_4',
+            'email' => null,
+            'password' => bcrypt('password4'),
+            'role' => 'sub_admin',
+            'ratio' => 10,
+            'wallet' => 0,
+        ]);
         Trip::factory(40)->create();
 
         FacilityDay::factory(20)->create();
@@ -71,7 +107,8 @@ class DatabaseSeeder extends Seeder
         GuideTransaction::factory(20)->create();
 
         $this->call([
-            // AdminSeeder::class
+                
+        // AdminSeeder::class;
         ]);
     }
 }

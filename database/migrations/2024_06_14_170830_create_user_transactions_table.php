@@ -20,6 +20,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('reservation_id')->constrained('reservatoins')->cascadeOnDelete();
             $table->foreignId('admin_id')->nullable()->constrained('admins')->cascadeOnDelete();
+            $table->foreignId('reservation_id')->nullable()->constrained('reservatoins')->cascadeOnDelete();
+            $table->foreignId('admin_id')->nullable()->constrained('admins')->cascadeOnDelete();
             $table->timestamps();
         });
     }

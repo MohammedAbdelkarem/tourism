@@ -37,6 +37,9 @@ class TripsController extends Controller
 
     public function updateTrip(TripRequest $request, Trip $trip){
 
+        if ($trip->status !== 'pending') {
+            return $this->SendResponse(response::HTTP_BAD_REQUEST, 'Trip status must be pending before updating');
+        }
         $trip->update([
             'name' => $request->name,
             'photo' => $request->photo,
@@ -59,6 +62,7 @@ class TripsController extends Controller
         return $this->SendResponse(response::HTTP_CREATED, 'trip updated successfully');
 
     }
+    
 
     public function deleteTrip( Trip $trip){{
         $trip->delete();
