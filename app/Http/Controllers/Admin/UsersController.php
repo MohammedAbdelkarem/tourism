@@ -25,7 +25,7 @@ class UsersController extends Controller
 
     public function addToWallet($userId)
     {
-        // Get the latest UserTransaction record for the given user ID
+        
         $latestTransaction = UserTransaction::where('user_id', $userId)
             ->latest()
             ->first();
