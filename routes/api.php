@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\GuideController;
 use App\Http\Controllers\Admin\TripsController;
 use App\Http\Controllers\User\FacilityController;
 use App\Http\Controllers\Admin\FacilitesController;
+use App\Http\Controllers\User\AppointmentController;
 use App\Http\Controllers\User\TripsController as UserTripsController;
 
 /*
@@ -90,6 +91,8 @@ Route::group(['prefix' => 'user'], function () {
         Route::post('details', [FacilityController::class, 'getFacilityDetails']);
     });
 
+    
+
 });
 
 
@@ -103,7 +106,12 @@ Route::group(['prefix' => 'user' , 'middleware' => ['auth:user']] , function(){
         Route::delete('delete', [UserController::class, 'deleteAccount']);
     });
 
-    
+
+    Route::group(['prefix' => 'appoint'], function () {
+        Route::post('appoint', [AppointmentController::class, 'appointTrip']);
+        Route::post('unappoint', [AppointmentController::class, 'unAppointTrip']);
+        Route::get('get', [AppointmentController::class, 'getMyTrips']);
+    });
 });
 
 

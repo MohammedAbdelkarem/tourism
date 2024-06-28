@@ -23,6 +23,12 @@ class UsersBackup extends Model
         'active',
     ];
 
+
+    public function modify($amount , $column , $char)
+    {
+        $this->$column += ($char == '+') ? $amount : -$amount;
+        $this->save();
+    }
     public function scopeUserEmail($query)
     {
         return $query->where('email' , user_email());

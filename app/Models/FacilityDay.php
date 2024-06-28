@@ -33,13 +33,6 @@ class FacilityDay extends Model
     public function facility()
     {
         return $this->belongsTo(Facility::class);
-    } 
-
-
-    public function facilityDayNotes()
-    {
-      return $this->hasMany(FacilityDayNotes::class, 'facility_day_id', 'id');
     }
-  
    
 }

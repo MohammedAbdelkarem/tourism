@@ -189,11 +189,5 @@ class TripsController extends Controller
 
         return $this->SendResponse(response::HTTP_OK , 'favourites retrieved with success');
     }
-    public function appointTrip(){}
-    public function unAppointTrip(){}
-    public function modifyAppointment(){}
-    public function getOldTrips(){}
-    
-    
 
 }
