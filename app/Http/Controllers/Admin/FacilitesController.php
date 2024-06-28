@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Support\Facades\DB;
+use App\Models\Trip;
 use App\Models\Facility;
 use Illuminate\Http\Request;
 use App\Traits\ResponseTrait;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\Admin\LatLongRequest;
 use App\Http\Requests\Admin\FacilityRequest;
@@ -41,20 +42,48 @@ class FacilitesController extends Controller
         return $this->SendResponse(response::HTTP_OK, 'places retrieved successfully',$data);
     }
 
-    public function getFacilittesNearest(LatLongRequest $request){
-        $lat = (float) $request->validated()['lat'];
-        $long = (float) $request->validated()['long'];
+    // public function getFacilittesNearest(LatLongRequest $request){
+    //     $lat = (float) $request->validated()['lat'];
+    //     $long = (float) $request->validated()['long'];
       
-        $lat1=$lat+0.05;
-        $lat2=$lat-0.05;
-        $long1=$long+0.05;
-        $long2=$long-0.05;
+    //     $lat1=$lat+0.05;
+    //     $lat2=$lat-0.05;
+    //     $long1=$long+0.05;
+    //     $long2=$long-0.05;
 
-        $facilities = Facility::whereBetween('lat', [$lat1, $lat2])
-        ->orderBy('lat')
-        ->get();
-        return $this->SendResponse(response::HTTP_OK, 'Facilities retrieved successfully', $facilities );
+    //     $facilities = Facility::where('lat', '>=', $lat2)
+    //     ->where('lat', '<=', $lat1)
+    //     ->where('long', '>=', $long2)
+    //     ->where('long', '<=', $long1)
+    //     ->get();
+    //     return $this->SendResponse(response::HTTP_OK, 'Facilities retrieved successfully', $facilities );
+    // }
+
+
+
+    public function getNearestFacilities($trip_id)
+    {
+        $trip = Trip::find($trip_id);
+    
+        $lat = $trip->lat;
+        $long = $trip->long;
+    
+
+       $lat1=$lat+0.05;
+       $lat2=$lat-0.05;
+       $long1=$long+0.05;
+       $long2=$long-0.05;
+
+       $facilities = Facility::where('lat', '>=', $lat2)
+       ->where('lat', '<=', $lat1)
+       ->where('long', '>=', $long2)
+       ->where('long', '<=', $long1)
+       ->get();
+       return $this->SendResponse(response::HTTP_OK, 'Facilities retrieved successfully', $facilities );
+           
+     
     }
+
 
 
     public function getRestaurants()
