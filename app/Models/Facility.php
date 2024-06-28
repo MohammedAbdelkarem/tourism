@@ -43,4 +43,9 @@ class Facility extends Model
     {
       return $this->hasMany(FacilityRate::class, 'facility_id', 'id');
     }
+
+    public function facilityInDay()
+    {
+      return $this->hasMany(FacilityInDay::class, 'facility_id', 'id');
+    }
 }

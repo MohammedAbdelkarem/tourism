@@ -23,7 +23,7 @@ class FacilityInDayFactory extends Factory
             'facility_day_id' => FacilityDay::inRandomOrder()->first()->id,
             'start_time' => $this->faker->time(),
             'end_time' => $this->faker->time(),
-            'note' => $this->faker->text(rand(20, 50)),
+            'note' => $this->faker->text(rand(10, 50)),
         ];
     }
 }

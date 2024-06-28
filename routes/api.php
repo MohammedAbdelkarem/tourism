@@ -12,6 +12,10 @@ use App\Http\Controllers\User\FacilityController;
 use App\Http\Controllers\Admin\FacilitesController;
 use App\Http\Controllers\User\AppointmentController;
 use App\Http\Controllers\User\TripsController as UserTripsController;
+use App\Http\Controllers\Admin\TripsController as AdminTripsController;
+use App\Http\Controllers\Admin\DaysController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -25,9 +29,19 @@ use App\Http\Controllers\User\TripsController as UserTripsController;
 */
 //general routes
 
-Route::post('checkcode' , [AuthController::class , 'checkCode']);
+Route::post('checkcode', [AuthController::class, 'checkCode']);
 
 //Admin 
+
+// Route::group(['prefix' => 'admin'], function () {
+
+//     Route::controller(AdminController::class)->group(['prefix' => 'auth'], function () {
+//         Route::post('send', 'sendCode');
+//         Route::post('register', 'register');
+//         Route::post('login', 'login');
+//         Route::post('reset', 'resetPassword');
+//         Route::post('logout', 'logout');
+//     });
 
 Route::group(['prefix' => 'admin'], function () {
 
@@ -38,26 +52,37 @@ Route::group(['prefix' => 'admin'], function () {
         Route::post('reset' , [AdminController::class , 'resetPassword']);
         Route::post('logout', [AdminController::class, 'logout']); 
     });
+    // facility
+    Route::post('facility/store', [FacilitesController::class, 'storeFacility']);
+    Route::get('allfacility', [FacilitesController::class, 'getFacilities']);
+    Route::get('restaurants', [FacilitesController::class, 'getRestaurants']);
+    Route::get('hotels', [FacilitesController::class, 'getHotels']);
+    Route::get('places', [FacilitesController::class, 'getPlaces']);
+    Route::get('facility/{id}', [FacilitesController::class, 'getFacilityDetails']);
+    Route::post('facility/{facility}', [FacilitesController::class, 'updateFacility']);
+    Route::delete('facilities/{facility}', [FacilitesController::class, 'deleteFacility']);
+    Route::get('facilities/nearest/{trip_id}', [FacilitesController::class, 'getNearestFacilities']);
+    //trip
+    Route::post('trip/store', [TripsController::class, 'addTrip']);
+    Route::post('trip/{trip}', [TripsController::class, 'updateTrip']);
+    Route::delete('trip/{trip}', [TripsController::class, 'deleteTrip']);
+    Route::get('trip/pending', [TripsController::class, 'getPinnedTrips']);
+    Route::get('trip/active', [TripsController::class, 'getRunningTrips']);
+    Route::get('trip/finish', [TripsController::class, 'getFinishidTrips']);
+    Route::get('trip', [TripsController::class, 'getTrips']);
+    Route::get('trip/{trip}', [TripsController::class, 'getTripDetails']);
+    Route::get('trip/active/{id}', [TripsController::class, 'activeTrip']);
+    Route::get('trip/in_progress/{id}', [TripsController::class, 'inProgressTrip']);
+    Route::get('trip/finished/{id}', [TripsController::class, 'finishTrip']);
+    //days
+    Route::post('days', [DaysController::class, 'addDay']);
+    Route::post('days/{days}', [DaysController::class, 'updateDay']);
 
-        // facility
-        Route::post('facility/store',[ FacilitesController::class,'storeFacility']);
-        Route::get('allfacility', [FacilitesController::class,'getFacilities']);
-        Route::get('restaurants', [FacilitesController::class, 'getRestaurants']);
-        Route::get('hotels', [FacilitesController::class, 'getHotels']);
-        Route::get('places', [FacilitesController::class, 'getPlaces']);
-        Route::get('facility/{id}', [FacilitesController::class,'getFacilityDetails']);
-        Route::post('/facility/{facility}', [FacilitesController::class, 'updateFacility']);
-        Route::delete('/facilities/{facility}',[FacilitesController::class, 'deleteFacility']);
-        
-         //trip
-        Route::post('trip/store',[TripsController::class,'addTrip']);
-        Route::post('/trip/{trip}', [TripsController::class, 'updateTrip']);
-        Route::delete('/trip/{trip}', [TripsController::class, 'deleteTrip']);
-        Route::get('/trip/pending', [TripsController::class, 'getPinnedTrips']);
-        Route::get('/trip/active', [TripsController::class, 'getRunningTrips']);
-        Route::get('/trip/finish', [TripsController::class, 'getFinishidTrips']);
-        Route::get('/trip', [TripsController::class, 'getTrips']);
-        Route::get('/trip/{trip}', [TripsController::class, 'getTripDetails']);
+    
+
+    //facility in day
+    Route::post('facility_in_day', [DaysController::class, 'addFacilityInDay']);
+    Route::post('facility_in_day/{facilityInDay}', [DaysController::class, 'updateFacilityInDay']);
 });
 
 
@@ -67,10 +92,10 @@ Route::group(['prefix' => 'admin'], function () {
 Route::group(['prefix' => 'user'], function () {
 
     Route::group(['prefix' => 'auth'], function () {
-        Route::post('send' , [UserController::class , 'sendCode']);
-        Route::post('register' , [UserController::class , 'register']);
-        Route::post('login' , [UserController::class , 'login']);
-        Route::post('reset' , [UserController::class , 'resetPassword']);
+        Route::post('send', [UserController::class, 'sendCode']);
+        Route::post('register', [UserController::class, 'register']);
+        Route::post('login', [UserController::class, 'login']);
+        Route::post('reset', [UserController::class, 'resetPassword']);
     });
 
     Route::group(['prefix' => 'trip'], function () {
@@ -97,8 +122,8 @@ Route::group(['prefix' => 'user'], function () {
 
 
 //User with middleware
-Route::group(['prefix' => 'user' , 'middleware' => ['auth:user']] , function(){
-    
+Route::group(['prefix' => 'user', 'middleware' => ['auth:user']], function () {
+
     Route::group(['prefix' => 'auth'], function () {
         Route::post('edit', [UserController::class, 'updateProfile']);
         Route::post('logout', [UserController::class, 'logout']);
@@ -120,18 +145,17 @@ Route::group(['prefix' => 'user' , 'middleware' => ['auth:user']] , function(){
 Route::group(['prefix' => 'guide'], function () {
 
     Route::group(['prefix' => 'auth'], function () {
-        Route::post('send' , [GuideController::class , 'sendCode']);
-        Route::post('register' , [GuideController::class , 'register']);
-        Route::post('login' , [GuideController::class , 'login']);
-        Route::post('reset' , [GuideController::class , 'resetPassword']);
+        Route::post('send', [GuideController::class, 'sendCode']);
+        Route::post('register', [GuideController::class, 'register']);
+        Route::post('login', [GuideController::class, 'login']);
+        Route::post('reset', [GuideController::class, 'resetPassword']);
     });
-
 });
 
 
 //Guide with middleware
-Route::group(['prefix' => 'guide' , 'middleware' => ['auth:guide']] , function(){
-    
+Route::group(['prefix' => 'guide', 'middleware' => ['auth:guide']], function () {
+
     Route::group(['prefix' => 'auth'], function () {
         Route::post('edit', [GuideController::class, 'updateProfile']);
         Route::post('logout', [GuideController::class, 'logout']);
@@ -139,7 +163,3 @@ Route::group(['prefix' => 'guide' , 'middleware' => ['auth:guide']] , function()
         Route::delete('delete', [GuideController::class, 'deleteAccount']);
     });
 });
-
-
-
-
