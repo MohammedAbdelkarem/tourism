@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Support\Facades\DB;
 use App\Models\Facility;
 use Illuminate\Http\Request;
 use App\Traits\ResponseTrait;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Resources\Admin\FacilityResource;
-use App\Http\Resources\Admin\FacilityDetailsResource;
-use Symfony\Component\HttpFoundation\Response;
+use App\Http\Requests\Admin\LatLongRequest;
 use App\Http\Requests\Admin\FacilityRequest;
+use App\Http\Resources\Admin\FacilityResource;
+use Symfony\Component\HttpFoundation\Response;
+use App\Http\Resources\Admin\FacilityDetailsResource;
 // use App\Http\Resources\Dashboard\FacilityResource as DashboardFacilityresource;
 
 class FacilitesController extends Controller
@@ -39,12 +41,28 @@ class FacilitesController extends Controller
         return $this->SendResponse(response::HTTP_OK, 'places retrieved successfully',$data);
     }
 
+    public function getFacilittesNearest(LatLongRequest $request){
+        $lat = (float) $request->validated()['lat'];
+        $long = (float) $request->validated()['long'];
+      
+        $lat1=$lat+0.05;
+        $lat2=$lat-0.05;
+        $long1=$long+0.05;
+        $long2=$long-0.05;
+
+        $facilities = Facility::whereBetween('lat', [$lat1, $lat2])
+        ->orderBy('lat')
+        ->get();
+        return $this->SendResponse(response::HTTP_OK, 'Facilities retrieved successfully', $facilities );
+    }
+
 
     public function getRestaurants()
     {
         $restaurants = Facility::where('type', 'Restaurant')->get();
         if ($restaurants->isEmpty()) {
             return $this->SendResponse(response::HTTP_NOT_FOUND, 'No restaurants found');
+            
         }$data = FacilityResource::collection($restaurants);
         return $this->SendResponse(response::HTTP_OK, 'Restaurants retrieved successfully',  $data);
     }
@@ -57,7 +75,7 @@ class FacilitesController extends Controller
             'long' => $request->long,
             'bio' => $request->bio,
             'type' => $request->type,
-            'number_of_places_available' => $request->number_of_places_available,
+            'number_of_available_places' => $request->number_of_available_places,
             'price_per_person' => $request->price_per_person,
             'country_id' =>$request->country_id,
         ]);
@@ -82,7 +100,7 @@ class FacilitesController extends Controller
             'long' => $request->long,
             'bio' => $request->bio,
             'type' => $request->type,
-            'number_of_places_available' => $request->number_of_places_available,
+            'number_of_available_places' => $request->number_of_available_places,
             'price_per_person' => $request->price_per_person,
             'country_id' =>$request->country_id,
         ]);

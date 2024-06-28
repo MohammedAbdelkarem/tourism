@@ -6,6 +6,7 @@ use App\Models\Trip;
 use App\Models\Day;
 use App\Models\Facility;
 use App\Models\FacilityDayNotes;
+use App\Models\FacilityInDay;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,7 +15,9 @@ class FacilityDay extends Model
     use HasFactory;
 
     protected $fillable = [
-        'data',
+        'date',
+        // 'start_time',
+        // 'end_time',
         'day_id',
         'trip_id',
     ];
@@ -41,5 +44,9 @@ class FacilityDay extends Model
       return $this->hasMany(FacilityDayNotes::class, 'facility_day_id', 'id');
     }
   
-   
+    public function facilityInDay()
+    {
+      return $this->hasMany(FacilityInDay::class, 'facility_day_id', 'id');
+    }
+  
 }
