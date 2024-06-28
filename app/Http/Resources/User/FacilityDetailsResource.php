@@ -20,7 +20,6 @@ class FacilityDetailsResource extends JsonResource
             'rate' => $this->rate,
             'bio' => $this->bio,
             'price_per_person' => $this->price_per_person,
-            'comments' => CommentResource::collection($this->facilityComment),
         ];
     }
 }

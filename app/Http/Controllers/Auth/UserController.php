@@ -29,7 +29,7 @@ class UserController extends Controller
         $code = RandomCode();
 
         Cache::forever('user_email' , $email);
-        Cache::put('code' , $code , now()->addHour());
+        Cache::put('code' , $code , now()->addHours(1));
 
         event(new SendEmailEvent($email , $code));
 
@@ -40,7 +40,6 @@ class UserController extends Controller
     {
         $validatedData = $request->validated();
 
-        $validatedData['photo'] = photoPath($validatedData['photo']);
         $validatedData['email'] = user_email();
 
         hashing_data($validatedData);
@@ -48,7 +47,6 @@ class UserController extends Controller
         User::create($validatedData);
         UsersBackup::create([
             'name' =>$validatedData['name'],
-            'photo' =>$validatedData['photo'],
             'phone' =>$validatedData['phone'],
             'email' =>$validatedData['email'],
         ]);
@@ -78,6 +76,7 @@ class UserController extends Controller
 
         Cache::forever('user_email' , $request->email);
 
+
         return $this->SendResponse(response::HTTP_OK , 'logged in successfully' ,['token' => $token]);
     }
 
@@ -105,7 +104,7 @@ class UserController extends Controller
     {
         $data = auth()->guard('user')->user();
 
-        $data = new ProfileResource($data);
+        // $data = new ProfileResource($data);
         
         return $this->SendResponse(response::HTTP_OK , 'user profile data retrieved successfully' , $data);
     }
@@ -116,9 +115,12 @@ class UserController extends Controller
             'active' => 'inactive'
         ]);
 
+
         $this->logout();
         
         User::userEmail()->delete();
+
+        Cache::forget('user_email');
 
         return $this->SendResponse(response::HTTP_OK , 'account deleted successfully');
     }

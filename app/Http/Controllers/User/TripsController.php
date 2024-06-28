@@ -55,45 +55,46 @@ class TripsController extends Controller
         return $this->SendResponse(response::HTTP_OK , 'recommended list retrieved with success' , $records);
     }
 
-    // public function getTripsList(Request $request) // should be implemented depending on the price range
-    // {
-    //     $startPrice = $request->validated()['start'];
-    //     $endPrice = $request->validated()['end'];
+    
+    public function getCountryTrips(IdRequest $request)
+    {
+        $id = $request->validated()['id'];
 
-    //     $trips = Trip::Active()->when($startPrice !== null, function ($query) use ($startPrice) {
-    //         return $query->where('price', '>=', $startPrice);
-    //     })
-    //     ->when($endPrice !== null, function ($query) use ($endPrice) {
-    //         return $query->where('price', '<=', $endPrice);
-    //     })
-    //     ->get();
+        $userId = user_id();
 
+        $trips = 
 
-    //     if($trips->isEmpty())
-    //     {
-    //         return $this->SendResponse(response::HTTP_OK  , 'no results');
-    //     }
-    //     return $this->SendResponse(response::HTTP_OK , 'results retrieved with success' , $trips);
-    // }
+        Trip::
+        Active()
+        ->where('country_id' , $id)
+        ->favourite()
+        ->take(7)->get();
+        
+        
+        if($trips->isEmpty())
+        {
+            return $this->SendResponse(response::HTTP_OK  , 'no results');
+        }
+
+        $trips = HomeRecResource::collection($trips);
+
+        return $this->SendResponse(response::HTTP_OK , 'results retrieved with success' , $trips);
+    }
     public function getTripsListByCountry(TripFilterRequest $request)
     {
         $startPrice = $request->validated()['start'];
         $endPrice = $request->validated()['end'];
         $id = $request->validated()['country_id'];
 
+        $userId = user_id();
+
         $trips = 
 
         Trip::
-        // when($startPrice !== null, function ($query) use ($startPrice) {
-        //     return $query->where('price', '>=', $startPrice);
-        // })
-        // ->when($endPrice !== null, function ($query) use ($endPrice) {
-        //     return $query->where('price', '<=', $endPrice);
-        // })
         Active()
-        ->where('price_per_one_new', '>=', $startPrice)
-        ->where('price_per_one_new', '<=', $endPrice)
+        ->whereBetween('price_per_one_new', [$startPrice, $endPrice])
         ->where('country_id' , $id)
+        ->favourite()
         ->get();
         
         
@@ -110,11 +111,18 @@ class TripsController extends Controller
     {
         $id = $request->validated()['id'];
 
-        $data = Trip::find($id);
+        $userId = user_id();
 
-        $data = new TripDetailsResource($data);
+        $trips = Trip::find($id);
 
-        return $this->SendResponse(response::HTTP_OK , 'trip details retrived with success' ,  $data);
+        $trips->load(['favourites' => function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        }]);
+            
+
+        $trips = new TripDetailsResource($trips);
+
+        return $this->SendResponse(response::HTTP_OK , 'trip details retrived with success' ,  $trips);
     }
 
     public function search(Request $request)
