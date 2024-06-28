@@ -21,31 +21,6 @@ class DaysController extends Controller
      use ResponseTrait;
      
 
-         public function getNearestFacilities($trip_id)
-         {
-             $trip = Trip::find($trip_id);
-             if (!$trip) {
-                 // handle the case where the trip is not found
-                 return [];
-             }
-         
-             $lat = $trip->lat;
-             $long = $trip->long;
-         
-
-            $lat1=$lat+0.05;
-            $lat2=$lat-0.05;
-            $long1=$long+0.05;
-            $long2=$long-0.05;
-
-
-
-            $facilities = Facility::whereBetween('lat', [$lat1, $lat2])
-            ->orderBy('lat')
-            ->get();
-                 return $this->SendResponse(response::HTTP_OK, 'Facilities retrieved successfully', $facilities);
-          
-         }
 
 
 
