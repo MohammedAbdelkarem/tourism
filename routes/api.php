@@ -60,7 +60,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('facility/{id}', [FacilitesController::class, 'getFacilityDetails']);
     Route::post('facility/{facility}', [FacilitesController::class, 'updateFacility']);
     Route::delete('facilities/{facility}', [FacilitesController::class, 'deleteFacility']);
-    Route::post('facilities/nearest/{trip_id}', [FacilitesController::class, 'getNearestFacilities']);
+    Route::get('facilities/nearest/{trip_id}', [FacilitesController::class, 'getNearestFacilities']);
     //trip
     Route::post('trip/store', [TripsController::class, 'addTrip']);
     Route::post('trip/{trip}', [TripsController::class, 'updateTrip']);
