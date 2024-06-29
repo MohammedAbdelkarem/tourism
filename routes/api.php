@@ -51,6 +51,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::post('register' , [AdminController::class , 'register']);
         Route::post('login' , [AdminController::class , 'login']);
         Route::post('reset' , [AdminController::class , 'resetPassword']);
+        Route::post('store' , [AdminController::class , 'storeEmail']);
         Route::post('logout', [AdminController::class, 'logout']); 
     });
     // facility

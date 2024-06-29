@@ -6,6 +6,7 @@ use App\Event\SendEmailEvent;
 use App\Traits\ResponseTrait;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\Admin\EmailRequest;
+use App\Http\Requests\Auth\Admin\NameLoginRequest;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\PasswordRequest;
@@ -15,7 +16,7 @@ class AdminController extends Controller
 {
 
     use ResponseTrait;
-    public function login(LoginRequest $request)
+    public function login(NameLoginRequest $request)
     {
         if (! $token = auth()->attempt($request->only('name' , 'password')))
         {
