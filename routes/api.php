@@ -144,6 +144,7 @@ Route::group(['prefix' => 'user', 'middleware' => ['auth:user']], function () {
         Route::post('appoint', [AppointmentController::class, 'appointTrip']);
         Route::post('unappoint', [AppointmentController::class, 'unAppointTrip']);
         Route::get('get', [AppointmentController::class, 'getMyTrips']);
+        Route::post('modify', [AppointmentController::class, 'modifyAppointment']);
     });
 });
 

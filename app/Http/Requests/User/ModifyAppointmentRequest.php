@@ -29,8 +29,8 @@ class ModifyAppointmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'number_of_places' => 'required|min:1',
-            'reservation_id' => 'required',
+            'number_of_places' => 'required|min:1|integer',
+            'reservation_id' => 'required|integer',
         ];
     }
 

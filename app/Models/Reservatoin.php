@@ -18,6 +18,12 @@ class Reservatoin extends Model
         'trip_id',
     ];
 
+    public function modify($amount , $column , $char)
+    {
+        $this->$column += ($char == '+') ? $amount : -$amount;
+        $this->save();
+    }
+
     public function trip()
     {
         return $this->belongsTo(Trip::class);

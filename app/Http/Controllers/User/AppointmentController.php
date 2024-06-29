@@ -14,11 +14,19 @@ use App\Http\Requests\User\AppointmentRequest;
 use App\Http\Requests\User\ModifyAppointmentRequest;
 use App\Http\Resources\User\AppointResource;
 use App\Models\UserTransaction;
+use App\Services\AppointmentService;
 use Symfony\Component\HttpFoundation\Response;
 
 class AppointmentController extends Controller
 {
     use ResponseTrait;
+
+    private AppointmentService $appointmentService;
+ 
+    public function __construct(AppointmentService $appointmentService)
+    {
+        $this->appointmentService = $appointmentService;
+    } 
 
     public function appointTrip(AppointmentRequest $request)
     {
@@ -79,10 +87,7 @@ class AppointmentController extends Controller
         {
             return $this->SendResponse(response::HTTP_UNPROCESSABLE_ENTITY , 'your wallet is: '.$current_wallet.' which is less than the reservation price: '.$reservation_price.' you may charge your wallet or decrease the number of places');
         }
-        $trip = Trip::find($trip_id);
-        $trip->modify($reservation_price , 'total_price' , '+');
-        $trip->modify($number_of_places , 'number_of_filled_places' , '+');
-        $trip->modify($number_of_places , 'number_of_available_places' , '-');
+        $this->appointmentService->addTripReservation($trip_id , $reservation_price , $number_of_places);
 
         $data['user_id'] = $user_id;
         $data['trip_id'] = $trip_id;
@@ -108,7 +113,7 @@ class AppointmentController extends Controller
         $details['$reservation_price'] = $reservation_price;
         $details['$number_of_places'] = $number_of_places;
         $details['$price_per_one'] = $price_per_one;
-        $details['$current_wallet'] = $current_wallet;
+        $details['$current_wallet'] = $new_wallet;
 
         return $this->SendResponse(response::HTTP_CREATED , 'appointed with success' , $details);
          
@@ -146,10 +151,8 @@ class AppointmentController extends Controller
         $reservation_price = $reservation->total_price;
         $number_of_places = $reservation->number_of_places;
 
-        $trip = Trip::find($trip_id);
-        $trip->modify($reservation_price , 'total_price' , '-');
-        $trip->modify($number_of_places , 'number_of_filled_places' , '-');
-        $trip->modify($number_of_places , 'number_of_available_places' , '+');
+        $trip = Trip::find($trip_id); 
+        $this->appointmentService->disTripReservation($trip_id , $reservation_price , $number_of_places);
 
 
         $user = UsersBackup::find($user_id);
@@ -182,6 +185,7 @@ class AppointmentController extends Controller
 
         /**
          * number of places
+         * reservation id
          * 
          * 
          * if > or < than the available places
@@ -190,7 +194,108 @@ class AppointmentController extends Controller
          * 
          * if > or < than the old number of places--> add or dis
          * 
+         * values to add or dis:
+         * 
+         * 
+         * the diffPlaces(number of places to add or dis) = abs(old places - new places)
+         * the diffPrice (reservatoin price to add or dis) = diffplaces * price per one new
+         * 
+         * modificatoins:
+         * 
+         * trips:
+         * total price(add or dis the diffPrice)
+         * number of available places(add or dis the diffplace)
+         * number of filled places(add or dis the diffplace)
+         * 
+         * reservaion:
+         * total price of the reservation(add or dis form it the diffprice)
+         * number of places(add or dis the diffplaces)
+         * 
+         * userbackup:
+         * wallet: add or dis the difprice
+         * 
+         * reservatoin:
+         * wallet = userbackup wallet
+         * user id
+         * date
+         * amount = difPrice
+         * type:add or dis
+         * reservatoin id
+         * 
+         * 
+         * 
          */
+
+        //number of places = old number + (new number which is + or -)
+        $new_number_of_places = $requerst->validated()['number_of_places'];
+        $reservation_id = $requerst->validated()['reservation_id'];
+        
+        $reservation = Reservatoin::find($reservation_id);
+        $trip_id = $reservation->trip_id;
+        //the old price of the reservation
+        $original_price = $reservation->total_price;
+        //the old number of places
+        $original_places = $reservation->number_of_places;
+
+        $trip = Trip::find($trip_id);
+        $available_places = $trip->number_of_available_places;
+        $price_per_one = $trip->price_per_one_new;
+
+        if($new_number_of_places == $original_places)
+        {
+            return $this->SendResponse(response::HTTP_OK , 'nothing has changed');
+        }
+        
+        if($new_number_of_places > $available_places + $original_places)
+        {
+            return $this->SendResponse(response::HTTP_UNPROCESSABLE_ENTITY , 'your number is more than the number of available places which is: '.$available_places);
+        }
+
+        $user = UsersBackup::find(user_id());
+        $current_wallet = $user->wallet;
+        $diffPlaces = abs($new_number_of_places - $original_places);
+        $diffPrice = $diffPlaces * $price_per_one;
+
+        if($original_places > $new_number_of_places)
+        {
+            $this->appointmentService->disTripReservation($trip_id , $diffPrice , $diffPlaces);
+
+            $this->appointmentService->disFromReservation($diffPrice , $diffPlaces , $reservation_id);
+
+            $user->modify($diffPrice , 'wallet' , '+');
+
+            $data['wallet'] = $user->wallet;
+            $data['user_id'] = $user->id;
+            $data['date'] = Carbon::now();
+            $data['amount'] = $diffPrice;
+            $data['type'] = 'add';
+            $data['reservation_id'] = $reservation_id;
+
+            UserTransaction::create($data);
+
+            return $this->SendResponse(response::HTTP_CREATED , $diffPlaces.' places returned back with success' , $data);
+        }
+        if($diffPrice > $current_wallet)
+        {
+            return $this->SendResponse(response::HTTP_UNPROCESSABLE_ENTITY , 'the additional cost is: '.$diffPrice.' which is more than your wallet: '.$current_wallet.' , you may charge your wallet or decrease the number of places');
+        }
+        $this->appointmentService->addTripReservation($trip_id , $diffPrice , $diffPlaces);
+
+        $this->appointmentService->addToReservation($diffPrice , $diffPlaces , $reservation_id);
+
+        $user->modify($diffPrice , 'wallet' , '-');
+
+        $data['wallet'] = $user->wallet;
+        $data['user_id'] = $user->id;
+        $data['date'] = Carbon::now();
+        $data['amount'] = $diffPrice;
+        $data['type'] = 'dis';
+        $data['reservation_id'] = $reservation_id;
+
+        UserTransaction::create($data);
+
+        return $this->SendResponse(response::HTTP_CREATED , $diffPlaces.' new places added with success' , $data);
+
     }
     public function getMyTrips()
     {
@@ -201,6 +306,7 @@ class AppointmentController extends Controller
             return $this->SendResponse(response::HTTP_OK , 'you do not have reservations yet');
         }
         $records = AppointResource::collection($records);
+
         return $this->SendResponse(response::HTTP_OK , 'reservations retrieve with success' , $records);
     }
     
