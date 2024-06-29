@@ -32,6 +32,8 @@ class AdminController extends Controller
     {
         $email = $request->validated()['email'];
 
+        Cache::forever('admin_email' , $request->email);
+
         Admin::adminName()->update([
             'email' => $email
         ]);
@@ -44,15 +46,17 @@ class AdminController extends Controller
         
         return $this->SendResponse(response::HTTP_OK , 'logged out successfully');
     }
-    public function sendCode()
+    public function sendCode(EmailRequest $request)
     {
-        $email = Cache::get('admin_name');
+        $email = $request->validated()['email'];
 
         $code = RandomCode();
 
         Cache::put('code', $code , now()->addHour());
 
         event(new SendEmailEvent($email , $code));
+
+        Cache::forever('admin_email', $email);
 
         return $this->SendResponse(response::HTTP_OK , 'email sended successfully' , ['code' => $code]);
     }
@@ -63,7 +67,7 @@ class AdminController extends Controller
 
         hashing_password($password);
 
-        Admin::adminName()->update([
+        Admin::adminEmail()->update([
             'password' => $password
         ]);
 

@@ -41,9 +41,13 @@ class Admin extends Authenticatable implements JWTSubject
         'password' => 'hashed',
     ];
 
-    public function scopeadminName($query)
+    public function scopeAdminName($query)
     {
         return $query->where('name' , admin_name());
+    }
+    public function scopeAdminEmail($query)
+    {
+        return $query->where('email' , admin_email());
     }
     
     /**

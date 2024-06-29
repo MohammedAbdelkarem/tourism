@@ -85,6 +85,13 @@ if(!function_exists('user_email'))
         return Cache::get('user_email');
     }
 }
+if(!function_exists('admin_email'))
+{
+    function admin_email()
+    {
+        return Cache::get('admin_email');
+    }
+}
 if(!function_exists('guide_email'))
 {
     function guide_email()
