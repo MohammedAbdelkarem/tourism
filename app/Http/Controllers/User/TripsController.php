@@ -12,10 +12,12 @@ use App\Http\Requests\User\FavRequest;
 use App\Http\Resources\User\CountryResource;
 use App\Http\Resources\User\HomeRecResource;
 use App\Http\Requests\User\TripFilterRequest;
+use App\Http\Resources\Admin\TripResource;
 use App\Http\Resources\User\HomeOfferResource;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Resources\User\TripDetailsResource;
 use App\Http\Resources\User\CountryDetailsResource;
+use App\Http\Resources\User\FavResource;
 use App\Models\Favourite;
 
 class TripsController extends Controller
@@ -163,11 +165,11 @@ class TripsController extends Controller
 
         return $this->SendResponse(response::HTTP_OK , 'countries retrieved with success' , $data);
     }
-    public function addToFav(FavRequest $request)
+    public function addToFav(IdRequest $request)
     {
 
-        $data['trip_id'] = $request->validated()['trip_id'];
-        $data['user_id'] = $request->validated()['user_id'];
+        $data['trip_id'] = $request->validated()['id'];
+        $data['user_id'] = user_id();
 
         Favourite::create($data);
 
@@ -175,19 +177,37 @@ class TripsController extends Controller
     }
     public function deleteFav(IdRequest $request)
     {
-        $favid = $request->validated()['id'];
+        $tripId = $request->validated()['id'];
 
-        Favourite::where('id' , $favid)->delete();
+        Favourite::where('trip_id' , $tripId)->
+        where('user_id' , user_id())->
+        delete();
 
         return $this->SendResponse(response::HTTP_OK , 'deleted from favourites with success');
     }
-    public function getFav(IdRequest $request)
+    public function getFav()
     {
-        $userId = $request->validated()['id'];
+        $userId = user_id();
 
-        Favourite::where('user_id' , $userId)->delete();
+        $ids = Favourite::where('user_id' , $userId)->pluck('trip_id');
 
-        return $this->SendResponse(response::HTTP_OK , 'favourites retrieved with success');
+        // dd($ids);
+
+        $data = [];
+        foreach($ids as $id)
+        {
+            $data[$id] = Trip::where('id' , $id)->get()->first();
+        }
+
+        // $data = Trip::where('user_id' , $userId)->with('trip')->get();
+        if(count($data) == 0)
+        {
+            return $this->SendResponse(response::HTTP_OK , 'no favourites yet');
+        }
+
+        $data = TripDetailsResource::collection($data);
+
+        return $this->SendResponse(response::HTTP_OK , 'favourites retrieved with success' , $data);
     }
 
 }

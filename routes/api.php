@@ -146,6 +146,12 @@ Route::group(['prefix' => 'user', 'middleware' => ['auth:user']], function () {
         Route::get('get', [AppointmentController::class, 'getMyTrips']);
         Route::post('modify', [AppointmentController::class, 'modifyAppointment']);
     });
+
+    Route::group(['prefix' => 'favourite'], function () {
+        Route::post('add', [UserTripsController::class, 'addToFav']);
+        Route::post('delete', [UserTripsController::class, 'deleteFav']);
+        Route::get('get', [UserTripsController::class, 'getFav']);
+    });
 });
 
 
