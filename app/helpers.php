@@ -61,7 +61,7 @@ if(!function_exists('admin_id'))
 {
     function admin_id()
     {
-        return Admin::currentEmail()->pluck('id')->first();
+        return Admin::AdminEmail()->pluck('id')->first();
     }
 }
 if(!function_exists('user_id'))

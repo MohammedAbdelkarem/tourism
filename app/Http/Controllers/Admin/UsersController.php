@@ -44,6 +44,6 @@ class UsersController extends Controller
             'admin_id' => admin_id(),
         ]);
     
-        return $userTransaction;
+        return $this->SendResponse(response::HTTP_OK, 'Wallet updated successfully',['wallet' => $newWalletValue]);
     }
 }
