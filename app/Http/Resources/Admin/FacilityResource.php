@@ -17,6 +17,8 @@ class FacilityResource extends JsonResource
         'id' => $this->resource->id,
         'name' => $this->resource->name,
         'photo' => $this->resource->photo,
+        'total_rate' => $this->resource->total_rate,
+        
     ];
     }
 }

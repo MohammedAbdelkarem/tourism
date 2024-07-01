@@ -28,15 +28,8 @@ class DaysController extends Controller
      
      public function addDay(DayRequest $request)
      {
-         
-     
-        //  $nearestFacilities = $this->getNearestFacilities($lat, $long);
-     
          // allow user to select multiple facilities
         //  $selectedFacilities = $request->validated()['selected_facilities'];
-     
-        
-        
         //  foreach ($selectedFacilities as $facilityId) {
              $day = FacilityDay::create([
                  'date' => $request->date,
@@ -54,8 +47,6 @@ class DaysController extends Controller
 
      public function updateDay(DayRequest $request ,FacilityDay $day)
      {
-       
-        //  $nearestFacilities = $this->getNearestFacilities($lat, $long);
          // allow user to select multiple facilities
         //  $selectedFacilities = $request->input('selected_facilities');
          // Validate that at least one facility is selected

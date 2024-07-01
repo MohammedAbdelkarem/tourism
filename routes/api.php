@@ -53,6 +53,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::post('reset' , [AdminController::class , 'resetPassword']);
         Route::post('store' , [AdminController::class , 'storeEmail']);
         Route::post('logout', [AdminController::class, 'logout']); 
+        Route::post('wallet/{userId}', [UsersController::class, 'addToWallet']);
     });
     // facility
     Route::post('facility/store', [FacilitesController::class, 'storeFacility']);
@@ -90,7 +91,8 @@ Route::group(['prefix' => 'admin'], function () {
     // users
 
     Route::get('users', [UsersController::class, 'getUsers']);
-    Route::post('wallet/{userId}', [UsersController::class, 'addToWallet']);
+    // Route::post('wallet/{userId}', [UsersController::class, 'addToWallet']);
+
 });
 
 
