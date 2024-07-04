@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
+use App\Models\UsersBackup;
 use Illuminate\Http\Request;
 use App\Traits\ResponseTrait;
 use App\Models\UserTransaction;
@@ -44,6 +45,13 @@ class UsersController extends Controller
             'admin_id' => admin_id(),
         ]);
     
+        $userBackup = UsersBackup::where('email', User::find($userId)->email)->first();
+
+        // Update the wallet column of the UsersBackup instance
+        if ($userBackup) {
+            $userBackup->wallet = $newWalletValue;
+            $userBackup->save();
+        }
         return $this->SendResponse(response::HTTP_OK, 'Wallet updated successfully',['wallet' => $newWalletValue]);
     }
 }

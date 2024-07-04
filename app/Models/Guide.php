@@ -82,5 +82,9 @@ class Guide extends Authenticatable implements JWTSubject
     {
     return $this->hasMany(AvailableGuide::class, 'guide_id', 'id');
     }
-
+    
+    function scopeAvailable($query) {
+        return $query->where('status', 'available')
+                         ->where('accept_by_admin', 'accepted');
+    }
 }

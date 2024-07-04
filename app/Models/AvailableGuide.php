@@ -26,4 +26,15 @@ class AvailableGuide extends Model
     {
         return $this->belongsTo(Trip::class);
     } 
+
+    public function scopeAcceptedTrips($query) {
+        return $query->where('accept_trip', 'accepted')
+                     ->with('trip');
+    }
+
+    
+    public function scopeRejectedTrips($query) {
+        return $query->where('accept_trip', 'rejected')
+                     ->with('trip');
+    }
 }

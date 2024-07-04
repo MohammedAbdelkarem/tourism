@@ -12,11 +12,11 @@ use App\Http\Controllers\Admin\TripsController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\User\FacilityController;
 use App\Http\Controllers\Admin\FacilitesController;
+use App\Http\Controllers\Admin\GuidesController;
 use App\Http\Controllers\User\AppointmentController;
 use App\Http\Controllers\User\TripsController as UserTripsController;
 use App\Http\Controllers\Admin\TripsController as AdminTripsController;
-
-
+use App\Models\Guide;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,6 +53,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::post('reset' , [AdminController::class , 'resetPassword']);
         Route::post('store' , [AdminController::class , 'storeEmail']);
         Route::post('logout', [AdminController::class, 'logout']); 
+        // users
         Route::post('wallet/{userId}', [UsersController::class, 'addToWallet']);
     });
     // facility
@@ -91,9 +92,13 @@ Route::group(['prefix' => 'admin'], function () {
     // users
 
     Route::get('users', [UsersController::class, 'getUsers']);
-    // Route::post('wallet/{userId}', [UsersController::class, 'addToWallet']);
-
+    
+    //guides
+    Route::post('guides', [GuidesController::class, 'getAvailableGuides']);
+    Route::get('acceptedTrips', [GuidesController::class, 'acceptedTrips']);
+    Route::get('rejectedTrips', [GuidesController::class, 'rejectedTrips']);
 });
+
 
 
 
