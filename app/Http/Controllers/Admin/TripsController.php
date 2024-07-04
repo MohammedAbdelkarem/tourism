@@ -31,7 +31,7 @@ class TripsController extends Controller
         ]);
         
 
-        return $this->SendResponse(response::HTTP_CREATED, 'trip added successfully');
+        return $this->SendResponse(response::HTTP_CREATED, 'trip added successfully',$Trip);
         
     }
 
@@ -66,7 +66,8 @@ class TripsController extends Controller
 
     public function deleteTrip( Trip $trip){{
         $trip->delete();
-        return response()->json('trip deleted successfully');
+        
+        return $this->SendResponse(response::HTTP_OK, 'trip deleted successfully');
     }
 
     }

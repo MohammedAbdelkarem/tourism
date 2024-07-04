@@ -44,6 +44,8 @@ Route::post('checkcode', [AuthController::class, 'checkCode']);
 //         Route::post('logout', 'logout');
 //     });
 
+
+//Admin with middleware
 Route::group(['prefix' => 'admin'], function () {
 
     Route::group(['prefix' => 'auth'], function () {
@@ -53,9 +55,11 @@ Route::group(['prefix' => 'admin'], function () {
         Route::post('reset' , [AdminController::class , 'resetPassword']);
         Route::post('store' , [AdminController::class , 'storeEmail']);
         Route::post('logout', [AdminController::class, 'logout']); 
-        // users
+        // users with middleware
         Route::post('wallet/{userId}', [UsersController::class, 'addToWallet']);
     });
+//Admin without middleware
+    Route::post('update_admin_ratio' , [AdminController::class , 'updateAdminRatio']);
     // facility
     Route::post('facility/store', [FacilitesController::class, 'storeFacility']);
     Route::get('allfacility', [FacilitesController::class, 'getFacilities']);
@@ -80,16 +84,16 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('trip/finished/{id}', [TripsController::class, 'finishTrip']);
     //days
     Route::post('days', [DaysController::class, 'addDay']);
-    Route::post('days/{days}', [DaysController::class, 'updateDay']);
-
+    Route::post('days/{day}', [DaysController::class, 'updateDay']);
+    Route::delete('days/{day}', [DaysController::class, 'deleteDay']);
     
 
     //facility in day
     Route::post('facility_in_day', [DaysController::class, 'addFacilityInDay']);
     Route::post('facility_in_day/{facilityInDay}', [DaysController::class, 'updateFacilityInDay']);
-
-
-    // users
+    Route::delete('facility_in_day/{facilityInDay}', [DaysController::class, 'deleteFacilityInDay']);
+    
+    // users 
 
     Route::get('users', [UsersController::class, 'getUsers']);
     

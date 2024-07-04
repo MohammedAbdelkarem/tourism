@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Cache;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\PasswordRequest;
 use Symfony\Component\HttpFoundation\Response;
-
+use Illuminate\Http\Request;
 class AdminController extends Controller
 {
 
@@ -26,6 +26,10 @@ class AdminController extends Controller
         Cache::forever('admin_name' , $request->name);
 
         $admin = Admin::where('name', $request->name)->first();
+
+        if ($admin->role === 'super_admin'){
+        Cache::forever('admin_ratio', 10); // store the fixed value 10 in the cache
+        }
         return $this->SendResponse(response::HTTP_OK , 'logged in successfully' ,['token' => $token, 'role' => $admin->role]);
     }
 
@@ -74,4 +78,14 @@ class AdminController extends Controller
 
         return $this->SendResponse(response::HTTP_OK , 'password updated successfully');
     }
+
+
+    public function updateAdminRatio(Request $request)
+    { 
+        $ratio = $request->input('ratio');
+        Cache::forever('admin_ratio', $ratio);
+        return $this->SendResponse(response::HTTP_OK , 'Admin ratio updated successfully');
+    
+    }
+
 }
