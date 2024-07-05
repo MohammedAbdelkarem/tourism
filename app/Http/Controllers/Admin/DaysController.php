@@ -118,12 +118,22 @@ class DaysController extends Controller
     ]);
 
 // number_of_original_places
-    $trip = $day->facilityDay->trip;
-    $facilitiesInDay = FacilityInDay::where('facility_day_id', $day->facility_day_id)->get();
-    $minAvailablePlaces = $facilitiesInDay->pluck('facility')->min('number_of_available_places'); 
-    $trip->number_of_original_places = $minAvailablePlaces;
+    // $trip = $day->facilityDay->trip;
+    // $facilitiesInDay = FacilityInDay::where('facility_day_id', $day->facility_day_id)->get();
+    // $minAvailablePlaces = $facilitiesInDay->pluck('facility')->min('number_of_available_places'); 
+    // $trip->number_of_original_places = $minAvailablePlaces;
     
-
+    $trip = $day->facilityDay->trip;
+    $facilityDays = $trip->facilityDay;
+    $minAvailablePlaces = [];
+    
+    foreach ($facilityDays as $facilityDay) {
+        $facilitiesInDay = FacilityInDay::where('facility_day_id', $facilityDay->id)->get();
+        $availablePlaces = $facilitiesInDay->pluck('facility')->min('number_of_available_places');
+        $minAvailablePlaces[] = $availablePlaces;
+    }
+    
+    $trip->number_of_original_places = min($minAvailablePlaces);
 // total Facilities price in all days 
 
     $trip = $day->facilityDay->trip;
@@ -183,9 +193,16 @@ class DaysController extends Controller
     
 // number_of_original_places
 $trip = $facilityInDay->facilityDay->trip;
-$facilitiesInDay = FacilityInDay::where('facility_day_id',  $facilityInDay->facility_day_id)->get();
-$minAvailablePlaces = $facilitiesInDay->pluck('facility')->min('number_of_available_places'); 
-$trip->number_of_original_places = $minAvailablePlaces;
+$facilityDays = $trip->facilityDay;
+    $minAvailablePlaces = [];
+    
+    foreach ($facilityDays as $facilityDay) {
+        $facilitiesInDay = FacilityInDay::where('facility_day_id', $facilityDay->id)->get();
+        $availablePlaces = $facilitiesInDay->pluck('facility')->min('number_of_available_places');
+        $minAvailablePlaces[] = $availablePlaces;
+    }
+    
+    $trip->number_of_original_places = min($minAvailablePlaces);
 
 
 // total Facilities price in all days 
@@ -234,8 +251,19 @@ $totalGuideFee = $guideFeePerPerson * $numDays;
      public function deleteFacilityInDay(FacilityInDay $facilityInDay)
      {
          $facilityInDay->delete();
-         // Update trip prices
+         
          $trip = $facilityInDay->facilityDay->trip;
+         $facilityDays = $trip->facilityDay;
+         $minAvailablePlaces = [];
+         
+         foreach ($facilityDays as $facilityDay) {
+             $facilitiesInDay = FacilityInDay::where('facility_day_id', $facilityDay->id)->get();
+             $availablePlaces = $facilitiesInDay->pluck('facility')->min('number_of_available_places');
+             $minAvailablePlaces[] = $availablePlaces;
+         }
+         
+         $trip->number_of_original_places = min($minAvailablePlaces);
+// Update trip prices
          $facilityDays = $trip->facilityDay;
          $totalFacilityPrice = 0;
          foreach ($facilityDays as $facilityDay) {
@@ -275,6 +303,20 @@ $totalGuideFee = $guideFeePerPerson * $numDays;
         $trip = $day->trip;
         $day->delete();
         
+
+// number_of_original_places
+
+$facilityDays = $trip->facilityDay;
+    $minAvailablePlaces = [];
+    
+    foreach ($facilityDays as $facilityDay) {
+        $facilitiesInDay = FacilityInDay::where('facility_day_id', $facilityDay->id)->get();
+        $availablePlaces = $facilitiesInDay->pluck('facility')->min('number_of_available_places');
+        $minAvailablePlaces[] = $availablePlaces;
+    }
+    
+    $trip->number_of_original_places = min($minAvailablePlaces);
+
         // Update trip prices
         $facilityDays = $trip->facilityDay;
         $totalFacilityPrice = 0;
