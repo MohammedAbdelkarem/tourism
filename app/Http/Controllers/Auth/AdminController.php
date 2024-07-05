@@ -27,9 +27,9 @@ class AdminController extends Controller
 
         $admin = Admin::where('name', $request->name)->first();
 
-        if ($admin->role === 'super_admin'){
+        
         Cache::forever('admin_ratio', 10); // store the fixed value 10 in the cache
-        }
+        
         return $this->SendResponse(response::HTTP_OK , 'logged in successfully' ,['token' => $token, 'role' => $admin->role]);
     }
 
