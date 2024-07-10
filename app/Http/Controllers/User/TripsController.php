@@ -26,7 +26,7 @@ class TripsController extends Controller
 
     public function getHomeOffers()//for the offers in the home , regardless of the country
     {
-        $records = Trip::Active()->Offer()->orderByDesc('offer_ratio')->take(7)->get();
+        $records = Trip::Active()->Offer()->favourite()->orderByDesc('offer_ratio')->take(7)->get();
 
         $records = HomeOfferResource::collection($records);
 

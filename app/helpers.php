@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\{User , Admin};
+use App\Models\{User , Admin, Guide};
 use Illuminate\Support\Facades\Cache;
 
 
@@ -62,6 +62,13 @@ if(!function_exists('admin_id'))
     function admin_id()
     {
         return Admin::AdminEmail()->pluck('id')->first();
+    }
+}
+if(!function_exists('guide_id'))
+{
+    function guide_id()
+    {
+        return Guide::guideEmail()->pluck('id')->first();
     }
 }
 if(!function_exists('user_id'))

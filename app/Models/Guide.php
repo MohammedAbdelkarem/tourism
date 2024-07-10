@@ -87,4 +87,6 @@ class Guide extends Authenticatable implements JWTSubject
         return $query->where('status', 'available')
                          ->where('accept_by_admin', 'accepted');
     }
+
+    
 }
