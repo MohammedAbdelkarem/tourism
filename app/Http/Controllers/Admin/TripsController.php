@@ -54,7 +54,6 @@ class TripsController extends Controller
             'bio' => $request->bio,
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
-            'guide_backup_id' => null,
             'country_id' =>$request->country_id,
             'offer_ratio' => $request->offer_ratio, 
         ]);
