@@ -20,6 +20,7 @@ class HomeOfferResource extends JsonResource
             'photo' => $this->photo,
             'rate' => $this->rate,
             'offer' => $this->offer_ratio,
+            'favourite' => $this->favourites->count(),
         ];
     }
 }
