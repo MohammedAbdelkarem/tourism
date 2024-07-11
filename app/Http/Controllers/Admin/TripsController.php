@@ -54,15 +54,33 @@ class TripsController extends Controller
             'bio' => $request->bio,
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
-            'guide_backup_id' => $request->guide_backup_id,
+            'guide_backup_id' => null,
             'country_id' =>$request->country_id,
             'offer_ratio' => $request->offer_ratio, 
         ]);
+
+         // Check if the guide ID already exists for this trip
+    $existingGuide = AvailableGuide::where('trip_id', $trip->id)
+    ->where('guide_id', $request->guide_id)
+    ->first();
+
+    if (!$existingGuide) {
+    // Delete all existing available guides for this trip
+    AvailableGuide::where('trip_id', $trip->id)->delete();
+
+    // Create a new available guide record
+    $availableGuide = AvailableGuide::create([
+    'trip_id' => $trip->id,
+    'guide_id' => $request->guide_id,
+    'accept_trip' => 'rejected', 
+    ]);
+    }
+
         $trip->update(['price_per_one_old' => $trip->price_per_one_new]);
 
-    // Calculate new price_per_one_new
-    $newPrice = $trip->price_per_one_old * $request->offer_ratio / 100;
-    $trip->update(['price_per_one_new' => $newPrice]);
+        // Calculate new price_per_one_new
+        $newPrice = $trip->price_per_one_old * $request->offer_ratio / 100;
+        $trip->update(['price_per_one_new' => $newPrice]);
 
 
         return $this->SendResponse(response::HTTP_CREATED, 'trip updated successfully');
