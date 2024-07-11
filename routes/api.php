@@ -58,7 +58,7 @@ Route::group(['prefix' => 'admin'], function () {
         // users with middleware
         Route::post('wallet/{userId}', [UsersController::class, 'addToWallet']);
     });
-//Admin without middleware
+    //Admin without middleware
     Route::post('update_admin_ratio' , [AdminController::class , 'updateAdminRatio']);
     // facility
     Route::post('facility/store', [FacilitesController::class, 'storeFacility']);
@@ -101,6 +101,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('guides', [GuidesController::class, 'getAvailableGuides']);
     Route::get('acceptedTrips', [GuidesController::class, 'acceptedTrips']);
     Route::get('rejectedTrips', [GuidesController::class, 'rejectedTrips']);
+    Route::get('can_change_unique_id/{guideId}', [GuidesController::class, 'update_can_change_unique_id']);
+    Route::get('accept_by_admin/{guideId}', [GuidesController::class, 'update_accept_by_admin']);
 });
 
 

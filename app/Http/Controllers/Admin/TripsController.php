@@ -184,14 +184,22 @@ class TripsController extends Controller
 
         
     }
-    public function activeTrip( string $id)
+
+public function activeTrip(string $id)
 {
     $trip = Trip::find($id);
-
-    $trip->status = 'active';
-    $trip->save();
-    return $this->SendResponse(response::HTTP_OK, 'Trip activated successfully' );
-  
+    if ($trip) {
+        $availableGuide = AvailableGuide::where('trip_id', $id)->first();
+        if ($availableGuide && $availableGuide->accept_trip === 'accepted') {
+            $trip->status = 'active';
+            $trip->save();
+            return $this->SendResponse(response::HTTP_OK, 'Trip activated successfully');
+        } else {
+            return $this->SendResponse(response::HTTP_BAD_REQUEST, 'Guide has not accepted the trip');
+        }
+    } else {
+        return $this->SendResponse(response::HTTP_NOT_FOUND, 'Trip not found');
+    }
 }
 
 public function inProgressTrip(string $id)
