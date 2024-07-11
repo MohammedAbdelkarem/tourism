@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Trip;
 use Illuminate\Http\Request;
+use App\Models\FacilityInDay;
 use App\Traits\ResponseTrait;
 use App\Models\AvailableGuide;
 use Illuminate\Routing\Controller;
@@ -11,6 +12,8 @@ use App\Http\Requests\Admin\TripRequest;
 use App\Http\Resources\Admin\TripResource;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Resources\Admin\TripDetailsResource;
+use Illuminate\Support\Facades\Cache;
+
 
 
 
@@ -75,12 +78,42 @@ class TripsController extends Controller
     ]);
     }
 
-        $trip->update(['price_per_one_old' => $trip->price_per_one_new]);
 
-        // Calculate new price_per_one_new
-        $newPrice = $trip->price_per_one_old * $request->offer_ratio / 100;
-        $trip->update(['price_per_one_new' => $newPrice]);
+          // Update trip prices
+          $facilityDays = $trip->facilityDay;
+          $totalFacilityPrice = 0;
+          foreach ($facilityDays as $facilityDay) {
+              $facilitiesInDay = FacilityInDay::where('facility_day_id', $facilityDay->id)->get();
+              foreach ($facilitiesInDay as $facilityInDay) {
+                  $totalFacilityPrice += $facilityInDay->facility->price_per_person;
+              }
+          }
+          // $guideBackup = $trip->Guides_backups;
+          $availableGuide = AvailableGuide::where('trip_id', $trip->id)->first();
+          $guideFeePerPerson = $availableGuide->guide->price_per_person_one_day;
+          // $guideFeePerPerson = $guideBackup->price_per_person_one_day;
+          $numDays = $trip->facilityDay->count();
+          $totalGuideFee = $guideFeePerPerson * $numDays;
+            // Calculate the total trip price
+          $totalTripPrice = $totalFacilityPrice + $totalGuideFee;
+  
+           // Retrieve the admin ratio from the cache
+          $adminRatio = Cache::get('admin_ratio');
+   
+           // Calculate the admin fee
+          $adminFee = $totalTripPrice * ($adminRatio / 100);
+   
+           // Add the admin fee to the total trip price
+          $trip->price_per_one_new = $totalTripPrice + $adminFee;
+   
+         $trip->save();
 
+
+       $trip->update(['price_per_one_old' => $trip->price_per_one_new]);
+
+       // Calculate new price_per_one_new
+       $newPrice = $trip->price_per_one_old * $request->offer_ratio / 100;
+       $trip->update(['price_per_one_new' => $newPrice]);
 
         return $this->SendResponse(response::HTTP_CREATED, 'trip updated successfully');
 

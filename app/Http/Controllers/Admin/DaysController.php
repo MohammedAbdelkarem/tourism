@@ -6,16 +6,17 @@ use App\Models\Trip;
 use App\Models\Facility;
 use App\Models\FacilityDay;
 use Illuminate\Http\Request;
+use App\Models\FacilityInDay;
 use App\Traits\ResponseTrait;
 use Ramsey\Uuid\Type\Integer;
+use App\Models\AvailableGuide;
 use App\Http\Controllers\Controller;
 use PhpParser\Node\Expr\Cast\Double;
+use Illuminate\Support\Facades\Cache;
 use App\Http\Requests\Admin\DayRequest;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Admin\FacilityInDayRequest;
-use App\Models\FacilityInDay;
-use Illuminate\Support\Facades\Cache;
 
 class DaysController extends Controller
 {
@@ -42,8 +43,10 @@ class DaysController extends Controller
                 $totalFacilityPrice += $facilityInDay->facility->price_per_person;
             }
         }
-        $guideBackup = $trip->Guides_backups;
-        $guideFeePerPerson = $guideBackup->price_per_person_one_day;
+        // $guideBackup = $trip->Guides_backups;
+        $availableGuide = AvailableGuide::where('trip_id', $trip->id)->first();
+        $guideFeePerPerson = $availableGuide->guide->price_per_person_one_day;
+        // $guideFeePerPerson = $guideBackup->price_per_person_one_day;
         $numDays = $trip->facilityDay->count();
         $totalGuideFee = $guideFeePerPerson * $numDays;
           // Calculate the total trip price
@@ -84,8 +87,10 @@ class DaysController extends Controller
                   $totalFacilityPrice += $facilityInDay->facility->price_per_person;
               }
           }
-          $guideBackup = $trip->Guides_backups;
-          $guideFeePerPerson = $guideBackup->price_per_person_one_day;
+        //   $guideBackup = $trip->Guides_backups;
+        //   $guideFeePerPerson = $guideBackup->price_per_person_one_day;
+        $availableGuide = AvailableGuide::where('trip_id', $trip->id)->first();
+        $guideFeePerPerson = $availableGuide->guide->price_per_person_one_day;
           $numDays = $trip->facilityDay->count();
           $totalGuideFee = $guideFeePerPerson * $numDays;
             // Calculate the total trip price
@@ -136,6 +141,7 @@ class DaysController extends Controller
     $trip->number_of_original_places = min($minAvailablePlaces);
 // total Facilities price in all days 
 
+
     $trip = $day->facilityDay->trip;
     $facilityDays = $trip->facilityDay;
     $totalFacilityPrice = 0;
@@ -148,9 +154,10 @@ class DaysController extends Controller
     }
 
 // total guide fee
-    $guideBackup = $trip->Guides_backups;
-    $guideFeePerPerson = $guideBackup->price_per_person_one_day;
-
+//     $guideBackup = $trip->Guides_backups;
+//     $guideFeePerPerson = $guideBackup->price_per_person_one_day;
+$availableGuide = AvailableGuide::where('trip_id', $trip->id)->first();
+$guideFeePerPerson = $availableGuide->guide->price_per_person_one_day;
     // Count the number of days in the trip
     $numDays = $trip->facilityDay->count();
 
@@ -219,9 +226,10 @@ foreach ($facilityDays as $facilityDay) {
 }
 
 // total guide fee
-$guideBackup = $trip->Guides_backups;
-$guideFeePerPerson = $guideBackup->price_per_person_one_day;
-
+// $guideBackup = $trip->Guides_backups;
+// $guideFeePerPerson = $guideBackup->price_per_person_one_day;
+$availableGuide = AvailableGuide::where('trip_id', $trip->id)->first();
+$guideFeePerPerson = $availableGuide->guide->price_per_person_one_day;
 // Count the number of days in the trip
 $numDays = $trip->facilityDay->count();
 
@@ -272,9 +280,11 @@ $totalGuideFee = $guideFeePerPerson * $numDays;
                  $totalFacilityPrice += $facilityInDay->facility->price_per_person;
              }
          }
-         $guideBackup = $trip->Guides_backups;
-         $guideFeePerPerson = $guideBackup->price_per_person_one_day;
-         $numDays = $trip->facilityDay->count();
+        //  $guideBackup = $trip->Guides_backups;
+        //  $guideFeePerPerson = $guideBackup->price_per_person_one_day;
+        $availableGuide = AvailableGuide::where('trip_id', $trip->id)->first();
+        $guideFeePerPerson = $availableGuide->guide->price_per_person_one_day; 
+        $numDays = $trip->facilityDay->count();
          $totalGuideFee = $guideFeePerPerson * $numDays;
         
            // Calculate the total trip price
@@ -326,8 +336,10 @@ $facilityDays = $trip->facilityDay;
                 $totalFacilityPrice += $facilityInDay->facility->price_per_person;
             }
         }
-        $guideBackup = $trip->Guides_backups;
-        $guideFeePerPerson = $guideBackup->price_per_person_one_day;
+        // $guideBackup = $trip->Guides_backups;
+        // $guideFeePerPerson = $guideBackup->price_per_person_one_day;
+        $availableGuide = AvailableGuide::where('trip_id', $trip->id)->first();
+        $guideFeePerPerson = $availableGuide->guide->price_per_person_one_day;
         $numDays = $trip->facilityDay->count();
         $totalGuideFee = $guideFeePerPerson * $numDays;
           // Calculate the total trip price
