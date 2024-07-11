@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\Admin\TripRequest;
 use App\Models\Trip;
-use App\Traits\ResponseTrait;
 use Illuminate\Http\Request;
+use App\Traits\ResponseTrait;
+use App\Models\AvailableGuide;
 use Illuminate\Routing\Controller;
-use Symfony\Component\HttpFoundation\Response;
+use App\Http\Requests\Admin\TripRequest;
 use App\Http\Resources\Admin\TripResource;
+use Symfony\Component\HttpFoundation\Response;
 use App\Http\Resources\Admin\TripDetailsResource;
 
 
@@ -16,7 +17,6 @@ use App\Http\Resources\Admin\TripDetailsResource;
 class TripsController extends Controller
 {
     use ResponseTrait;
-
     public function addTrip(TripRequest $request){
         $Trip = Trip::create([
             'name' => $request->name,
@@ -26,10 +26,16 @@ class TripsController extends Controller
             'bio' => $request->bio,
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
-            'guide_backup_id' => $request->guide_backup_id,
+            'guide_backup_id' =>  null,
             'country_id' =>$request->country_id,
         ]);
         
+    // create a new available guide record
+    $availableGuide = AvailableGuide::create([
+        'trip_id' => $Trip->id,
+        'guide_id' => $request->guide_id,
+        'accept_trip' => 'rejected', 
+    ]);
 
         return $this->SendResponse(response::HTTP_CREATED, 'trip added successfully',$Trip);
         
