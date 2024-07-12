@@ -17,6 +17,7 @@ class TripDetailsResource extends JsonResource
         return [
             'name' => $this->name,
             'photo' => $this->photo,
+            'trip_id' => $this->trips,
             'bio' => $this->bio,
             'old_price' => $this->price_per_one_old,
             'price' => $this->price_per_one_new,
