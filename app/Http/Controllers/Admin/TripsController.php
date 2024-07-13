@@ -3,16 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Trip;
+use App\Models\Admin;
 use Illuminate\Http\Request;
 use App\Models\FacilityInDay;
 use App\Traits\ResponseTrait;
 use App\Models\AvailableGuide;
+use App\Models\GuideTransaction;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Cache;
 use App\Http\Requests\Admin\TripRequest;
 use App\Http\Resources\Admin\TripResource;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Resources\Admin\TripDetailsResource;
-use Illuminate\Support\Facades\Cache;
 
 
 
@@ -211,12 +213,97 @@ public function inProgressTrip(string $id)
     return $this->SendResponse(response::HTTP_OK, 'Trip updated to in progress');
 }
 
+// public function finishTrip(string $id)
+// {
+//     $trip = Trip::find($id);
+
+//     $trip->status = 'finished';
+//     $trip->save();
+//     return $this->SendResponse(response::HTTP_OK, 'Trip marked as finished');
+// }
+
 public function finishTrip(string $id)
 {
     $trip = Trip::find($id);
 
+    if (!$trip) {
+        return $this->SendResponse(response::HTTP_NOT_FOUND, 'Trip not found');
+    }
+
     $trip->status = 'finished';
     $trip->save();
+
+// calculate all facility price 
+
+
+    $facilityDays = $trip->facilityDay;
+    $totalFacilityPrice = 0;
+    foreach ($facilityDays as $facilityDay) {
+        $facilitiesInDay = FacilityInDay::where('facility_day_id', $facilityDay->id)->get();
+        foreach ($facilitiesInDay as $facilityInDay) {
+            $totalFacilityPrice += $facilityInDay->facility->price_per_person;
+        }
+    }
+
+    // Get total trip price from trip table
+    $totalTripPrice = $trip->total_price;
+
+    // Calculate facility profits
+    $facilityDays = $trip->facilityDay;
+    $facilityProfit = 0;
+    foreach ($facilityDays as $facilityDay) {
+        $facilitiesInDay = FacilityInDay::where('facility_day_id', $facilityDay->id)->get();
+        foreach ($facilitiesInDay as $facilityInDay) {
+            $facility = $facilityInDay->facility;
+            $facilityProfit += $facilityInDay->facility->price_per_person * $trip->number_of_filled_places;
+            $facility->profits += $facilityInDay->facility->price_per_person * $trip->number_of_filled_places;
+            $facility->save();
+        }
+    }
+  
+
+    // Calculate guide profits
+    $availableGuide = AvailableGuide::where('trip_id', $trip->id)->first();
+    $guide = $availableGuide->guide;
+    $guideBackup = $trip->Guides_backups;
+    $guideFeePerPerson = $availableGuide->guide->price_per_person_one_day;
+    $numDays = $trip->facilityDay->count();
+    $totalGuideFeePerDay = $guideFeePerPerson * $numDays;
+    $totalGuideFee = $totalGuideFeePerDay * $trip->number_of_filled_places;
+
+  // Add the guide fee to the guide's wallet
+  $guideBackup->wallet += $totalGuideFee;
+  $guideBackup->save();
+
+    // Create a new guide transaction record
+    GuideTransaction::create([
+        'guide_id' => $guide->id,
+        'amount' => $totalGuideFee,
+        'wallet' =>  $guideBackup->wallet,
+        'date' => now(),
+    ]);
+
+   // add  totalGuideFee to totalFacilityPrice to calculate total price without admin profits
+    $totalprice=$totalGuideFee + $totalFacilityPrice* $trip->number_of_filled_places;
+    // Calculate admin profits
+    $adminRatio = Cache::get('admin_ratio');
+    $adminProfit = $totalprice * ($adminRatio / 100);
+
+     // Get the super admin
+     $superAdmin = Admin::where('role', 'super_admin')->first();
+
+     // Add the admin profit to the super admin's wallet
+     $superAdmin->wallet += $adminProfit;
+     $superAdmin->save();
+
+  // To test the validity of mathematical calculations
+    //  $totalTripPrice -= $facilityProfit;
+    // $totalTripPrice -= $totalGuideFee;
+    // $totalTripPrice -= $adminProfit;
+    // $trip->total_price=$totalTripPrice;
+    $trip->save();
+
+    // Return response
     return $this->SendResponse(response::HTTP_OK, 'Trip marked as finished');
 }
 

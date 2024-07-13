@@ -61,48 +61,57 @@ Route::group(['prefix' => 'admin'], function () {
     //Admin without middleware
     Route::post('update_admin_ratio' , [AdminController::class , 'updateAdminRatio']);
     // facility
-    Route::post('facility/store', [FacilitesController::class, 'storeFacility']);
-    Route::get('allfacility', [FacilitesController::class, 'getFacilities']);
-    Route::get('restaurants', [FacilitesController::class, 'getRestaurants']);
-    Route::get('hotels', [FacilitesController::class, 'getHotels']);
-    Route::get('places', [FacilitesController::class, 'getPlaces']);
-    Route::get('facility/{id}', [FacilitesController::class, 'getFacilityDetails']);
-    Route::post('facility/{facility}', [FacilitesController::class, 'updateFacility']);
-    Route::delete('facilities/{facility}', [FacilitesController::class, 'deleteFacility']);
-    Route::get('facilities/nearest/{trip_id}', [FacilitesController::class, 'getNearestFacilities']);
+    
+    Route::controller(FacilitesController::class)->group(function () {
+        Route::post('facility/store', 'storeFacility');
+        Route::get('allfacility', 'getFacilities');
+        Route::get('restaurants', 'getRestaurants');
+        Route::get('hotels', 'getHotels');
+        Route::get('places', 'getPlaces');
+        Route::get('facility/{id}', 'getFacilityDetails');
+        Route::post('facility/{facility}', 'updateFacility');
+        Route::delete('facilities/{facility}', 'deleteFacility');
+        Route::get('facilities/nearest/{trip_id}', 'getNearestFacilities');
+    });
     //trip
-    Route::post('trip/store', [TripsController::class, 'addTrip']);
-    Route::post('trip/{trip}', [TripsController::class, 'updateTrip']);
-    Route::delete('trip/{trip}', [TripsController::class, 'deleteTrip']);
-    Route::get('trip/pending', [TripsController::class, 'getPinnedTrips']);
-    Route::get('trip/active', [TripsController::class, 'getRunningTrips']);
-    Route::get('trip/finish', [TripsController::class, 'getFinishidTrips']);
-    Route::get('trip', [TripsController::class, 'getTrips']);
-    Route::get('trip/{trip}', [TripsController::class, 'getTripDetails']);
-    Route::get('trip/active/{id}', [TripsController::class, 'activeTrip']);
-    Route::get('trip/in_progress/{id}', [TripsController::class, 'inProgressTrip']);
-    Route::get('trip/finished/{id}', [TripsController::class, 'finishTrip']);
+    Route::controller(TripsController::class)->group(function () {
+        Route::post('trip/store', 'addTrip');
+        Route::post('trip/{trip}', 'updateTrip');
+        Route::delete('trip/{trip}', 'deleteTrip');
+        Route::get('trip/pending', 'getPinnedTrips');
+        Route::get('trip/active', 'getRunningTrips');
+        Route::get('trip/finish', 'getFinishidTrips');
+        Route::get('trip', 'getTrips');
+        Route::get('trip/{trip}', 'getTripDetails');
+        Route::get('trip/active/{id}', 'activeTrip');
+        Route::get('trip/in_progress/{id}', 'inProgressTrip');
+        Route::get('trip/finished/{id}', 'finishTrip');
+    });
+    
+    Route::controller(DaysController::class)->group(function () {
     //days
-    Route::post('days', [DaysController::class, 'addDay']);
-    Route::post('days/{day}', [DaysController::class, 'updateDay']);
-    Route::delete('days/{day}', [DaysController::class, 'deleteDay']);
-    
-
+    Route::post('days', 'addDay');
+    Route::post('days/{day}', 'updateDay');
+    Route::delete('days/{day}', 'deleteDay');
     //facility in day
-    Route::post('facility_in_day', [DaysController::class, 'addFacilityInDay']);
-    Route::post('facility_in_day/{facilityInDay}', [DaysController::class, 'updateFacilityInDay']);
-    Route::delete('facility_in_day/{facilityInDay}', [DaysController::class, 'deleteFacilityInDay']);
-    
+    Route::post('facility_in_day', 'addFacilityInDay');
+    Route::post('facility_in_day/{facilityInDay}', 'updateFacilityInDay');
+    Route::delete('facility_in_day/{facilityInDay}', 'deleteFacilityInDay');
+    });
     // users 
 
     Route::get('users', [UsersController::class, 'getUsers']);
     
     //guides
-    Route::post('guides', [GuidesController::class, 'getAvailableGuides']);
-    Route::get('acceptedTrips', [GuidesController::class, 'acceptedTrips']);
-    Route::get('rejectedTrips', [GuidesController::class, 'rejectedTrips']);
-    Route::get('can_change_unique_id/{guideId}', [GuidesController::class, 'update_can_change_unique_id']);
-    Route::get('accept_by_admin/{guideId}', [GuidesController::class, 'update_accept_by_admin']);
+ 
+    Route::controller(GuidesController::class)->group(function () {
+        Route::post('guides', 'getAvailableGuides');
+        Route::get('acceptedTrips', 'acceptedTrips');
+        Route::get('rejectedTrips', 'rejectedTrips');
+        Route::get('can_change_unique_id/{guideId}', 'update_can_change_unique_id');
+        Route::get('accept_by_admin/{guideId}', 'update_accept_by_admin');
+    });
+    
 });
 
 

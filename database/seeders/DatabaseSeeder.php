@@ -55,7 +55,7 @@ class DatabaseSeeder extends Seeder
         'email' => 'mayagritaabouasali@gmail.com',
         'password' => bcrypt('password1'),
         'role' => 'super_admin',
-        'ratio' => 10,
+        // 'ratio' => 10,
         'wallet' => 0,
         ]);
         Admin::factory()->create([
@@ -63,7 +63,7 @@ class DatabaseSeeder extends Seeder
             'email' => null,
             'password' => bcrypt('password2'),
             'role' => 'sub_admin',
-            'ratio' => 10,
+            // 'ratio' => 10,
             'wallet' => 0,
         ]);
 
@@ -72,7 +72,7 @@ class DatabaseSeeder extends Seeder
             'email' => null,
             'password' => bcrypt('password3'),
             'role' => 'sub_admin',
-            'ratio' => 10,
+            // 'ratio' => 10,
             'wallet' => 0,
         ]);
 
@@ -81,7 +81,7 @@ class DatabaseSeeder extends Seeder
             'email' => null,
             'password' => bcrypt('password4'),
             'role' => 'sub_admin',
-            'ratio' => 10,
+            // 'ratio' => 10,
             'wallet' => 0,
         ]);
         Trip::factory(40)->create();

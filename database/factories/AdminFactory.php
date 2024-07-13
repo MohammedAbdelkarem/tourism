@@ -22,7 +22,7 @@ class AdminFactory extends Factory
             'email' => $this->faker->unique()->safeEmail,
             'password' => Hash::make('password'),
             'role' => $this->faker->randomElement(['super_admin', 'sub_admin']),
-            'ratio' => $this->faker->randomNumber(),
+            // 'ratio' => $this->faker->randomNumber(),
             'wallet' => $this->faker->randomNumber(),
         ];
     }

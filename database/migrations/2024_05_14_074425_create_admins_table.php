@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->string('password');
             $table->enum('role' , ['super_admin' , 'sub_admin']);
-            $table->integer('ratio');
+            // $table->integer('ratio');
             $table->integer('wallet');
             $table->timestamps();
         });

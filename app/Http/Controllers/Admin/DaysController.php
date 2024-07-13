@@ -137,8 +137,9 @@ class DaysController extends Controller
         $availablePlaces = $facilitiesInDay->pluck('facility')->min('number_of_available_places');
         $minAvailablePlaces[] = $availablePlaces;
     }
-    
-    $trip->number_of_original_places = min($minAvailablePlaces);
+  
+    // $trip->number_of_original_places = min($minAvailablePlaces);
+    $trip->number_of_original_places = collect($minAvailablePlaces)->min();
 // total Facilities price in all days 
 
 
@@ -209,7 +210,8 @@ $facilityDays = $trip->facilityDay;
         $minAvailablePlaces[] = $availablePlaces;
     }
     
-    $trip->number_of_original_places = min($minAvailablePlaces);
+    // $trip->number_of_original_places = min($minAvailablePlaces);
+    $trip->number_of_original_places = collect($minAvailablePlaces)->min();
 
 
 // total Facilities price in all days 
@@ -270,7 +272,8 @@ $totalGuideFee = $guideFeePerPerson * $numDays;
              $minAvailablePlaces[] = $availablePlaces;
          }
          
-         $trip->number_of_original_places = min($minAvailablePlaces);
+        //  $trip->number_of_original_places = min($minAvailablePlaces);
+        $trip->number_of_original_places = collect($minAvailablePlaces)->min();
 // Update trip prices
          $facilityDays = $trip->facilityDay;
          $totalFacilityPrice = 0;
@@ -325,7 +328,8 @@ $facilityDays = $trip->facilityDay;
         $minAvailablePlaces[] = $availablePlaces;
     }
     
-    $trip->number_of_original_places = min($minAvailablePlaces);
+    // $trip->number_of_original_places = min($minAvailablePlaces);
+    $trip->number_of_original_places = collect($minAvailablePlaces)->min();
 
         // Update trip prices
         $facilityDays = $trip->facilityDay;
