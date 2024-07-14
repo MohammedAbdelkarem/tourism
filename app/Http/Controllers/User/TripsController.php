@@ -205,7 +205,7 @@ class TripsController extends Controller
             return $this->SendResponse(response::HTTP_OK , 'no favourites yet');
         }
 
-        $data = TripDetailsResource::collection($data);
+        // $data = TripDetailsResource::collection($data);
 
         return $this->SendResponse(response::HTTP_OK , 'favourites retrieved with success' , $data);
     }
