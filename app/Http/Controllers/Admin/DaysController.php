@@ -12,6 +12,7 @@ use Ramsey\Uuid\Type\Integer;
 use App\Models\AvailableGuide;
 use App\Http\Controllers\Controller;
 use PhpParser\Node\Expr\Cast\Double;
+use App\Services\TripPriceCalculator;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Requests\Admin\DayRequest;
 use Illuminate\Support\Facades\Validator;
@@ -35,34 +36,12 @@ class DaysController extends Controller
              ]);
              $trip = $day->trip;
            // Update trip prices
-        $facilityDays = $trip->facilityDay;
-        $totalFacilityPrice = 0;
-        foreach ($facilityDays as $facilityDay) {
-            $facilitiesInDay = FacilityInDay::where('facility_day_id', $facilityDay->id)->get();
-            foreach ($facilitiesInDay as $facilityInDay) {
-                $totalFacilityPrice += $facilityInDay->facility->price_per_person;
-            }
-        }
-        // $guideBackup = $trip->Guides_backups;
-        $availableGuide = AvailableGuide::where('trip_id', $trip->id)->first();
-        $guideFeePerPerson = $availableGuide->guide->price_per_person_one_day;
-        // $guideFeePerPerson = $guideBackup->price_per_person_one_day;
-        $numDays = $trip->facilityDay->count();
-        $totalGuideFee = $guideFeePerPerson * $numDays;
-          // Calculate the total trip price
-        $totalTripPrice = $totalFacilityPrice + $totalGuideFee;
 
-         // Retrieve the admin ratio from the cache
-        $adminRatio = Cache::get('admin_ratio');
- 
-         // Calculate the admin fee
-        $adminFee = $totalTripPrice * ($adminRatio / 100);
- 
-         // Add the admin fee to the total trip price
-        $trip->price_per_one_new = $totalTripPrice + $adminFee;
- 
-     $trip->save();
+           $tripPriceCalculator = new TripPriceCalculator();
+           $trip->price_per_one_new = $tripPriceCalculator->calculateTripPrice($trip);
+           $trip->save();
 
+   
      
          return $this->SendResponse(response::HTTP_CREATED, 'day added successfully',$day);
      }
@@ -78,34 +57,11 @@ class DaysController extends Controller
              ]);
         
              $trip = $day->trip;
-             // Update trip prices
-          $facilityDays = $trip->facilityDay;
-          $totalFacilityPrice = 0;
-          foreach ($facilityDays as $facilityDay) {
-              $facilitiesInDay = FacilityInDay::where('facility_day_id', $facilityDay->id)->get();
-              foreach ($facilitiesInDay as $facilityInDay) {
-                  $totalFacilityPrice += $facilityInDay->facility->price_per_person;
-              }
-          }
-        //   $guideBackup = $trip->Guides_backups;
-        //   $guideFeePerPerson = $guideBackup->price_per_person_one_day;
-        $availableGuide = AvailableGuide::where('trip_id', $trip->id)->first();
-        $guideFeePerPerson = $availableGuide->guide->price_per_person_one_day;
-          $numDays = $trip->facilityDay->count();
-          $totalGuideFee = $guideFeePerPerson * $numDays;
-            // Calculate the total trip price
-          $totalTripPrice = $totalFacilityPrice + $totalGuideFee;
+             
+             $tripPriceCalculator = new TripPriceCalculator();
+             $trip->price_per_one_new = $tripPriceCalculator->calculateTripPrice($trip);
+             $trip->save();
   
-           // Retrieve the admin ratio from the cache
-          $adminRatio = Cache::get('admin_ratio');
-   
-           // Calculate the admin fee
-          $adminFee = $totalTripPrice * ($adminRatio / 100);
-   
-           // Add the admin fee to the total trip price
-          $trip->price_per_one_new = $totalTripPrice + $adminFee;
-   
-       $trip->save();
          return $this->SendResponse(response::HTTP_CREATED, 'day updated successfully');
      }
 
@@ -122,63 +78,14 @@ class DaysController extends Controller
         'note' => $request->note,
     ]);
 
-// number_of_original_places
-    // $trip = $day->facilityDay->trip;
-    // $facilitiesInDay = FacilityInDay::where('facility_day_id', $day->facility_day_id)->get();
-    // $minAvailablePlaces = $facilitiesInDay->pluck('facility')->min('number_of_available_places'); 
-    // $trip->number_of_original_places = $minAvailablePlaces;
     
     $trip = $day->facilityDay->trip;
-    $facilityDays = $trip->facilityDay;
-    $minAvailablePlaces = [];
-    
-    foreach ($facilityDays as $facilityDay) {
-        $facilitiesInDay = FacilityInDay::where('facility_day_id', $facilityDay->id)->get();
-        $availablePlaces = $facilitiesInDay->pluck('facility')->min('number_of_available_places');
-        $minAvailablePlaces[] = $availablePlaces;
-    }
-  
-    // $trip->number_of_original_places = min($minAvailablePlaces);
-    $trip->number_of_original_places = collect($minAvailablePlaces)->min();
-// total Facilities price in all days 
 
+    $tripPriceCalculator = new TripPriceCalculator();
+    $trip->price_per_one_new = $tripPriceCalculator->calculateTripPrice($trip);
+    $trip->number_of_original_places = $tripPriceCalculator->calculateNumberOfOriginalPlaces($trip);
+    $trip->save();
 
-    $trip = $day->facilityDay->trip;
-    $facilityDays = $trip->facilityDay;
-    $totalFacilityPrice = 0;
-
-    foreach ($facilityDays as $facilityDay) {
-        $facilitiesInDay = FacilityInDay::where('facility_day_id', $facilityDay->id)->get();
-        foreach ($facilitiesInDay as $facilityInDay) {
-            $totalFacilityPrice += $facilityInDay->facility->price_per_person;
-        }
-    }
-
-// total guide fee
-//     $guideBackup = $trip->Guides_backups;
-//     $guideFeePerPerson = $guideBackup->price_per_person_one_day;
-$availableGuide = AvailableGuide::where('trip_id', $trip->id)->first();
-$guideFeePerPerson = $availableGuide->guide->price_per_person_one_day;
-    // Count the number of days in the trip
-    $numDays = $trip->facilityDay->count();
-
-    // Calculate the total guide fee
-    $totalGuideFee = $guideFeePerPerson * $numDays;
-
-
-     // Calculate the total trip price
-     $totalTripPrice = $totalFacilityPrice + $totalGuideFee;
-
-     // Retrieve the admin ratio from the cache
-     $adminRatio = Cache::get('admin_ratio');
- 
-     // Calculate the admin fee
-     $adminFee = $totalTripPrice * ($adminRatio / 100);
- 
-     // Add the admin fee to the total trip price
-     $trip->price_per_one_new = $totalTripPrice + $adminFee;
- 
-     $trip->save();
     return $this->SendResponse(response::HTTP_CREATED, 'facility added successfully');
 }
 
@@ -200,58 +107,12 @@ $guideFeePerPerson = $availableGuide->guide->price_per_person_one_day;
     
     
 // number_of_original_places
-$trip = $facilityInDay->facilityDay->trip;
-$facilityDays = $trip->facilityDay;
-    $minAvailablePlaces = [];
-    
-    foreach ($facilityDays as $facilityDay) {
-        $facilitiesInDay = FacilityInDay::where('facility_day_id', $facilityDay->id)->get();
-        $availablePlaces = $facilitiesInDay->pluck('facility')->min('number_of_available_places');
-        $minAvailablePlaces[] = $availablePlaces;
-    }
-    
-    // $trip->number_of_original_places = min($minAvailablePlaces);
-    $trip->number_of_original_places = collect($minAvailablePlaces)->min();
+    $trip = $facilityInDay->facilityDay->trip;
+    $tripPriceCalculator = new TripPriceCalculator();
+    $trip->price_per_one_new = $tripPriceCalculator->calculateTripPrice($trip);
+    $trip->number_of_original_places = $tripPriceCalculator->calculateNumberOfOriginalPlaces($trip);
+    $trip->save();
 
-
-// total Facilities price in all days 
-
-$trip =  $facilityInDay->facilityDay->trip;
-$facilityDays = $trip->facilityDay;
-$totalFacilityPrice = 0;
-
-foreach ($facilityDays as $facilityDay) {
-    $facilitiesInDay = FacilityInDay::where('facility_day_id', $facilityDay->id)->get();
-    foreach ($facilitiesInDay as $facilityInDay) {
-        $totalFacilityPrice += $facilityInDay->facility->price_per_person;
-    }
-}
-
-// total guide fee
-// $guideBackup = $trip->Guides_backups;
-// $guideFeePerPerson = $guideBackup->price_per_person_one_day;
-$availableGuide = AvailableGuide::where('trip_id', $trip->id)->first();
-$guideFeePerPerson = $availableGuide->guide->price_per_person_one_day;
-// Count the number of days in the trip
-$numDays = $trip->facilityDay->count();
-
-// Calculate the total guide fee
-$totalGuideFee = $guideFeePerPerson * $numDays;
-
-  // Calculate the total trip price
-  $totalTripPrice = $totalFacilityPrice + $totalGuideFee;
-
-  // Retrieve the admin ratio from the cache
-  $adminRatio = Cache::get('admin_ratio');
-
-  // Calculate the admin fee
-  $adminFee = $totalTripPrice * ($adminRatio / 100);
-
-  // Add the admin fee to the total trip price
-  $trip->price_per_one_new = $totalTripPrice + $adminFee;
-
-  $trip->save();
-  
          return $this->SendResponse(response::HTTP_CREATED, 'facility updated successfully');
      }
      
@@ -263,46 +124,13 @@ $totalGuideFee = $guideFeePerPerson * $numDays;
          $facilityInDay->delete();
          
          $trip = $facilityInDay->facilityDay->trip;
-         $facilityDays = $trip->facilityDay;
-         $minAvailablePlaces = [];
-         
-         foreach ($facilityDays as $facilityDay) {
-             $facilitiesInDay = FacilityInDay::where('facility_day_id', $facilityDay->id)->get();
-             $availablePlaces = $facilitiesInDay->pluck('facility')->min('number_of_available_places');
-             $minAvailablePlaces[] = $availablePlaces;
-         }
-         
-        //  $trip->number_of_original_places = min($minAvailablePlaces);
-        $trip->number_of_original_places = collect($minAvailablePlaces)->min();
-// Update trip prices
-         $facilityDays = $trip->facilityDay;
-         $totalFacilityPrice = 0;
-         foreach ($facilityDays as $facilityDay) {
-             $facilitiesInDay = FacilityInDay::where('facility_day_id', $facilityDay->id)->get();
-             foreach ($facilitiesInDay as $facilityInDay) {
-                 $totalFacilityPrice += $facilityInDay->facility->price_per_person;
-             }
-         }
-        //  $guideBackup = $trip->Guides_backups;
-        //  $guideFeePerPerson = $guideBackup->price_per_person_one_day;
-        $availableGuide = AvailableGuide::where('trip_id', $trip->id)->first();
-        $guideFeePerPerson = $availableGuide->guide->price_per_person_one_day; 
-        $numDays = $trip->facilityDay->count();
-         $totalGuideFee = $guideFeePerPerson * $numDays;
-        
-           // Calculate the total trip price
-     $totalTripPrice = $totalFacilityPrice + $totalGuideFee;
 
-     // Retrieve the admin ratio from the cache
-     $adminRatio = Cache::get('admin_ratio');
- 
-     // Calculate the admin fee
-     $adminFee = $totalTripPrice * ($adminRatio / 100);
- 
-     // Add the admin fee to the total trip price
-     $trip->price_per_one_new = $totalTripPrice + $adminFee;
- 
-     $trip->save();
+         $tripPriceCalculator = new TripPriceCalculator();
+         $trip->price_per_one_new = $tripPriceCalculator->calculateTripPrice($trip);
+         $trip->number_of_original_places = $tripPriceCalculator->calculateNumberOfOriginalPlaces($trip)?? 0;
+         $trip->save();
+
+
          return $this->SendResponse(response::HTTP_OK, 'facility in day deleted successfully');
      }
 
@@ -317,48 +145,11 @@ $totalGuideFee = $guideFeePerPerson * $numDays;
         $day->delete();
         
 
-// number_of_original_places
+        $tripPriceCalculator = new TripPriceCalculator();
+        $trip->price_per_one_new = $tripPriceCalculator->calculateTripPrice($trip)?? 0;
+        $trip->number_of_original_places = $tripPriceCalculator->calculateNumberOfOriginalPlaces($trip)?? 0;
+        $trip->save();
 
-$facilityDays = $trip->facilityDay;
-    $minAvailablePlaces = [];
-    
-    foreach ($facilityDays as $facilityDay) {
-        $facilitiesInDay = FacilityInDay::where('facility_day_id', $facilityDay->id)->get();
-        $availablePlaces = $facilitiesInDay->pluck('facility')->min('number_of_available_places');
-        $minAvailablePlaces[] = $availablePlaces;
-    }
-    
-    // $trip->number_of_original_places = min($minAvailablePlaces);
-    $trip->number_of_original_places = collect($minAvailablePlaces)->min();
-
-        // Update trip prices
-        $facilityDays = $trip->facilityDay;
-        $totalFacilityPrice = 0;
-        foreach ($facilityDays as $facilityDay) {
-            $facilitiesInDay = FacilityInDay::where('facility_day_id', $facilityDay->id)->get();
-            foreach ($facilitiesInDay as $facilityInDay) {
-                $totalFacilityPrice += $facilityInDay->facility->price_per_person;
-            }
-        }
-        // $guideBackup = $trip->Guides_backups;
-        // $guideFeePerPerson = $guideBackup->price_per_person_one_day;
-        $availableGuide = AvailableGuide::where('trip_id', $trip->id)->first();
-        $guideFeePerPerson = $availableGuide->guide->price_per_person_one_day;
-        $numDays = $trip->facilityDay->count();
-        $totalGuideFee = $guideFeePerPerson * $numDays;
-          // Calculate the total trip price
-        $totalTripPrice = $totalFacilityPrice + $totalGuideFee;
-
-         // Retrieve the admin ratio from the cache
-        $adminRatio = Cache::get('admin_ratio');
- 
-         // Calculate the admin fee
-        $adminFee = $totalTripPrice * ($adminRatio / 100);
- 
-         // Add the admin fee to the total trip price
-        $trip->price_per_one_new = $totalTripPrice + $adminFee;
- 
-     $trip->save();
          return $this->SendResponse(response::HTTP_OK, 'day deleted successfully');
      }
 
