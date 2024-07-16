@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Day;
 use App\Models\Trip;
 use App\Models\Admin;
 use Illuminate\Http\Request;
@@ -12,9 +13,12 @@ use App\Models\GuideTransaction;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Requests\Admin\TripRequest;
+use App\Http\Resources\Admin\DayResource;
 use App\Http\Resources\Admin\TripResource;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Resources\Admin\TripDetailsResource;
+use App\Services\Notifications\AdminNotification;
+
 
 
 
@@ -148,7 +152,19 @@ class TripsController extends Controller
         $data = TripResource::collection($trips);
         return $this->SendResponse(response::HTTP_OK, 'active trips retrieved successfully',$data);
 
-    } //the trips that is running currently
+        
+    } 
+
+
+    public function getInprogressTrip(){
+        $trips = Trip::where('status', 'in_progress')->get();
+       if ($trips->isEmpty()) {
+           return $this->SendResponse(response::HTTP_NOT_FOUND, 'No trips found');
+       }
+       $data = TripResource::collection($trips);
+       return $this->SendResponse(response::HTTP_OK, 'in_progress trips retrieved successfully',$data);
+
+   } 
 
     public function getFinishidTrips(){
 
@@ -229,7 +245,8 @@ public function finishTrip(string $id)
     if (!$trip) {
         return $this->SendResponse(response::HTTP_NOT_FOUND, 'Trip not found');
     }
-
+    if ($trip->status == 'finished') { return $this->SendResponse(response::HTTP_BAD_REQUEST, 'Trip is already finished'); }
+    
     $trip->status = 'finished';
     $trip->save();
 
@@ -296,6 +313,13 @@ public function finishTrip(string $id)
      $superAdmin->wallet += $adminProfit;
      $superAdmin->save();
 
+
+    // Send notification to super admin
+    $adminNotification = new AdminNotification();
+    $adminNotification->sendAdminNotification($trip, $adminProfit);
+
+
+
   // To test the validity of mathematical calculations
     //  $totalTripPrice -= $facilityProfit;
     // $totalTripPrice -= $totalGuideFee;
@@ -303,8 +327,17 @@ public function finishTrip(string $id)
     // $trip->total_price=$totalTripPrice;
     $trip->save();
 
-    // Return response
+    
     return $this->SendResponse(response::HTTP_OK, 'Trip marked as finished');
+}
+
+
+
+public function getDays()
+{
+    $days = Day::all();
+    $data = DayResource::collection($days);
+    return $this->SendResponse(response::HTTP_OK, 'Days retrieved successfully', $data);
 }
 
 }
