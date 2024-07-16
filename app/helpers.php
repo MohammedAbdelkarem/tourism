@@ -42,7 +42,7 @@ if(!function_exists('photoPath'))
     {
         $path = time().'.'.$image->getClientOriginalExtension();
         $image->move(public_path('image') , $path);
-        $path = 'image/'.$path;
+        $path = 'localhost:8000/image/'.$path;
 
         return $path;
     }
