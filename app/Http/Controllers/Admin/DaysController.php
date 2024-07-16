@@ -75,7 +75,7 @@ class DaysController extends Controller
         'end_time' => $request->end_time,
         'facility_id' => $request->facility_id,
         'facility_day_id' => $request->facility_day_id,
-        'note' => $request->note,
+        // 'note' => $request->note,
     ]);
 
     
@@ -102,7 +102,7 @@ class DaysController extends Controller
             'end_time' => $request->end_time,
             'facility_id' =>$request-> facility_id,
             'facility_day_id' => $request->facility_day_id,
-            'note' => $request->note,
+            // 'note' => $request->note,
         ]);
     
     

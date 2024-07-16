@@ -34,7 +34,34 @@ class DatabaseSeeder extends Seeder
     {
         Country::factory(10)->create();
 
-        Day::factory(7)->create();
+        Day::factory()->create([
+            'id' => 1,
+            'name'=> 'Sunday'
+       ] );
+       Day::factory()->create([
+        'id' => 2,
+        'name'=> 'Monday'
+         ] );
+        Day::factory()->create([
+            'id' => 3,
+            'name'=> 'Tuesday'
+        ] );
+        Day::factory()->create([
+            'id' => 4,
+            'name'=> 'Wednesday'
+        ] );
+        Day::factory()->create([
+            'id' => 5,
+            'name'=> 'Thursday'
+        ] );
+        Day::factory()->create([
+            'id' => 6,
+            'name'=> 'Friday'
+        ] );
+        Day::factory()->create([
+            'id' => 7,
+            'name'=> 'Saturday'
+        ] );
 
         Facility::factory(20)->create();
 

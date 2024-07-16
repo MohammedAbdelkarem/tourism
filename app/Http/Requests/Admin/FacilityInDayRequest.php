@@ -26,7 +26,7 @@ class FacilityInDayRequest extends FormRequest
             'end_time' => 'required|date_format:H:i:s',
             'facility_id'  => 'required|integer',
             'facility_day_id'  => 'required|integer',
-            'note'  => 'nullable|string',
+            // 'note'  => 'nullable|string',
         ];
     }
 }
