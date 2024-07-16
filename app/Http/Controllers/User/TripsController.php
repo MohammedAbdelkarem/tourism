@@ -196,7 +196,7 @@ class TripsController extends Controller
         $data = [];
         foreach($ids as $id)
         {
-            $data[$id] = Trip::where('id' , $id)->get()->first();
+            $data[] = Trip::where('id' , $id)->get()->first();
         }
 
         // $data = Trip::where('user_id' , $userId)->with('trip')->get();

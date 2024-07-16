@@ -16,6 +16,7 @@ use App\Http\Requests\Auth\User\EmailRequest;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Auth\User\EditInfoRequest;
 use App\Http\Requests\Auth\User\InformationRequest;
+use App\Http\Requests\IdRequest;
 use App\Models\UsersBackup;
 
 class UserController extends Controller
@@ -126,4 +127,15 @@ class UserController extends Controller
     }
 
 
+    public function deletePhoto()
+    {
+        $user_id = user_id();
+
+        $user = User::find($user_id);
+
+        $user->photo = null;
+        $user->save();
+
+        return $this->SendResponse(response::HTTP_OK , 'photo deleted successfully');
+    }
 }
