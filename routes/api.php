@@ -1,8 +1,9 @@
 <?php
 
+use App\Models\Guide;
+
+
 use Illuminate\Support\Facades\Route;
-
-
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Admin\DaysController;
@@ -10,13 +11,13 @@ use App\Http\Controllers\Auth\AdminController;
 use App\Http\Controllers\Auth\GuideController;
 use App\Http\Controllers\Admin\TripsController;
 use App\Http\Controllers\Admin\UsersController;
+use App\Http\Controllers\Admin\GuidesController;
 use App\Http\Controllers\User\FacilityController;
 use App\Http\Controllers\Admin\FacilitesController;
-use App\Http\Controllers\Admin\GuidesController;
 use App\Http\Controllers\User\AppointmentController;
+use App\Http\Controllers\Admin\AdminNotificationController;
 use App\Http\Controllers\User\TripsController as UserTripsController;
 use App\Http\Controllers\Admin\TripsController as AdminTripsController;
-use App\Models\Guide;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,6 +58,9 @@ Route::group(['prefix' => 'admin'], function () {
         Route::post('logout', [AdminController::class, 'logout']); 
         // users with middleware
         Route::post('wallet/{userId}', [UsersController::class, 'addToWallet']);
+
+
+
     });
     //Admin without middleware
     Route::post('update_admin_ratio' , [AdminController::class , 'updateAdminRatio']);
@@ -114,6 +118,14 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('accept_by_admin/{guideId}', 'update_accept_by_admin');
     });
     
+    //Admin notifications 
+    Route::controller(AdminNotificationController::class)->middleware('auth:admin')->group(function () {
+        Route::get('getAdminNotification', 'getAdminNotification');
+        Route::get('getUnReadAdminNotification', 'getUnReadAdminNotification');
+        Route::get('markReadAdminNotification', 'markReadAdminNotification');
+        Route::delete('deleteAllNotification', 'deleteAllNotification');
+        Route::delete('deleteNotification/{id}', 'deleteNotification');
+    });
 });
 
 
