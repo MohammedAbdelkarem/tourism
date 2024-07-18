@@ -17,6 +17,7 @@ use App\Http\Resources\Admin\DayResource;
 use App\Http\Resources\Admin\TripResource;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Resources\Admin\TripDetailsResource;
+use App\Models\Country;
 use App\Services\Notifications\AdminNotification;
 
 
@@ -338,6 +339,12 @@ public function getDays()
     $days = Day::all();
     $data = DayResource::collection($days);
     return $this->SendResponse(response::HTTP_OK, 'Days retrieved successfully', $data);
+}
+public function getcountries()
+{
+    $countries = Country::all();
+    $data = DayResource::collection($countries);
+    return $this->SendResponse(response::HTTP_OK, 'countries retrieved successfully', $countries);
 }
 
 }

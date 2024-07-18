@@ -92,6 +92,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('trip/in_progress/{id}', 'inProgressTrip');
         Route::get('trip/finished/{id}', 'finishTrip');
         Route::get('days', 'getDays');
+        Route::get('countries', 'getcountries');
     });
     
     Route::controller(DaysController::class)->group(function () {

@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Auth;
 
 
 use App\Models\User;
+use App\Models\Guide;
+use App\Models\UsersBackup;
 use Illuminate\Http\Request;
 use App\Event\SendEmailEvent;
 use App\Traits\ResponseTrait;
+use App\Models\Guides_backups;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
@@ -15,13 +18,11 @@ use App\Http\Requests\Auth\PasswordRequest;
 use App\Http\Resources\User\ProfileResource;
 use App\Http\Requests\Auth\User\EmailRequest;
 use Symfony\Component\HttpFoundation\Response;
-use App\Models\UsersBackup;
+use App\Services\Notifications\AdminNotification;
 use App\Http\Requests\Auth\Guide\EmailRequest as GuideEmailRequest;
-use App\Http\Requests\Auth\Guide\InformationRequest as GuideInformationRequest;
-use App\Http\Requests\Auth\Guide\EditInfoRequest as GuideEditInfoRequest;
 use App\Http\Resources\Guide\ProfileResource as GuideProfileResource;
-use App\Models\Guide;
-use App\Models\Guides_backups;
+use App\Http\Requests\Auth\Guide\EditInfoRequest as GuideEditInfoRequest;
+use App\Http\Requests\Auth\Guide\InformationRequest as GuideInformationRequest;
 
 class GuideController extends Controller
 {
@@ -50,8 +51,12 @@ class GuideController extends Controller
         $validatedData['email'] = "mayagritaabouasali@gmail.com";
         hashing_data($validatedData);
         
-        Guide::create($validatedData);
+        $guide = Guide::create($validatedData);
         Guides_backups::create($validatedData);
+
+         // Send notification to all admins
+        $adminNotification = new AdminNotification();
+        $adminNotification->sendNotificationIfNewGuideRegistered($guide);
 
         return $this->SendResponse(response::HTTP_CREATED , 'guide registered successfully');
     }
