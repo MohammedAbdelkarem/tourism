@@ -27,9 +27,9 @@ function sendNotificationIfNewGuideRegistered($guide) {
     Log::info('Sending notification to all admins with data:', [
         'guide' => $guide,
     ]);
-    foreach ($admins as $admin) {
-        Notification::send($admin, new NewGuideRegistered($guide));
-    }
+    Notification::send($admins, new NewGuideRegistered( $guide));
+   
+    
 }
 
 

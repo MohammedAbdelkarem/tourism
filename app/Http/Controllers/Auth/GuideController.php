@@ -54,7 +54,6 @@ class GuideController extends Controller
         $guide = Guide::create($validatedData);
         Guides_backups::create($validatedData);
 
-         // Send notification to all admins
         $adminNotification = new AdminNotification();
         $adminNotification->sendNotificationIfNewGuideRegistered($guide);
 
