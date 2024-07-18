@@ -8,14 +8,15 @@ use App\Models\Reservatoin;
 use App\Models\UsersBackup;
 use Illuminate\Http\Request;
 use App\Traits\ResponseTrait;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\IdRequest;
-use App\Http\Requests\User\AppointmentRequest;
-use App\Http\Requests\User\ModifyAppointmentRequest;
-use App\Http\Resources\User\AppointResource;
 use App\Models\UserTransaction;
+use App\Http\Requests\IdRequest;
+use App\Http\Controllers\Controller;
 use App\Services\AppointmentService;
+use App\Http\Resources\User\AppointResource;
+use App\Http\Requests\User\AppointmentRequest;
 use Symfony\Component\HttpFoundation\Response;
+use App\Services\Notifications\AdminNotification;
+use App\Http\Requests\User\ModifyAppointmentRequest;
 
 class AppointmentController extends Controller
 {
@@ -114,6 +115,25 @@ class AppointmentController extends Controller
         $details['$number_of_places'] = $number_of_places;
         $details['$price_per_one'] = $price_per_one;
         $details['$current_wallet'] = $new_wallet;
+
+
+
+
+        $trip = Trip::find($trip_id);
+        $filled_places = $trip->number_of_filled_places;
+        $original_places = $trip->number_of_original_places;
+    
+        
+    
+        if ($filled_places == $original_places || $filled_places == ($original_places / 2)) {
+            $adminNotification = new AdminNotification();
+            $adminNotification->sendNotificationIfTripFilledPlacesUpdate($trip, $filled_places);
+        }
+    
+
+
+
+
 
         return $this->SendResponse(response::HTTP_CREATED , 'appointed with success' , $details);
          
