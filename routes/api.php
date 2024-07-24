@@ -46,7 +46,7 @@ Route::post('checkcode', [AuthController::class, 'checkCode']);
 //     });
 
 
-//Admin with middleware
+//Admin
 Route::group(['prefix' => 'admin'], function () {
 
     Route::group(['prefix' => 'auth'], function () {
@@ -56,12 +56,15 @@ Route::group(['prefix' => 'admin'], function () {
         Route::post('reset' , [AdminController::class , 'resetPassword']);
         Route::post('store' , [AdminController::class , 'storeEmail']);
         Route::post('logout', [AdminController::class, 'logout']); 
-        // users with middleware
-        Route::post('wallet/{userId}', [UsersController::class, 'addToWallet']);
-
-
-
+        
+    
     });
+
+    
+    Route::controller(UsersController::class)->middleware('auth:admin')->group(function () {
+        Route::post('wallet/{userId}', 'addToWallet');
+    });
+
     //Admin without middleware
     Route::post('update_admin_ratio' , [AdminController::class , 'updateAdminRatio']);
     // facility
@@ -119,7 +122,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('accept_by_admin/{guideId}', 'update_accept_by_admin');
     });
     
-    //Admin notifications 
+    //Admin notifications with middleware
     Route::controller(AdminNotificationController::class)->middleware('auth:admin')->group(function () {
         Route::get('getAdminNotification', 'getAdminNotification');
         Route::get('getUnReadAdminNotification', 'getUnReadAdminNotification');
