@@ -47,7 +47,6 @@ Route::post('checkcode', [AuthController::class, 'checkCode']);
 
 
 //Admin
-//Admin 
 Route::group(['prefix' => 'admin'], function () {
 
     Route::group(['prefix' => 'auth'], function () {
@@ -64,14 +63,9 @@ Route::group(['prefix' => 'admin'], function () {
     
     Route::controller(UsersController::class)->middleware('auth:admin')->group(function () {
         Route::post('wallet/{userId}', 'addToWallet');
-
-        Route::post('wallet/{userId}', [UsersController::class, 'addToWallet']);
-
-
-
     });
 
-    //Admin without middleware
+    //Admin 
     Route::post('update_admin_ratio' , [AdminController::class , 'updateAdminRatio']);
     // facility
     
