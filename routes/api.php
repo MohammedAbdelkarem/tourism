@@ -46,7 +46,7 @@ Route::post('checkcode', [AuthController::class, 'checkCode']);
 //     });
 
 
-//Admin with middleware
+//Admin 
 Route::group(['prefix' => 'admin'], function () {
 
     Route::group(['prefix' => 'auth'], function () {
@@ -56,7 +56,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::post('reset' , [AdminController::class , 'resetPassword']);
         Route::post('store' , [AdminController::class , 'storeEmail']);
         Route::post('logout', [AdminController::class, 'logout']); 
-        // users with middleware
+
         Route::post('wallet/{userId}', [UsersController::class, 'addToWallet']);
 
 
