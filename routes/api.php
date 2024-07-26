@@ -18,6 +18,7 @@ use App\Http\Controllers\User\AppointmentController;
 use App\Http\Controllers\Admin\AdminNotificationController;
 use App\Http\Controllers\User\TripsController as UserTripsController;
 use App\Http\Controllers\Admin\TripsController as AdminTripsController;
+use App\Http\Controllers\User\CountryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,9 +56,8 @@ Route::group(['prefix' => 'admin'], function () {
         Route::post('login' , [AdminController::class , 'login']);
         Route::post('reset' , [AdminController::class , 'resetPassword']);
         Route::post('store' , [AdminController::class , 'storeEmail']);
-        Route::post('logout', [AdminController::class, 'logout']); 
-        
-    
+        Route::post('logout', [AdminController::class, 'logout'])->middleware('auth:admin');
+
     });
 
     
@@ -147,21 +147,19 @@ Route::group(['prefix' => 'user'], function () {
     });
 
     Route::group(['prefix' => 'trip'], function () {
-        Route::get('homeoffers', [UserTripsController::class, 'getHomeOffers']);
         Route::get('listoffers', [UserTripsController::class, 'getAllOffers']);
-        Route::get('homerec', [UserTripsController::class, 'getHomeRecommended']);
         Route::get('listrec', [UserTripsController::class, 'getAllRecommended']);
         Route::post('triplist', [UserTripsController::class, 'getTripsListByCountry']);
         Route::post('details', [UserTripsController::class, 'getTripDetails']);
         Route::post('search', [UserTripsController::class, 'search']);
-        Route::get('co', [UserTripsController::class, 'getHomeCountries']);
-        Route::post('codetails', [UserTripsController::class, 'getCountryDetails']);
-        Route::post('countrytrips', [UserTripsController::class, 'getCountryTrips']);
     });
 
     Route::group(['prefix' => 'facility'], function () {
-        Route::post('getlist', [FacilityController::class, 'getFacilitiesByCountry']);
         Route::post('details', [FacilityController::class, 'getFacilityDetails']);
+    });
+    Route::group(['prefix' => 'country'], function () {
+        Route::get('get', [CountryController::class, 'getCountries']);
+        Route::post('details', [CountryController::class, 'getCountryDetails']);
     });
 
     

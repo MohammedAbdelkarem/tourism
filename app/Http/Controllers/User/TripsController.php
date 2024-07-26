@@ -58,57 +58,7 @@ class TripsController extends Controller
     }
 
     
-    public function getCountryTrips(IdRequest $request)
-    {
-        $id = $request->validated()['id'];
-
-        $userId = user_id();
-
-        $trips = 
-
-        Trip::
-        Active()
-        ->where('country_id' , $id)
-        ->favourite()
-        ->take(7)->get();
-        
-        
-        if($trips->isEmpty())
-        {
-            return $this->SendResponse(response::HTTP_OK  , 'no results');
-        }
-
-        $trips = HomeRecResource::collection($trips);
-
-        return $this->SendResponse(response::HTTP_OK , 'results retrieved with success' , $trips);
-    }
-    public function getTripsListByCountry(TripFilterRequest $request)
-    {
-        $startPrice = $request->validated()['start'];
-        $endPrice = $request->validated()['end'];
-        $id = $request->validated()['country_id'];
-
-        $userId = user_id();
-
-        $trips = 
-
-        Trip::
-        Active()
-        ->whereBetween('price_per_one_new', [$startPrice, $endPrice])
-        ->where('country_id' , $id)
-        ->favourite()
-        ->get();
-        
-        
-        if($trips->isEmpty())
-        {
-            return $this->SendResponse(response::HTTP_OK  , 'no results');
-        }
-
-        $trips = HomeRecResource::collection($trips);
-
-        return $this->SendResponse(response::HTTP_OK , 'results retrieved with success' , $trips);
-    }
+    
     public function getTripDetails(IdRequest $request)
     {
         $id = $request->validated()['id'];
@@ -146,25 +96,6 @@ class TripsController extends Controller
         return $this->SendResponse(response::HTTP_OK , 'results retrieved with success' , $results);
     }
 
-    public function getHomeCountries()
-    {
-        $records = Country::take(6)->get();
-
-        $records = CountryResource::collection($records);
-
-        return $this->SendResponse(response::HTTP_OK , 'countries retrieved with success' , $records);
-    }
-
-    public function getCountryDetails(IdRequest $request)
-    {
-        $id = $request->validated()['id'];
-
-        $data = Country::find($id);
-
-        $data = new CountryDetailsResource($data);
-
-        return $this->SendResponse(response::HTTP_OK , 'countries retrieved with success' , $data);
-    }
     public function addToFav(IdRequest $request)
     {
 
@@ -208,6 +139,34 @@ class TripsController extends Controller
         // $data = TripDetailsResource::collection($data);
 
         return $this->SendResponse(response::HTTP_OK , 'favourites retrieved with success' , $data);
+    }
+
+    public function getTripsListByCountry(TripFilterRequest $request)
+    {
+        $startPrice = $request->validated()['start'];
+        $endPrice = $request->validated()['end'];
+        $id = $request->validated()['country_id'];
+
+        $userId = user_id();
+
+        $trips = 
+
+        Trip::
+        Active()
+        ->whereBetween('price_per_one_new', [$startPrice, $endPrice])
+        ->where('country_id' , $id)
+        ->favourite()
+        ->get();
+        
+        
+        if($trips->isEmpty())
+        {
+            return $this->SendResponse(response::HTTP_OK  , 'no results');
+        }
+
+        $trips = HomeRecResource::collection($trips);
+
+        return $this->SendResponse(response::HTTP_OK , 'results retrieved with success' , $trips);
     }
 
 }

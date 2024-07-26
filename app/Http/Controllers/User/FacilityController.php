@@ -17,16 +17,6 @@ class FacilityController extends Controller
 {
     use ResponseTrait;
 
-    public function getFacilitiesByCountry(IdRequest $request)
-    {
-        $id = $request->validated()['id'];
-
-        $records = Facility::where('country_id' , $id)->get();
-
-        $records = FacilityListResource::collection($records);
-
-        return $this->SendResponse(response::HTTP_OK , 'facility list retrieved with success' , $records);
-    }
 
     public function getFacilityDetails(IdRequest $request)
     {
