@@ -25,7 +25,7 @@ class FacilityRate extends Model
     
     public function usersBackup()
     {
-        return $this->belongsTo(UsersBackup::class);
+        return $this->belongsTo(UsersBackup::class , 'user_backup_id');
     } 
     
 }

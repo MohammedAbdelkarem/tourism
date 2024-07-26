@@ -17,6 +17,7 @@ use App\Http\Requests\User\AppointmentRequest;
 use Symfony\Component\HttpFoundation\Response;
 use App\Services\Notifications\AdminNotification;
 use App\Http\Requests\User\ModifyAppointmentRequest;
+use App\Http\Resources\User\TransactionResource;
 
 class AppointmentController extends Controller
 {
@@ -328,6 +329,15 @@ class AppointmentController extends Controller
         $records = AppointResource::collection($records);
 
         return $this->SendResponse(response::HTTP_OK , 'reservations retrieve with success' , $records);
+    }
+
+    public function getTransactions()
+    {
+        $data = UserTransaction::where('user_id' ,user_id())->get();
+
+        $data = TransactionResource::collection($data);
+
+        return $this->SendResponse(response::HTTP_OK , 'transactions retrieved with success' , $data);
     }
     
 }

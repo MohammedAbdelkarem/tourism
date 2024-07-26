@@ -47,7 +47,7 @@ class UsersBackup extends Model
 
     public function facilityRate()
     {
-      return $this->hasMany(FacilityRate::class, 'user_backup_id', 'id');
+      return $this->hasMany(FacilityRate::class, 'user_backup_id' , 'id');
     }
 
 
