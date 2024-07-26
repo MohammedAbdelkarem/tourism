@@ -81,10 +81,14 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('facilities/nearest/{trip_id}', 'getNearestFacilities');
     });
     //trip
-    Route::controller(TripsController::class)->group(function () {
+
+    Route::controller(TripsController::class)->middleware('auth:admin')->group(function () {
         Route::post('trip/store', 'addTrip');
         Route::post('trip/{trip}', 'updateTrip');
         Route::delete('trip/{trip}', 'deleteTrip');
+        Route::get('trip/finished/{id}', 'finishTrip');
+     });
+    Route::controller(TripsController::class)->group(function () {
         Route::get('trip/pending', 'getPinnedTrips');
         Route::get('trip/in_progress', 'getInprogressTrip');
         Route::get('trip/active', 'getRunningTrips');
@@ -93,12 +97,11 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('trip/{trip}', 'getTripDetails');
         Route::get('trip/active/{id}', 'activeTrip');
         Route::get('trip/in_progress/{id}', 'inProgressTrip');
-        Route::get('trip/finished/{id}', 'finishTrip');
         Route::get('days', 'getDays');
         Route::get('countries', 'getcountries');
     });
     
-    Route::controller(DaysController::class)->group(function () {
+    Route::controller(DaysController::class)->middleware('auth:admin')->group(function () {
     //days
     Route::post('days', 'addDay');
     Route::post('days/{day}', 'updateDay');
