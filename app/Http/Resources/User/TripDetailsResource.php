@@ -28,7 +28,10 @@ class TripDetailsResource extends JsonResource
             'guide' => $this->Guides_backups->name,
             'guide_phone' => $this->Guides_backups->phone,
             'favourite' => $this->favourites->count(),
+            'in_reserve' => $this->reservatoin->count(),
             'comments' => CommentResource::collection($this->trip_comment),
+            'photos' => $this->photos,
+            'days' => $this->facilityDay,
         ];
     }
 }

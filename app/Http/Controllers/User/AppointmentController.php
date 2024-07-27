@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Http\Resources\User\DayResource;
 use Carbon\Carbon;
 use App\Models\Trip;
 use App\Models\Reservatoin;
@@ -18,6 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Services\Notifications\AdminNotification;
 use App\Http\Requests\User\ModifyAppointmentRequest;
 use App\Http\Resources\User\TransactionResource;
+use App\Models\FacilityDay;
 
 class AppointmentController extends Controller
 {
@@ -318,6 +320,15 @@ class AppointmentController extends Controller
         return $this->SendResponse(response::HTTP_CREATED , $diffPlaces.' new places added with success' , $data);
 
     }
+
+    public function getTransactions()
+    {
+        $data = UserTransaction::where('user_id' ,user_id())->get();
+
+        $data = TransactionResource::collection($data);
+
+        return $this->SendResponse(response::HTTP_OK , 'transactions retrieved with success' , $data);
+    }
     public function getMyTrips()
     {
         $records = Reservatoin::where('user_id' , user_id())->with('trip')->get();
@@ -331,13 +342,25 @@ class AppointmentController extends Controller
         return $this->SendResponse(response::HTTP_OK , 'reservations retrieve with success' , $records);
     }
 
-    public function getTransactions()
+    public function getDayDetails(IdRequest $request)
     {
-        $data = UserTransaction::where('user_id' ,user_id())->get();
+        $day_id = $request->validated()['id'];
 
-        $data = TransactionResource::collection($data);
+        $day = FacilityDay::find($day_id);
 
-        return $this->SendResponse(response::HTTP_OK , 'transactions retrieved with success' , $data);
+        $day->load(['facilityInDay' => function ($query) use ($day_id) {
+            $query->where('facility_day_id', $day_id);
+        }]);
+
+        $trip_id = $day->trip_id;
+        $day = new DayResource($day);
+
+        $in_reserve = Reservatoin::where('user_id' , user_id())->where('trip_id' , $trip_id)->get();
+        $data['day_details'] = $day;
+        $data['in_reserve'] = $in_reserve->count();
+
+
+        return $this->SendResponse(response::HTTP_OK , 'day details retrieved with success' , $data);
     }
     
 }
