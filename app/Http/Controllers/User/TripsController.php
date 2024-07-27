@@ -69,11 +69,14 @@ class TripsController extends Controller
 
         $trips = Trip::find($id);
 
-        $trips->load(['favourites' => function ($query) use ($userId) {
-            $query->where('user_id', $userId);
+        $trips->load(['favourites' => function ($query) use ($userId , $id) {
+            $query->where('user_id', $userId)->where('trip_id' , $id);
         }]);
-            
-
+        $trips->load(['reservatoin' => function ($query) use ($userId , $id) {
+            $query->where('user_id' , $userId)
+                ->where('trip_id', $id);
+        }]);
+        
         $trips = new TripDetailsResource($trips);
 
         return $this->SendResponse(response::HTTP_OK , 'trip details retrived with success' ,  $trips);

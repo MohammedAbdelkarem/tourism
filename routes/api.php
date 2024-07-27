@@ -176,6 +176,13 @@ Route::group(['prefix' => 'user'], function () {
             Route::post('details',  'getCountryDetails');
         });
     });
+    Route::group(['prefix' => 'appoint'], function () {
+
+        Route::controller(AppointmentController::class)->group(function () {
+            Route::post('day',  'getDayDetails');
+        });
+    });
+    
 
 });
 
