@@ -200,14 +200,6 @@ public function inProgressTrip(string $id)
     return $this->SendResponse(response::HTTP_OK, 'Trip updated to in progress');
 }
 
-// public function finishTrip(string $id)
-// {
-//     $trip = Trip::find($id);
-
-//     $trip->status = 'finished';
-//     $trip->save();
-//     return $this->SendResponse(response::HTTP_OK, 'Trip marked as finished');
-// }
 
 public function finishTrip(string $id)
 {
