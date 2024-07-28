@@ -38,4 +38,12 @@ class AvailableGuide extends Model
         return $query->where('accept_trip', 'rejected')
                      ->with('trip');
     }
+    public function scopeNullTrips($query) {
+        return $query->where('accept_trip', null)
+                     ->with('trip');
+    }
+    
+    public function scopeAccepted($query) {
+        return $query->where('accept_trip', 'accepted');
+    }
 }

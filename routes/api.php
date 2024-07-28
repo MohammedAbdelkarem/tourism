@@ -18,6 +18,7 @@ use App\Http\Controllers\User\AppointmentController;
 use App\Http\Controllers\Admin\AdminNotificationController;
 use App\Http\Controllers\User\TripsController as UserTripsController;
 use App\Http\Controllers\Admin\TripsController as AdminTripsController;
+use \App\Http\Controllers\Guide\GuideController as GeneralGuideController;
 use App\Http\Controllers\User\CountryController;
 
 /*
@@ -265,6 +266,17 @@ Route::group(['prefix' => 'guide', 'middleware' => ['auth:guide']], function () 
             Route::post('logout',  'logout');
             Route::get('profile',  'profile');
             Route::delete('delete',  'deleteAccount');
+        });
+    });
+    Route::group(['prefix' => 'general'], function () {
+
+        Route::controller(GeneralGuideController::class)->group(function () {
+            Route::get('home',  'home');
+            Route::post('days',  'getDays');
+            Route::post('details',  'getDayDetails');
+            Route::get('transactions',  'transactions');
+            Route::post('note',  'addNote');
+            Route::post('tripstatus',  'modifyPending');
         });
     });
 });
