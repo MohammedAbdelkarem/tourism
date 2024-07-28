@@ -11,6 +11,7 @@ use App\Models\TripRate;
 use App\Models\TripComment;
 use App\Models\AvailableGuide;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -102,6 +103,18 @@ class Trip extends Model
     public function scopeActive($query)
     {
         return $query->where('status' , 'active');
+    }
+    public function scopeCommingSoon($query)
+    {
+        return $query->where('start_date' , '>' , Carbon::now());
+    }
+    public function scopeInProgress($query)
+    {
+        return $query->where('start_date' , '<=' , Carbon::now())->where('end_date' , '>' , Carbon::now());
+    }
+    public function scopeHistory($query)
+    {
+        return $query->where('end_date' , '<' , Carbon::now());
     }
     public function scopeFavourite($query)
     {
