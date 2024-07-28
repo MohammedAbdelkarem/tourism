@@ -22,6 +22,7 @@ class FacilityDayResource extends JsonResource
             'note' => $this->note,
             'facility_id' => $this->facility_id,
             'done' => $this->end_time < Carbon::now(),
+            'able_to_add_or_modify_note' => $this->end_time > Carbon::now() && $this->start_time <= Carbon::now(),
         ];
     }
 }
