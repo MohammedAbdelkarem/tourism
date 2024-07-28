@@ -90,10 +90,10 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('trip/finished/{id}', 'finishTrip');
      });
     Route::controller(TripsController::class)->group(function () {
-        Route::get('trip/pending', 'getPinnedTrips');
-        Route::get('trip/in_progress', 'getInprogressTrip');
-        Route::get('trip/active', 'getRunningTrips');
-        Route::get('trip/finish', 'getFinishidTrips');
+        Route::get('trip/pending', 'getTripsByType')->defaults('status', 'pending');
+        Route::get('trip/in_progress', 'getTripsByType')->defaults('status', 'in_progress');
+        Route::get('trip/active', 'getTripsByType')->defaults('status', 'active');
+        Route::get('trip/finish', 'getTripsByType')->defaults('status', 'finished');
         Route::get('trip', 'getTrips');
         Route::get('trip/{trip}', 'getTripDetails');
         Route::get('trip/active/{id}', 'activeTrip');

@@ -123,5 +123,9 @@ class Trip extends Model
       }]);
     }
 
+    public function scopeOfStatus($query, $status)
+{
+    return $query->where('status', $status);
+}
 }
 

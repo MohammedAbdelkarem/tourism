@@ -63,7 +63,7 @@ class FacilitesController extends Controller
     {
         $facility = Facility::create([
             'name' => $request->name,
-            'photo' => $request->photo,
+            'photo' =>photoPath($request->photo),
             'lat' => $request->lat,
             'long' => $request->long,
             'bio' => $request->bio,
@@ -88,7 +88,7 @@ class FacilitesController extends Controller
     
         $facility->update([
             'name' => $request->name,
-            'photo' => $request->photo,
+            'photo' => photoPath($request->photo),
             'lat' => $request->lat,
             'long' => $request->long,
             'bio' => $request->bio,

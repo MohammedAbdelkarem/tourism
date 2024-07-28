@@ -17,6 +17,7 @@ class TripResource extends JsonResource
         'id' => $this->resource->id,
         'name' => $this->resource->name,
         'photo' => $this->resource->photo,
+        'rate' => $this->resource->rate,
     ];
     }
 }
