@@ -72,9 +72,9 @@ Route::group(['prefix' => 'admin'], function () {
     Route::controller(FacilitesController::class)->group(function () {
         Route::post('facility/store', 'storeFacility');
         Route::get('allfacility', 'getFacilities');
-        Route::get('restaurants', 'getRestaurants');
-        Route::get('hotels', 'getHotels');
-        Route::get('places', 'getPlaces');
+        Route::get('restaurants', 'getFacilitiesByType')->defaults('type', 'restaurant');
+        Route::get('hotels', 'getFacilitiesByType')->defaults('type', 'hotel');
+        Route::get('places', 'getFacilitiesByType')->defaults('type', 'place');
         Route::get('facility/{id}', 'getFacilityDetails');
         Route::post('facility/{facility}', 'updateFacility');
         Route::delete('facilities/{facility}', 'deleteFacility');

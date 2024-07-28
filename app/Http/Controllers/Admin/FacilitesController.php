@@ -21,43 +21,17 @@ class FacilitesController extends Controller
     use ResponseTrait;
     
 
-    //the returned data is gonna be alot of details , so custom the data using resource(return just the name , photo and the id of the facility , do the sam thing with getPlaces and getResturants)
-    public function getHotels()
-    { 
-        $hotels = Facility::where('type', 'hotel')->get();
-        if ($hotels->isEmpty()) {
-            return $this->SendResponse(response::HTTP_NOT_FOUND, 'No hotels found');
-        }
-        $data = FacilityResource::collection($hotels);
-        return $this->SendResponse(response::HTTP_OK, 'hotels retrieved successfully',$data);
-        
+ public function getFacilitiesByType($type)
+{
+    $facilities = Facility::ofType($type)->get();
+
+    if ($facilities->isEmpty()) {
+        return $this->SendResponse(response::HTTP_NOT_FOUND, "No $type found");
     }
 
-    public function getPlaces() 
-    { 
-        $places = Facility::where('type', 'place')->get();
-        if ($places->isEmpty()) {
-            return $this->SendResponse(response::HTTP_NOT_FOUND, 'No places found');
-        }$data = FacilityResource::collection($places);
-        return $this->SendResponse(response::HTTP_OK, 'places retrieved successfully',$data);
-    }
-
-    // public function getFacilittesNearest(LatLongRequest $request){
-    //     $lat = (float) $request->validated()['lat'];
-    //     $long = (float) $request->validated()['long'];
-      
-    //     $lat1=$lat+0.05;
-    //     $lat2=$lat-0.05;
-    //     $long1=$long+0.05;
-    //     $long2=$long-0.05;
-
-    //     $facilities = Facility::where('lat', '>=', $lat2)
-    //     ->where('lat', '<=', $lat1)
-    //     ->where('long', '>=', $long2)
-    //     ->where('long', '<=', $long1)
-    //     ->get();
-    //     return $this->SendResponse(response::HTTP_OK, 'Facilities retrieved successfully', $facilities );
-    // }
+    $data = FacilityResource::collection($facilities);
+    return $this->SendResponse(response::HTTP_OK, "$type retrieved successfully", $data);
+}
 
 
 
@@ -85,16 +59,6 @@ class FacilitesController extends Controller
     }
 
 
-
-    public function getRestaurants()
-    {
-        $restaurants = Facility::where('type', 'Restaurant')->get();
-        if ($restaurants->isEmpty()) {
-            return $this->SendResponse(response::HTTP_NOT_FOUND, 'No restaurants found');
-            
-        }$data = FacilityResource::collection($restaurants);
-        return $this->SendResponse(response::HTTP_OK, 'Restaurants retrieved successfully',  $data);
-    }
     public function storeFacility(FacilityRequest $request)
     {
         $facility = Facility::create([

@@ -344,7 +344,7 @@ public function getcountries()
 {
     $countries = Country::all();
     $data = DayResource::collection($countries);
-    return $this->SendResponse(response::HTTP_OK, 'countries retrieved successfully', $countries);
+    return $this->SendResponse(response::HTTP_OK, 'countries retrieved successfully', $data);
 }
 
 }

@@ -48,4 +48,17 @@ class Facility extends Model
     {
       return $this->hasMany(FacilityInDay::class, 'facility_id', 'id');
     }
+
+ /**
+     * 
+     * 
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string $type
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOfType($query, $type)
+    {
+        return $query->where('type', $type);
+    }
+
 }
