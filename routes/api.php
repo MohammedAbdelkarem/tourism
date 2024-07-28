@@ -18,6 +18,7 @@ use App\Http\Controllers\User\AppointmentController;
 use App\Http\Controllers\Admin\AdminNotificationController;
 use App\Http\Controllers\User\TripsController as UserTripsController;
 use App\Http\Controllers\Admin\TripsController as AdminTripsController;
+use \App\Http\Controllers\Guide\GuideController as GeneralGuideController;
 use App\Http\Controllers\User\CountryController;
 
 /*
@@ -143,28 +144,45 @@ Route::group(['prefix' => 'admin'], function () {
 Route::group(['prefix' => 'user'], function () {
 
     Route::group(['prefix' => 'auth'], function () {
-        Route::post('send', [UserController::class, 'sendCode']);
-        Route::post('register', [UserController::class, 'register']);
-        Route::post('login', [UserController::class, 'login']);
-        Route::post('reset', [UserController::class, 'resetPassword']);
+
+        Route::controller(UserController::class)->group(function () {
+            Route::post('send',  'sendCode');
+            Route::post('register',  'register');
+            Route::post('login',  'login');
+            Route::post('reset',  'resetPassword');
+        });
     });
 
     Route::group(['prefix' => 'trip'], function () {
-        Route::get('listoffers', [UserTripsController::class, 'getAllOffers']);
-        Route::get('listrec', [UserTripsController::class, 'getAllRecommended']);
-        Route::post('triplist', [UserTripsController::class, 'getTripsListByCountry']);
-        Route::post('details', [UserTripsController::class, 'getTripDetails']);
-        Route::post('search', [UserTripsController::class, 'search']);
+
+        Route::controller(UserTripsController::class)->group(function () {
+            Route::get('listoffers', 'getAllOffers');
+            Route::get('listrec', 'getAllRecommended');
+            Route::post('triplist', 'getTripsListByCountry');
+            Route::post('details', 'getTripDetails');
+            Route::post('search', 'search');
+        });
     });
 
     Route::group(['prefix' => 'facility'], function () {
-        Route::post('details', [FacilityController::class, 'getFacilityDetails']);
+
+        Route::controller(FacilityController::class)->group(function () {
+            Route::post('details',  'getFacilityDetails');
+        });
     });
     Route::group(['prefix' => 'country'], function () {
-        Route::get('get', [CountryController::class, 'getCountries']);
-        Route::post('details', [CountryController::class, 'getCountryDetails']);
-    });
 
+        Route::controller(CountryController::class)->group(function () {
+            Route::get('get',  'getCountries');
+            Route::post('details',  'getCountryDetails');
+        });
+    });
+    Route::group(['prefix' => 'appoint'], function () {
+
+        Route::controller(AppointmentController::class)->group(function () {
+            Route::post('day',  'getDayDetails');
+        });
+    });
     
 
 });
@@ -174,26 +192,51 @@ Route::group(['prefix' => 'user'], function () {
 Route::group(['prefix' => 'user', 'middleware' => ['auth:user']], function () {
 
     Route::group(['prefix' => 'auth'], function () {
-        Route::post('edit', [UserController::class, 'updateProfile']);
-        Route::post('logout', [UserController::class, 'logout']);
-        Route::get('profile', [UserController::class, 'profile']);
-        Route::delete('delete', [UserController::class, 'deleteAccount']);
-        Route::delete('deleteph', [UserController::class, 'deletePhoto']);
+
+        Route::controller(UserController::class)->group(function () {
+            Route::post('edit', 'updateProfile');
+            Route::post('logout', 'logout');
+            Route::get('profile', 'profile');
+            Route::delete('delete', 'deleteAccount');
+            Route::delete('deleteph', 'deletePhoto');
+        });
     });
 
-
     Route::group(['prefix' => 'appoint'], function () {
-        Route::post('appoint', [AppointmentController::class, 'appointTrip']);
-        Route::post('unappoint', [AppointmentController::class, 'unAppointTrip']);
-        Route::get('get', [AppointmentController::class, 'getMyTrips']);
-        Route::post('modify', [AppointmentController::class, 'modifyAppointment']);
+
+        Route::controller(AppointmentController::class)->group(function () {
+            Route::post('appoint',  'appointTrip');
+            Route::post('unappoint',  'unAppointTrip');
+            Route::get('get',  'getMyTrips');
+            Route::post('modify',  'modifyAppointment');
+            Route::get('transactions',  'getTransactions');
+        });
     });
 
     Route::group(['prefix' => 'favourite'], function () {
-        Route::post('add', [UserTripsController::class, 'addToFav']);
-        Route::post('delete', [UserTripsController::class, 'deleteFav']);
-        Route::get('get', [UserTripsController::class, 'getFav']);
+
+        Route::controller(UserTripsController::class)->group(function () {
+            Route::post('add',  'addToFav');
+            Route::post('delete',  'deleteFav');
+            Route::get('get',  'getFav');
+        });
     });
+    Route::group(['prefix' => 'comment'], function () {
+
+        Route::controller(UserTripsController::class)->group(function () {
+            Route::post('add' , 'addComment');
+            Route::post('delete' , 'deleteComment');
+        });
+    });
+    Route::group(['prefix' => 'rate'], function () {
+
+        Route::controller(FacilityController::class)->group(function () {
+            Route::post('add' , 'addRate');
+            Route::post('delete' , 'deleteRate');
+            Route::post('update' , 'modifyRate');
+        });
+    });
+
 });
 
 
@@ -202,10 +245,13 @@ Route::group(['prefix' => 'user', 'middleware' => ['auth:user']], function () {
 Route::group(['prefix' => 'guide'], function () {
 
     Route::group(['prefix' => 'auth'], function () {
-        Route::post('send', [GuideController::class, 'sendCode']);
-        Route::post('register', [GuideController::class, 'register']);
-        Route::post('login', [GuideController::class, 'login']);
-        Route::post('reset', [GuideController::class, 'resetPassword']);
+
+        Route::controller(GuideController::class)->group(function () {
+            Route::post('send',  'sendCode');
+            Route::post('register',  'register');
+            Route::post('login',  'login');
+            Route::post('reset',  'resetPassword');
+        });
     });
 });
 
@@ -214,9 +260,23 @@ Route::group(['prefix' => 'guide'], function () {
 Route::group(['prefix' => 'guide', 'middleware' => ['auth:guide']], function () {
 
     Route::group(['prefix' => 'auth'], function () {
-        Route::post('edit', [GuideController::class, 'updateProfile']);
-        Route::post('logout', [GuideController::class, 'logout']);
-        Route::get('profile', [GuideController::class, 'profile']);
-        Route::delete('delete', [GuideController::class, 'deleteAccount']);
+
+        Route::controller(GuideController::class)->group(function () {
+            Route::post('edit',  'updateProfile');
+            Route::post('logout',  'logout');
+            Route::get('profile',  'profile');
+            Route::delete('delete',  'deleteAccount');
+        });
+    });
+    Route::group(['prefix' => 'general'], function () {
+
+        Route::controller(GeneralGuideController::class)->group(function () {
+            Route::get('home',  'home');
+            Route::post('days',  'getDays');
+            Route::post('details',  'getDayDetails');
+            Route::get('transactions',  'transactions');
+            Route::post('note',  'addNote');
+            Route::post('tripstatus',  'modifyPending');
+        });
     });
 });

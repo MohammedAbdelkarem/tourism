@@ -4,10 +4,12 @@ namespace App\Http\Controllers\User;
 
 use App\Models\Trip;
 use App\Models\Country;
+use App\Models\TripComment;
 use Illuminate\Http\Request;
 use App\Traits\ResponseTrait;
 use App\Http\Requests\IdRequest;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\AddCommentRequest;
 use App\Http\Requests\User\FavRequest;
 use App\Http\Resources\User\CountryResource;
 use App\Http\Resources\User\HomeRecResource;
@@ -67,11 +69,14 @@ class TripsController extends Controller
 
         $trips = Trip::find($id);
 
-        $trips->load(['favourites' => function ($query) use ($userId) {
-            $query->where('user_id', $userId);
+        $trips->load(['favourites' => function ($query) use ($userId , $id) {
+            $query->where('user_id', $userId)->where('trip_id' , $id);
         }]);
-            
-
+        $trips->load(['reservatoin' => function ($query) use ($userId , $id) {
+            $query->where('user_id' , $userId)
+                ->where('trip_id', $id);
+        }]);
+        
         $trips = new TripDetailsResource($trips);
 
         return $this->SendResponse(response::HTTP_OK , 'trip details retrived with success' ,  $trips);
@@ -167,6 +172,30 @@ class TripsController extends Controller
         $trips = HomeRecResource::collection($trips);
 
         return $this->SendResponse(response::HTTP_OK , 'results retrieved with success' , $trips);
+    }
+
+    public function addComment(AddCommentRequest $request)
+    {
+        $trip_id = $request->validated()['trip_id'];
+        $comment = $request->validated()['comment'];
+
+        $user_id = user_id();
+
+        $data['user_backup_id'] = $user_id;
+        $data['trip_id'] = $trip_id;
+        $data['comment'] = $comment;
+
+        TripComment::create($data);
+
+        return $this->SendResponse(response::HTTP_CREATED , 'comment added with success');
+    }
+    public function deleteComment(IdRequest $request)
+    {
+        $id = $request->validated()['id'];
+
+        TripComment::where('id' , $id)->delete();
+
+        return $this->SendResponse(response::HTTP_OK , 'comment deleted with success');
     }
 
 }

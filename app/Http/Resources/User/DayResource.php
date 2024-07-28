@@ -5,7 +5,7 @@ namespace App\Http\Resources\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CommentResource extends JsonResource
+class DayResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,9 +16,10 @@ class CommentResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'username' => $this->usersBackup->name,
-            'comment' => $this->comment,
-            'able_to_delete' => $this->usersBackup->id == user_id(),
+            'date' => $this->date,
+            'trip_id' => $this->trip_id,
+            'day_id' => $this->day_id,
+            'days' => FacilityDayResource::collection($this->facilityInDay),
         ];
     }
 }

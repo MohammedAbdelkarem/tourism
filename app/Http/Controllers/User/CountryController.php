@@ -55,8 +55,4 @@ class CountryController extends Controller
         return $this->SendResponse(response::HTTP_OK , 'country data retrived with success' , $data);
 
     }
-
-    
-
-    
 }

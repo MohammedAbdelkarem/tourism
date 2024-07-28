@@ -30,12 +30,16 @@ class FacilityDay extends Model
 
     public function Day()
     {
-        return $this->belongsTo(Day::class);
+        return $this->belongsTo(Day::class , 'day_id');
     } 
 
     public function facility()
     {
         return $this->belongsTo(Facility::class);
+    } 
+    public function facilityInDay()
+    {
+        return $this->hasMany(FacilityInDay::class);
     } 
 
 

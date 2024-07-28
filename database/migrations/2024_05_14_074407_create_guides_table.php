@@ -14,19 +14,19 @@ return new class extends Migration
         Schema::create('guides', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email')->unique();
-            $table->string('phone')->unique();
+            $table->string('email');
+            $table->string('phone');
             $table->string('password');
             $table->enum('status',['available' , 'unavailable'])->default('available');
             $table->integer('price_per_person_one_day');
             $table->string('father_name');
             $table->string('mother_name');
-            $table->string('unique_id')->unique();
+            $table->string('unique_id');
             $table->string('birth_place');
             $table->string('birth_date');
             $table->string('photo')->nullable();
-            $table->enum('can_change_unique_id' , ['able' , 'unable'])->nullable();
-            $table->enum('accept_by_admin' , ['accepted' , 'rejected'])->nullable();
+            $table->enum('can_change_unique_id' , ['able' , 'unable'])->default('unable');
+            $table->enum('accept_by_admin' , ['accepted' , 'rejected'])->default('rejected');
             $table->timestamps();
         });
     }

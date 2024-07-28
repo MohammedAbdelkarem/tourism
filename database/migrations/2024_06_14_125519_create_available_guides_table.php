@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('available_guides', function (Blueprint $table) {
             $table->id();
-            $table->enum('accept_trip' , ['accepted', 'rejected']);
+            $table->enum('accept_trip' , ['accepted', 'rejected'])->nullable();
             $table->foreignId('trip_id')->constrained('trips')->cascadeOnDelete();
             $table->foreignId('guide_id')->constrained('guides')->cascadeOnDelete();
             $table->timestamps();
