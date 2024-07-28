@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\User;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -29,6 +30,7 @@ class TripDetailsResource extends JsonResource
             'guide_phone' => $this->Guides_backups->phone,
             'favourite' => $this->favourites->count(),
             'in_reserve' => $this->reservatoin->count(),
+            'in_progress' => Carbon::now() >= $this->start_time && Carbon::now() < $this->end_time,
             'comments' => CommentResource::collection($this->trip_comment),
             'photos' => $this->photos,
             'days' => $this->facilityDay,

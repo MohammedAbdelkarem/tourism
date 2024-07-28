@@ -13,7 +13,10 @@ class GuideController extends Controller
 {
     use ResponseTrait;
 
-    public function home(){}// contain the cards of the trips and the accepted by admin 
+    public function home()
+    {
+        
+    }
     public function getPendingTrips(){}
     public function getCominSoonTrips(){}
     public function getInProgressTrips(){}
@@ -22,6 +25,7 @@ class GuideController extends Controller
     public function getDayDetails(){}//contain if the guide can add note or not(depend on the inprogress helper function)
     public function transactions(){}
     public function addNote(){}
+    public function modifyPending(){}
      
     
 }

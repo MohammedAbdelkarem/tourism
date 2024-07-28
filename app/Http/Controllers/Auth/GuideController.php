@@ -115,7 +115,7 @@ class GuideController extends Controller
     {
         $data = auth()->guard('guide')->user();
 
-        $data = new GuideProfileResource($data);
+        // $data = new GuideProfileResource($data);
         
         return $this->SendResponse(response::HTTP_OK , 'guide profile data retrieved successfully' , $data);
     }
