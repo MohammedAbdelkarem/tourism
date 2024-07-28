@@ -46,7 +46,6 @@ class InformationRequest extends FormRequest
             'unique_id' => 'required|unique:guides,unique_id',
             'birth_place' => 'required|string',
             'birth_date' => 'required|date',
-            'wallet' => 'required|integer',
             'photo' => ['image' , 'mimes:png,jpg,jpeg,bmp,svg,gif'],
         ];
     }

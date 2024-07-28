@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use App\Models\{User , Admin, Guide};
 use Illuminate\Support\Facades\Cache;
 
@@ -104,6 +105,15 @@ if(!function_exists('guide_email'))
     function guide_email()
     {
         return Cache::get('guide_email');
+    }
+}
+
+if(!function_exists('is_in_progress'))
+{
+    function is_in_progress($start_time , $end_time)
+    {
+        $now = Carbon::now();
+        return $now >= $start_time && $now < $end_time;
     }
 }
 

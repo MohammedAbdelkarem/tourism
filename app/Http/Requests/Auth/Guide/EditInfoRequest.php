@@ -41,12 +41,11 @@ class EditInfoRequest extends FormRequest
             ],
             'status' => 'required',
             'price_per_person_one_day' => 'required|integer',
-            'father_name' => 'required|integer',
-            'mother_name' => 'required|integer',
-            'unique_id' => 'required|unique:guides,id,'.$this->get('id'),
+            'father_name' => 'required|string',
+            'mother_name' => 'required|string',
+            'unique_id' => ['required' , 'unique:guides,unique_id,'.$this->get('id'),],
             'birth_place' => 'required|string',
             'birth_date' => 'required|date',
-            'wallet' => 'required|integer',
             'photo' => ['image' , 'mimes:png,jpg,jpeg,bmp,svg,gif'],
         ];
     }
@@ -56,6 +55,7 @@ class EditInfoRequest extends FormRequest
         return[
             'phone.unique' => 'Phone number has already been taken',
             'phone.required' => 'Phone number is required',
+            // 'unique_id.unique' => 'unique id has to be unique',
             'phone' => 'Phone number is not valid'
         ];
     }

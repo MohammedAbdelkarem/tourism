@@ -46,9 +46,12 @@ class GuideController extends Controller
     {
         $validatedData = $request->validated();
 
-        $validatedData['photo'] = photoPath($validatedData['photo']);
-        // $validatedData['email'] = guide_email();
-        $validatedData['email'] = "mayagritaabouasali@gmail.com";
+        if($request->hasFile('photo'))
+        {
+            $validatedData['photo'] = photoPath($validatedData['photo']);
+        }
+        
+        $validatedData['email'] = guide_email();
         hashing_data($validatedData);
         
         $guide = Guide::create($validatedData);
@@ -66,8 +69,10 @@ class GuideController extends Controller
 
         hashing_data($validatedData);
 
-        $validatedData['photo'] = photoPath($validatedData['photo']);
-
+        if($request->hasFile('photo'))
+        {
+            $validatedData['photo'] = photoPath($validatedData['photo']);
+        }
         Guide::where('email' , guide_email())->update($validatedData);
         Guides_backups::where('email' , guide_email())->update($validatedData);
 
