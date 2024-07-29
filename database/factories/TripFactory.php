@@ -26,7 +26,7 @@ class TripFactory extends Factory
             'bio' => $this->faker->text(rand(10, 50)),
             'photo' => $this->faker->imageUrl(),
             'rate' => $this->faker->numberBetween(1, 5),
-            'price_paer_one_old' => $this->faker->randomNumber(2),
+            'price_per_one_old' => $this->faker->randomNumber(2),
             'price_per_one_new' => $this->faker->randomNumber(2),
             'total_price' => $this->faker->randomNumber(4),
             'status' => $this->faker->randomElement(['pending' , 'active' ,'in_progress' , 'finished']),
