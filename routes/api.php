@@ -181,6 +181,7 @@ Route::group(['prefix' => 'user'], function () {
 
         Route::controller(AppointmentController::class)->group(function () {
             Route::post('day',  'getDayDetails');
+            Route::get('test',  'test');
         });
     });
     
@@ -208,6 +209,7 @@ Route::group(['prefix' => 'user', 'middleware' => ['auth:user']], function () {
             Route::post('appoint',  'appointTrip');
             Route::post('unappoint',  'unAppointTrip');
             Route::get('get',  'getMyTrips');
+            Route::post('details',  'getReservationDetails');//not tested yet
             Route::post('modify',  'modifyAppointment');
             Route::get('transactions',  'getTransactions');
         });

@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Resources\User\DayResource;
 use Carbon\Carbon;
 use App\Models\Trip;
+use App\Models\User;
+use App\Models\FacilityDay;
 use App\Models\Reservatoin;
 use App\Models\UsersBackup;
 use Illuminate\Http\Request;
@@ -13,23 +14,27 @@ use App\Models\UserTransaction;
 use App\Http\Requests\IdRequest;
 use App\Http\Controllers\Controller;
 use App\Services\AppointmentService;
+use App\Http\Resources\User\DayResource;
 use App\Http\Resources\User\AppointResource;
 use App\Http\Requests\User\AppointmentRequest;
 use Symfony\Component\HttpFoundation\Response;
+use App\Http\Resources\User\ReservationResource;
+use App\Http\Resources\User\TransactionResource;
 use App\Services\Notifications\AdminNotification;
 use App\Http\Requests\User\ModifyAppointmentRequest;
-use App\Http\Resources\User\TransactionResource;
-use App\Models\FacilityDay;
+use App\Services\Notifications\UserNotificatoinService;
 
 class AppointmentController extends Controller
 {
     use ResponseTrait;
 
     private AppointmentService $appointmentService;
+    private UserNotificatoinService $userNotificatoinService;
  
-    public function __construct(AppointmentService $appointmentService)
+    public function __construct(AppointmentService $appointmentService , UserNotificatoinService $userNotificatoinService)
     {
         $this->appointmentService = $appointmentService;
+        $this->userNotificatoinService = $userNotificatoinService;
     } 
 
     public function appointTrip(AppointmentRequest $request)
@@ -342,6 +347,17 @@ class AppointmentController extends Controller
         return $this->SendResponse(response::HTTP_OK , 'reservations retrieve with success' , $records);
     }
 
+    public function getReservationDetails(IdRequest $request)
+    {
+        $id = $request->validated()['id'];
+
+        $record = Reservatoin::find($id);
+
+        $record = new ReservationResource($record);
+
+        return $this->SendResponse(response::HTTP_OK ,'reservation details retrieved with success' , $record);
+    }
+
     public function getDayDetails(IdRequest $request)
     {
         $day_id = $request->validated()['id'];
@@ -361,6 +377,13 @@ class AppointmentController extends Controller
 
 
         return $this->SendResponse(response::HTTP_OK , 'day details retrieved with success' , $data);
+    }
+
+    public function test()
+    {
+        $this->userNotificatoinService->SendNoteNotification(1);
+
+        return $this->SendResponse(response::HTTP_OK , 'succcess');
     }
     
 }
