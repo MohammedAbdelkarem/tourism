@@ -1,13 +1,13 @@
 <?php
 namespace App\Services\Notifications;
 use App\Models\Admin;
-use App\Notifications\AdminWallet;
+use App\Notifications\Admin\AdminWallet;
 use Illuminate\Support\Facades\Log;
-use App\Notifications\NewCommentOnTrip;
-use App\Notifications\NewGuideRegistered;
-use App\Notifications\TripAcceptedByGuide;
+use App\Notifications\Admin\NewCommentOnTrip;
+use App\Notifications\Admin\NewGuideRegistered;
+use App\Notifications\Admin\TripAcceptedByGuide;
 use Illuminate\Support\Facades\Notification;
-use App\Notifications\TripFilledPlacesUpdate;
+use App\Notifications\Admin\TripFilledPlacesUpdate;
 
 class AdminNotification{
 

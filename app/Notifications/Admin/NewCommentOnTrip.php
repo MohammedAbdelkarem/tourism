@@ -1,23 +1,27 @@
 <?php
 
-namespace App\Notifications;
+namespace App\Notifications\Admin;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class TripAcceptedByGuide extends Notification
+class NewCommentOnTrip extends Notification
 {
     use Queueable;
     protected $trip;
+    protected $comment;
+    protected $user;
+
     /**
      * Create a new notification instance.
      */
-    public function __construct( $trip)
+    public function __construct($trip,$comment,$user)
     {
         $this->trip = $trip;
-        
+        $this->comment = $comment;
+        $this-> user= $user;
     }
 
     /**
@@ -30,7 +34,7 @@ class TripAcceptedByGuide extends Notification
         return ['database'];
     }
 
-  
+    
 
     /**
      * Get the array representation of the notification.
@@ -41,6 +45,8 @@ class TripAcceptedByGuide extends Notification
     {
         return [
             "trip" => $this->trip,
+            "comment" => $this->comment,
+            "user"=> $this ->user,
         ];
     }
 }
