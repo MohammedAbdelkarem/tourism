@@ -279,7 +279,7 @@ public function finishTrip(string $id)
 
     // Send notification to super admin
     $adminNotification = new AdminNotification();
-    $adminNotification->sendAdminNotification($trip, $adminProfit);
+    $adminNotification->sendAdminWalletNotification($trip, $adminProfit);
 
 
 

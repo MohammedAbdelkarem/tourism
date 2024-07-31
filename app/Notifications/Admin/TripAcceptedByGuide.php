@@ -11,13 +11,15 @@ class TripAcceptedByGuide extends Notification
 {
     use Queueable;
     protected $trip;
+    protected $message;
+    protected $trip_name;
     /**
      * Create a new notification instance.
      */
-    public function __construct( $trip)
-    {
+    public function __construct( $trip_name ,$trip)
+    { $this->trip_name = $trip_name;
         $this->trip = $trip;
-        
+        $this->message = "$trip_name trip accepted by guide";
     }
 
     /**
@@ -41,6 +43,7 @@ class TripAcceptedByGuide extends Notification
     {
         return [
             "trip" => $this->trip,
+            'message' => $this->message,
         ];
     }
 }

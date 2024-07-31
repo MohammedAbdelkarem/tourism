@@ -11,17 +11,20 @@ class NewCommentOnTrip extends Notification
 {
     use Queueable;
     protected $trip;
+    protected $trip_name;
     protected $comment;
     protected $user;
+    protected $message;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($trip,$comment,$user)
-    {
+    public function __construct($trip_name,$trip,$comment,$user)
+    {   $this->trip_name = $trip_name;
         $this->trip = $trip;
         $this->comment = $comment;
         $this-> user= $user;
+        $this->message = "a new comment added to $trip_name trip";
     }
 
     /**
@@ -47,6 +50,7 @@ class NewCommentOnTrip extends Notification
             "trip" => $this->trip,
             "comment" => $this->comment,
             "user"=> $this ->user,
+            'message' => $this->message,
         ];
     }
 }

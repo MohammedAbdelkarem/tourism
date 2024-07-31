@@ -11,6 +11,7 @@ class NewGuideRegistered extends Notification
 {
     use Queueable;
     protected $guide;
+    protected $message;
 
     /**
      * Create a new notification instance.
@@ -19,6 +20,7 @@ class NewGuideRegistered extends Notification
     {
         
         $this->guide = $guide;
+        $this->message = 'A new guide has been registered ';
     }
 
     /**
@@ -41,6 +43,7 @@ class NewGuideRegistered extends Notification
     {
         return [
             "guide" => $this->guide,
+            'message' => $this->message,
         ];
     }
 }

@@ -10,16 +10,18 @@ use Illuminate\Notifications\Notification;
 class TripFilledPlacesUpdate extends Notification
 {
     use Queueable;
+    protected $trip_name;
     protected $trip;
     protected $filled_places;
-
+    protected $message;
     /**
      * Create a new notification instance.
      */
-    public function __construct( $trip,$filled_places)
-    {
+    public function __construct( $trip_name,$trip,$filled_places)
+    {   $this->trip_name = $trip_name;
         $this->trip = $trip;
         $this->filled_places = $filled_places;
+        $this->message = "The $trip_name trip has been filled with $filled_places seats ";
     }
 
     /**
@@ -44,6 +46,7 @@ class TripFilledPlacesUpdate extends Notification
         return [
             "trip" => $this->trip,
             "filled_places" => $this->filled_places,
+            'message' => $this->message,
         ];
     }
 }

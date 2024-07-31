@@ -12,7 +12,7 @@ class AdminWallet extends Notification
     use Queueable;
 protected $trip;
 protected $amount;
-// protected $message;
+protected $message;
 
     /**
      * Create a new notification instance.
@@ -21,7 +21,7 @@ protected $amount;
     {
         $this->trip = $trip; 
         $this->amount = $amount;
-        // $this->message = '';
+        $this->message = 'new amount added to your wallet';
     }
 
     /**
@@ -45,6 +45,7 @@ protected $amount;
         return [
             "trip"=>$this->trip,
             "amount" => $this->amount,
+            'message' => $this->message,
         ];
     }
 }
