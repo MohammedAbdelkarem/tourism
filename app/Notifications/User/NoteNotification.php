@@ -11,8 +11,7 @@ class NoteNotification extends Notification
 {
     use Queueable;
 
-    protected $note;
-    protected $message;
+    protected $note , $message;
 
     /**
      * Create a new notification instance.

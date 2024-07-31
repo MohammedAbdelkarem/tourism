@@ -139,10 +139,6 @@ class AppointmentController extends Controller
         }
     
 
-
-
-
-
         return $this->SendResponse(response::HTTP_CREATED , 'appointed with success' , $details);
          
 

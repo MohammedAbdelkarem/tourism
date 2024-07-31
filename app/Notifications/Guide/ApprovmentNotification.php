@@ -1,25 +1,27 @@
 <?php
 
-namespace App\Notifications\User;
+namespace App\Notifications\Guide;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class OfferNotification extends Notification
+class ApprovmentNotification extends Notification
 {
     use Queueable;
-
-    protected $trip_id , $message;
+    protected $approvment , $message;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($trip_id)
+    public function __construct($approvment)
     {
-        $this->trip_id = $trip_id;
-        $this->message = 'new offer!!';
+        $this->approvment = $approvment;
+        
+        $this->message = ($approvment == 'accepted') 
+        ? 'You have the permission to work now!' 
+        : 'You do not have the permission to work now!';
     }
 
     /**
@@ -40,7 +42,7 @@ class OfferNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'trip_id' => $this->trip_id,
+            'approvment' => $this->approvment,
             'message' => $this->message,
         ];
     }
