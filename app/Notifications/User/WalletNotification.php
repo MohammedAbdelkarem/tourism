@@ -11,10 +11,7 @@ class WalletNotification extends Notification
 {
     use Queueable;
 
-    protected $reservation_id;
-    protected $amount;
-    protected $type;
-    protected $message;
+    protected $reservation_id , $amount , $type , $message;
 
     /**
      * Create a new notification instance.
@@ -24,14 +21,10 @@ class WalletNotification extends Notification
         $this->reservation_id = $reservation_id;
         $this->amount = $amount;
         $this->type = $type;
-        if($this->type == 'add')
-        {
-            $this->message = 'new amount added to your wallet';
-        }
-        else
-        {
-            $this->message = 'new amount taken from your wallet by the reservation';
-        }
+
+        $this->message = ($type == 'add') 
+        ? 'new amount added to your wallet' 
+        : 'new amount taken from your wallet by the reservation';
     }
 
     /**

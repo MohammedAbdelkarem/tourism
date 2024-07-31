@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Notifications\User;
+namespace App\Notifications\Guide;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class OfferNotification extends Notification
+class NewTripNotification extends Notification
 {
     use Queueable;
-
     protected $trip_id , $message;
 
     /**
@@ -19,7 +18,7 @@ class OfferNotification extends Notification
     public function __construct($trip_id)
     {
         $this->trip_id = $trip_id;
-        $this->message = 'new offer!!';
+        $this->message = 'new trip to accept or reject!';
     }
 
     /**

@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Notification;
 
 class UserNotificatoinService
 {
-    public function SendWalletNotification($user_id , $amount , $reservatioin_id , $type)
+    public function SendWalletNotification($user_id , $amount , $reservatioin_id , $type)//appoint trip and add to wallet
     {
         $user = User::where('id', $user_id)->first();
 

@@ -1,25 +1,25 @@
 <?php
 
-namespace App\Notifications\User;
+namespace App\Notifications\Guide;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class OfferNotification extends Notification
+class WalletNotification extends Notification
 {
     use Queueable;
-
-    protected $trip_id , $message;
+    protected $amount , $trip_id , $message;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($trip_id)
+    public function __construct($amount , $trip_id)
     {
+        $this->amount = $amount;
         $this->trip_id = $trip_id;
-        $this->message = 'new offer!!';
+        $this->message = 'new amount has been added to your wallet';
     }
 
     /**
@@ -40,6 +40,7 @@ class OfferNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
+            'amount' => $this->amount,
             'trip_id' => $this->trip_id,
             'message' => $this->message,
         ];
