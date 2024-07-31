@@ -135,7 +135,7 @@ class AppointmentController extends Controller
     
         if ($filled_places == $original_places || $filled_places == ($original_places / 2)) {
             $adminNotification = new AdminNotification();
-            $adminNotification->sendNotificationIfTripFilledPlacesUpdate($trip, $filled_places);
+            $adminNotification->sendNotificationIfTripFilledPlacesUpdate($trip_id, $filled_places);
         }
     
 

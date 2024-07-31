@@ -8,16 +8,17 @@ use App\Models\Guide;
 use App\Models\FacilityDay;
 use App\Models\Reservatoin;
 use Illuminate\Http\Request;
+use App\Models\FacilityInDay;
 use App\Traits\ResponseTrait;
 use App\Models\AvailableGuide;
 use App\Http\Requests\IdRequest;
+use App\Models\GuideTransaction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Guide\NoteRequest;
-use App\Http\Requests\Guide\PendingStatusRequest;
 use App\Http\Resources\User\DayResource;
-use App\Models\FacilityInDay;
-use App\Models\GuideTransaction;
 use Symfony\Component\HttpFoundation\Response;
+use App\Http\Requests\Guide\PendingStatusRequest;
+use App\Services\Notifications\AdminNotification;
 
 class GuideController extends Controller
 {
@@ -120,6 +121,8 @@ class GuideController extends Controller
             'accept_trip' => $status
         ]);
 
+        $adminNotification = new AdminNotification();
+        $adminNotification->sendNotificationIfTripAcceptedByGuide($trip_id);
         return $this->SendResponse(response::HTTP_OK , 'done with success');
     }
 }

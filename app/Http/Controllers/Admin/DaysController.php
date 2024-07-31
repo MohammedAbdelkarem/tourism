@@ -43,7 +43,7 @@ class DaysController extends Controller
 
    
      
-         return $this->SendResponse(response::HTTP_CREATED, 'day added successfully',$day);
+         return $this->SendResponse(response::HTTP_CREATED, 'day added successfully',['facility_day_id' => $day->id]);
      }
 
 

@@ -1,29 +1,32 @@
 <?php
 
-namespace App\Notifications;
+namespace App\Notifications\Admin;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class AdminWallet extends Notification
+class TripFilledPlacesUpdate extends Notification
 {
     use Queueable;
-protected $trip;
-protected $amount;
+    protected $trip_name;
+    protected $trip;
+    protected $filled_places;
+    protected $message;
     /**
      * Create a new notification instance.
      */
-    public function __construct($trip, $amount)
-    {
-        $this->trip = $trip; 
-        $this->amount = $amount;
+    public function __construct( $trip_name,$trip,$filled_places)
+    {   $this->trip_name = $trip_name;
+        $this->trip = $trip;
+        $this->filled_places = $filled_places;
+        $this->message = "The $trip_name trip has been filled with $filled_places seats ";
     }
 
     /**
      * Get the notification's delivery channels.
-     *1
+     *
      * @return array<int, string>
      */
     public function via(object $notifiable): array
@@ -31,7 +34,8 @@ protected $amount;
         return ['database'];
     }
 
-   
+    
+
     /**
      * Get the array representation of the notification.
      *
@@ -40,8 +44,9 @@ protected $amount;
     public function toArray(object $notifiable): array
     {
         return [
-            "trip"=>$this->trip,
-            "amount" => $this->amount,
+            "trip" => $this->trip,
+            "filled_places" => $this->filled_places,
+            'message' => $this->message,
         ];
     }
 }

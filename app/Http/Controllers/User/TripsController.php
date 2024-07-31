@@ -4,23 +4,24 @@ namespace App\Http\Controllers\User;
 
 use App\Models\Trip;
 use App\Models\Country;
+use App\Models\Favourite;
 use App\Models\TripComment;
 use Illuminate\Http\Request;
 use App\Traits\ResponseTrait;
 use App\Http\Requests\IdRequest;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\User\AddCommentRequest;
 use App\Http\Requests\User\FavRequest;
+use App\Http\Resources\User\FavResource;
+use App\Http\Resources\Admin\TripResource;
 use App\Http\Resources\User\CountryResource;
 use App\Http\Resources\User\HomeRecResource;
+use App\Http\Requests\User\AddCommentRequest;
 use App\Http\Requests\User\TripFilterRequest;
-use App\Http\Resources\Admin\TripResource;
 use App\Http\Resources\User\HomeOfferResource;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Resources\User\TripDetailsResource;
+use App\Services\Notifications\AdminNotification;
 use App\Http\Resources\User\CountryDetailsResource;
-use App\Http\Resources\User\FavResource;
-use App\Models\Favourite;
 
 class TripsController extends Controller
 {
@@ -187,6 +188,8 @@ class TripsController extends Controller
 
         TripComment::create($data);
 
+        $adminNotification = new AdminNotification();
+        $adminNotification->sendNotificationIfNewCommentOnTrip($trip_id,$comment,$user_id);
         return $this->SendResponse(response::HTTP_CREATED , 'comment added with success');
     }
     public function deleteComment(IdRequest $request)

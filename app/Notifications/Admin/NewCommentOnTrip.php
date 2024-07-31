@@ -1,25 +1,30 @@
 <?php
 
-namespace App\Notifications;
+namespace App\Notifications\Admin;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class TripFilledPlacesUpdate extends Notification
+class NewCommentOnTrip extends Notification
 {
     use Queueable;
     protected $trip;
-    protected $filled_places;
+    protected $trip_name;
+    protected $comment;
+    protected $user;
+    protected $message;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct( $trip,$filled_places)
-    {
+    public function __construct($trip_name,$trip,$comment,$user)
+    {   $this->trip_name = $trip_name;
         $this->trip = $trip;
-        $this->filled_places = $filled_places;
+        $this->comment = $comment;
+        $this-> user= $user;
+        $this->message = "a new comment added to $trip_name trip";
     }
 
     /**
@@ -43,7 +48,9 @@ class TripFilledPlacesUpdate extends Notification
     {
         return [
             "trip" => $this->trip,
-            "filled_places" => $this->filled_places,
+            "comment" => $this->comment,
+            "user"=> $this ->user,
+            'message' => $this->message,
         ];
     }
 }
