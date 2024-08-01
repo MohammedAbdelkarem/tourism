@@ -11,27 +11,27 @@ use Illuminate\Support\Facades\Notification;
 
 
 
-class GuideNotificatoinService
+class GuideNotificationService
 {
-    public function SendApprovmentNotification($approvment , $guide_id)
+    public function SendApprovmentNotification($approvment , $guide_id)//done
     {
         $guide = Guide::where('id', $guide_id)->first();
 
         Notification::send($guide, new ApprovmentNotification($approvment));
     }
-    public function SendUniqueIdNotification($status , $guide_id)
+    public function SendUniqueIdNotification($status , $guide_id)//done
     {
         $guide = Guide::where('id', $guide_id)->first();
 
         Notification::send($guide, new UniqueIdNotification($status));
     }
-    public function SendNewTripNotification($trip_id , $guide_id)
+    public function SendNewTripNotification($trip_id , $guide_id)//done
     {
         $guide = Guide::where('id', $guide_id)->first();
 
         Notification::send($guide, new NewTripNotification($trip_id));
     }
-    public function SendWalletNotification($amount , $trip_id , $guide_id)
+    public function SendWalletNotification($amount , $trip_id , $guide_id)//done
     {
         $guide = Guide::where('id', $guide_id)->first();
 

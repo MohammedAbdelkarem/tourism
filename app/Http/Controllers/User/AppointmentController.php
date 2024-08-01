@@ -22,6 +22,8 @@ use App\Http\Resources\User\ReservationResource;
 use App\Http\Resources\User\TransactionResource;
 use App\Services\Notifications\AdminNotification;
 use App\Http\Requests\User\ModifyAppointmentRequest;
+use App\Models\FacilityInDay;
+use App\Services\Notifications\GuideNotificationService;
 use App\Services\Notifications\UserNotificatoinService;
 
 class AppointmentController extends Controller
@@ -30,11 +32,13 @@ class AppointmentController extends Controller
 
     private AppointmentService $appointmentService;
     private UserNotificatoinService $userNotificatoinService;
+    private GuideNotificationService $guideNotificatoinService;
  
-    public function __construct(AppointmentService $appointmentService , UserNotificatoinService $userNotificatoinService)
+    public function __construct(AppointmentService $appointmentService , UserNotificatoinService $userNotificatoinService , GuideNotificationService $guideNotificatoinService)
     {
         $this->appointmentService = $appointmentService;
         $this->userNotificatoinService = $userNotificatoinService;
+        $this->guideNotificatoinService = $guideNotificatoinService;
     } 
 
     public function appointTrip(AppointmentRequest $request)
@@ -104,6 +108,7 @@ class AppointmentController extends Controller
         $data['number_of_places'] = $number_of_places;
 
         $reservation = Reservatoin::create($data);
+        $reservation_id = $reservation->id;
 
         $user = UsersBackup::find($user_id);
         $user->modify($reservation_price , 'wallet' , '-');
@@ -139,9 +144,14 @@ class AppointmentController extends Controller
         }
     
 
-        return $this->SendResponse(response::HTTP_CREATED , 'appointed with success' , $details);
-         
+        $this->userNotificatoinService->SendWalletNotification(
+            $user_id,
+            $reservation_price,
+            'dis',
+            $reservation_id,
+        );
 
+        return $this->SendResponse(response::HTTP_CREATED , 'appointed with success' , $details);
     }
     public function unAppointTrip(IdRequest $request)
     {
@@ -374,10 +384,21 @@ class AppointmentController extends Controller
 
         return $this->SendResponse(response::HTTP_OK , 'day details retrieved with success' , $data);
     }
+    public function getFacilityInDayDetails(IdRequest $request)
+    {
+        $id = $request->validated()['id'];
+
+        $record = FacilityInDay::where('id' , $id)->get();
+
+        return $this->SendResponse(response::HTTP_OK , 'facility details retrieved with success' , $record);
+    }
 
     public function test()
     {
-        $this->userNotificatoinService->SendNoteNotification(1);
+        $this->guideNotificatoinService->SendApprovmentNotification('accepted' , 21);
+        $this->guideNotificatoinService->SendNewTripNotification(1 , 21);
+        $this->guideNotificatoinService->SendUniqueIdNotification('able' , 21);
+        $this->guideNotificatoinService->SendWalletNotification(22 , 1 , 21);
 
         return $this->SendResponse(response::HTTP_OK , 'succcess');
     }

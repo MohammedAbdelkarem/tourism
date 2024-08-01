@@ -10,12 +10,19 @@ use App\Models\UserTransaction;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\UserResource;
 use Symfony\Component\HttpFoundation\Response;
+use App\Services\Notifications\GuideNotificationService;
+use App\Services\Notifications\UserNotificatoinService;
 
 class UsersController extends Controller
 {
     use ResponseTrait;
 
-
+    private UserNotificatoinService $userNotificatoinService;
+ 
+    public function __construct(UserNotificatoinService $userNotificatoinService)
+    {
+        $this->userNotificatoinService = $userNotificatoinService;
+    }
     public function getUsers(){
         $users = User::all();
         $data= UserResource::collection($users);
@@ -52,6 +59,13 @@ class UsersController extends Controller
             $userBackup->wallet = $newWalletValue;
             $userBackup->save();
         }
+
+
+        $this->userNotificatoinService->SendWalletNotification(
+            user_id(),
+            request('amount'),
+            'add'
+        );
         return $this->SendResponse(response::HTTP_OK, 'Wallet updated successfully',['wallet' => $newWalletValue]);
     }
 }

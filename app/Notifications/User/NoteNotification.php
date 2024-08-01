@@ -11,15 +11,16 @@ class NoteNotification extends Notification
 {
     use Queueable;
 
-    protected $note , $message;
+    protected $note , $message , $facility_in_day_id;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($note)
+    public function __construct($note , $facility_in_day_id)
     {
         $this->message = 'new note for the current reservation';
         $this->note = $note;
+        $this->facility_in_day_id = $facility_in_day_id;
     }
 
     /**
@@ -42,6 +43,7 @@ class NoteNotification extends Notification
         return [
             'note' => $this->note,
             'message' => $this->message,
+            'facility_in_day_id' => $this->facility_in_day_id,
         ];
     }
 }

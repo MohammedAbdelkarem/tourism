@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Guide\NotificatoinController as GuideNotificatoinController;
 use App\Models\Guide;
 
 
@@ -20,6 +21,7 @@ use App\Http\Controllers\User\TripsController as UserTripsController;
 use App\Http\Controllers\Admin\TripsController as AdminTripsController;
 use \App\Http\Controllers\Guide\GuideController as GeneralGuideController;
 use App\Http\Controllers\User\CountryController;
+use App\Http\Controllers\User\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -181,6 +183,7 @@ Route::group(['prefix' => 'user'], function () {
 
         Route::controller(AppointmentController::class)->group(function () {
             Route::post('day',  'getDayDetails');
+            Route::post('faclilityday',  'getFacilityInDayDetails');
             Route::get('test',  'test');
         });
     });
@@ -238,6 +241,16 @@ Route::group(['prefix' => 'user', 'middleware' => ['auth:user']], function () {
             Route::post('update' , 'modifyRate');
         });
     });
+    Route::group(['prefix' => 'notifications'], function () {
+
+        Route::controller(NotificationController::class)->group(function () {
+            Route::get('getall' , 'getAll');
+            Route::get('getunread' , 'getUnread');
+            Route::get('getread' , 'getRead');
+            Route::post('readone' , 'markOneAsRead');
+            Route::get('readall' , 'markAllAsRead');
+        });
+    });
 
 });
 
@@ -279,6 +292,16 @@ Route::group(['prefix' => 'guide', 'middleware' => ['auth:guide']], function () 
             Route::get('transactions',  'transactions');
             Route::post('note',  'addNote');
             Route::post('tripstatus',  'modifyPending');
+        });
+    });
+    Route::group(['prefix' => 'notifications'], function () {
+
+        Route::controller(GuideNotificatoinController::class)->group(function () {
+            Route::get('getall' , 'getAll');
+            Route::get('getunread' , 'getUnread');
+            Route::get('getread' , 'getRead');
+            Route::post('readone' , 'markOneAsRead');
+            Route::get('readall' , 'markAllAsRead');
         });
     });
 });

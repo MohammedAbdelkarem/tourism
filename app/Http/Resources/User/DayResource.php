@@ -19,7 +19,7 @@ class DayResource extends JsonResource
             'date' => $this->date,
             'trip_id' => $this->trip_id,
             'day_id' => $this->day_id,
-            'days' => FacilityDayResource::collection($this->facilityInDay),
+            'facilities_in_day' => FacilityDayResource::collection($this->facilityInDay),
         ];
     }
 }
