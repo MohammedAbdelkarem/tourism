@@ -32,13 +32,6 @@ class EditInfoRequest extends FormRequest
         return [
             'name' => 'required',
             'phone' => ['required'  , 'unique:guides,id,'.$this->get('id') , 'phone:AUTO'],
-            'password' => [
-                'required' ,
-                'confirmed' ,
-                Password::min(8)
-                ->letters()
-                ->numbers()
-            ],
             'status' => 'required',
             'price_per_person_one_day' => 'required|integer',
             'father_name' => 'required|string',

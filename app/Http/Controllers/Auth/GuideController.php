@@ -67,8 +67,6 @@ class GuideController extends Controller
     {
         $validatedData = $request->validated();
 
-        hashing_data($validatedData);
-
         if($request->hasFile('photo'))
         {
             $validatedData['photo'] = photoPath($validatedData['photo']);
@@ -127,6 +125,18 @@ class GuideController extends Controller
         Guide::guideEmail()->delete();
 
         return $this->SendResponse(response::HTTP_OK , 'account deleted successfully');
+    }
+
+    public function deletePhoto()
+    {
+        $guide_id = guide_id();
+
+        $guide = Guide::find($guide_id);
+
+        $guide->photo = null;
+        $guide->save();
+
+        return $this->SendResponse(response::HTTP_OK , 'photo deleted successfully');
     }
 
 

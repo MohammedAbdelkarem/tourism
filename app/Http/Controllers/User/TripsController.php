@@ -39,6 +39,10 @@ class TripsController extends Controller
     {
         $records = Trip::Active()->Offer()->orderByDesc('offer_ratio')->get();
 
+        $records->load(['favourites' => function ($query) {
+            $query->where('user_id', user_id());
+        }]);
+
         $records = HomeOfferResource::collection($records);//not sure if there will be the offer in the resource or not
 
         return $this->SendResponse(response::HTTP_OK , 'offers list retrieved with success' , $records);
@@ -55,6 +59,11 @@ class TripsController extends Controller
     {
         $records = Trip::Active()->where('rate' , '>=' , '3')->get();
 
+
+        $records->load(['favourites' => function ($query) {
+            $query->where('user_id', user_id());
+        }]);
+        
         $records = HomeRecResource::collection($records);
         
         return $this->SendResponse(response::HTTP_OK , 'recommended list retrieved with success' , $records);

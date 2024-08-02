@@ -281,6 +281,7 @@ Route::group(['prefix' => 'guide', 'middleware' => ['auth:guide']], function () 
             Route::post('logout',  'logout');
             Route::get('profile',  'profile');
             Route::delete('delete',  'deleteAccount');
+            Route::delete('deletephoto',  'deletePhoto');
         });
     });
     Route::group(['prefix' => 'general'], function () {
