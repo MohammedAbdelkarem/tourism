@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Day;
 use App\Models\Trip;
+use App\Models\User;
 use App\Models\Admin;
+use App\Models\Guide;
 use App\Models\Country;
 use Illuminate\Http\Request;
 use App\Models\FacilityInDay;
@@ -390,7 +392,29 @@ public function getcountries()
 {
     $countries = Country::all();
     $data = DayResource::collection($countries);
-    return $this->SendResponse(response::HTTP_OK, 'countries retrieved successfully', $countries);
+    return $this->SendResponse(response::HTTP_OK, 'countries retrieved successfully', $data);
 }
+
+
+public function search(Request $request)
+    {
+        $field = $request->field;
+        $results = Trip::
+        where('name', 'LIKE', "%$field%")
+        ->orWhere('price_per_one_new', 'LIKE', "%$field%")
+        ->orWhere('bio', 'LIKE', "%$field%")
+        ->get();
+        $users = User::where('name', 'LIKE', "%$field%")->get();
+
+        $guides = Guide::where('name', 'LIKE', "%$field%")
+        ->orWhere('unique_id', 'LIKE', "%$field%")
+        ->get();
+        $mergedResults = $results->merge($users)->merge($guides);
+        if($mergedResults->isEmpty())
+        {
+            return $this->SendResponse(response::HTTP_OK  , 'no results');
+        }
+        return $this->SendResponse(response::HTTP_OK , 'results retrieved with success' , $mergedResults);
+    }
 
 }

@@ -102,6 +102,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('trip/in_progress/{id}', 'inProgressTrip');
         Route::get('days', 'getDays');
         Route::get('countries', 'getcountries');
+        Route::post('all/search', 'search');
     });
     
     Route::controller(DaysController::class)->middleware('auth:admin')->group(function () {
