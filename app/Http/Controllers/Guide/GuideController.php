@@ -17,12 +17,17 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Guide\NoteRequest;
 use App\Http\Resources\User\DayResource;
 use Symfony\Component\HttpFoundation\Response;
-use App\Http\Requests\Guide\PendingStatusRequest;
-use App\Services\Notifications\AdminNotification;
 
 class GuideController extends Controller
 {
     use ResponseTrait;
+
+    private UserNotificatoinService $userNotificatoinService;
+ 
+    public function __construct(UserNotificatoinService $userNotificatoinService)
+    {
+        $this->userNotificatoinService = $userNotificatoinService;
+    }
 
     public function home()
     {
@@ -100,6 +105,10 @@ class GuideController extends Controller
             'note' => $note
         ]);
 
+        $this->userNotificatoinService->SendNoteNotification(
+            $note,
+            $id
+        );
         return $this->SendResponse(response::HTTP_OK , 'note added or updated with success');
     }
     public function modifyPending(PendingStatusRequest $request)
