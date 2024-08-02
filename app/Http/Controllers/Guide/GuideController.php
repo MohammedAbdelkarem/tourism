@@ -17,6 +17,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Guide\NoteRequest;
 use App\Http\Resources\User\DayResource;
 use Symfony\Component\HttpFoundation\Response;
+use App\Http\Requests\Guide\PendingStatusRequest;
+use App\Services\Notifications\UserNotificatoinService;
 
 class GuideController extends Controller
 {
