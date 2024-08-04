@@ -31,6 +31,15 @@ class UsersController extends Controller
     }
 
 
+
+ public function getUserDetails($userId){
+        $user = User::where('id', $userId)->get();
+        // $data= UserResource::collection($users);
+        return $this->SendResponse(response::HTTP_OK, 'user retrieved successfully',$user);
+    }
+
+
+
     public function addToWallet($userId)
     {
         
