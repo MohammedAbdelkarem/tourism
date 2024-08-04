@@ -169,6 +169,26 @@ class TripsController extends Controller
     }
 
 
+    public function deleteTrip( Trip $trip){{
+        $trip->delete();
+        
+        return $this->SendResponse(response::HTTP_OK, 'trip deleted successfully');
+    }
+
+    }
+
+
+public function getTripsByType($status)
+{
+    $trips = Trip::OfStatus($status)->get();
+    if ($trips->isEmpty()) {
+        return $this->SendResponse(response::HTTP_NOT_FOUND, 'No trips found');
+    }
+    $data = TripResource::collection($trips);
+    return $this->SendResponse(response::HTTP_OK, "$status trips retrieved successfully", $trips);
+}
+ 
+
     public function deleteTrip(Trip $trip)
     { {
             $trip->delete();
