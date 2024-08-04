@@ -147,7 +147,7 @@ public function getTripsByType($status)
     $data = TripResource::collection($trips);
     return $this->SendResponse(response::HTTP_OK, "$status trips retrieved successfully", $trips);
 }
-
+ 
 
 
 
