@@ -103,7 +103,9 @@ class UserController extends Controller
 
     public function profile()
     {
-        $data = auth()->guard('user')->user();
+        $data = User::find(user_id());
+
+        $data['wallet'] = UsersBackup::where('id' , user_id())->pluck('wallet')->first();
 
         // $data = new ProfileResource($data);
         

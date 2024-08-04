@@ -113,6 +113,8 @@ class GuideController extends Controller
     {
         $data = auth()->guard('guide')->user();
 
+
+        $data['wallet'] = Guides_backups::where('id' , guide_id())->pluck('wallet')->first();
         // $data = new GuideProfileResource($data);
         
         return $this->SendResponse(response::HTTP_OK , 'guide profile data retrieved successfully' , $data);
