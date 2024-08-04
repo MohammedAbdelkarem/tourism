@@ -37,17 +37,6 @@ use App\Http\Controllers\User\NotificationController;
 
 Route::post('checkcode', [AuthController::class, 'checkCode']);
 
-//Admin 
-
-// Route::group(['prefix' => 'admin'], function () {
-
-//     Route::controller(AdminController::class)->group(['prefix' => 'auth'], function () {
-//         Route::post('send', 'sendCode');
-//         Route::post('register', 'register');
-//         Route::post('login', 'login');
-//         Route::post('reset', 'resetPassword');
-//         Route::post('logout', 'logout');
-//     });
 
 
 //Admin
@@ -117,7 +106,13 @@ Route::group(['prefix' => 'admin'], function () {
     });
     // users 
 
-    Route::get('users', [UsersController::class, 'getUsers']);
+    Route::controller(UsersController::class)->group(function () {
+        Route::get('users', 'getUsers');
+        Route::get('user_details/{userId}', 'getUserDetails');
+    });
+
+ 
+
     
     //guides
  
@@ -127,6 +122,8 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('rejectedTrips', 'rejectedTrips');
         Route::get('can_change_unique_id/{guideId}', 'update_can_change_unique_id');
         Route::get('accept_by_admin/{guideId}', 'update_accept_by_admin');
+        Route::get('guides', 'getguides');
+        Route::get('getguideDetails/{guideId}', 'getguideDetails');
     });
     
     //Admin notifications with middleware

@@ -7,16 +7,31 @@ use App\Models\Guide;
 use Illuminate\Http\Request;
 use App\Traits\ResponseTrait;
 use App\Models\AvailableGuide;
+use App\Models\Guides_backups;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Date;
-use App\Models\Guides_backups;
 use App\Http\Requests\Admin\DateRequest;
+use App\Http\Resources\Admin\GuideResource;
 use App\Services\Notifications\GuideNotificationService;
 use Symfony\Component\HttpFoundation\Response;
 
 class GuidesController extends Controller
 {
     use ResponseTrait;
+
+
+     public function getguides(){
+        $guides = Guides_backups::all();
+        $data= GuideResource::collection($guides);
+
+        return $this->SendResponse(response::HTTP_OK, 'guides retrieved successfully',$data);
+    }
+
+
+    public function getguideDetails($guideId){
+        $guide = Guides_backups::where('id', $guideId)->get();
+        return $this->SendResponse(response::HTTP_OK, 'guide retrieved successfully',$guide);
+    }
 
     private GuideNotificationService $guideNotificationService;
  
