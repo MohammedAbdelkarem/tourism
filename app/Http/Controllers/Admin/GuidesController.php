@@ -19,8 +19,15 @@ class GuidesController extends Controller
 {
     use ResponseTrait;
 
+    private GuideNotificationService $guideNotificationService;
+ 
+    public function __construct(GuideNotificationService $guideNotificationService)
+    {
+        $this->guideNotificationService = $guideNotificationService;
+    }
 
-     public function getguides(){
+
+    public function getguides(){
         $guides = Guides_backups::all();
         $data= GuideResource::collection($guides);
 
@@ -33,12 +40,6 @@ class GuidesController extends Controller
         return $this->SendResponse(response::HTTP_OK, 'guide retrieved successfully',$guide);
     }
 
-    private GuideNotificationService $guideNotificationService;
- 
-    public function __construct(GuideNotificationService $guideNotificationService)
-    {
-        $this->guideNotificationService = $guideNotificationService;
-    }
 
     public function getAvailableGuides(DateRequest $request)
     {
