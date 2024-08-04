@@ -102,7 +102,7 @@ class GuideController extends Controller
 
         hashing_password($password);
 
-        User::userEmail()->update([
+        Guide::guideEmail()->update([
             'password' => $password
         ]);
 
