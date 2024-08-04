@@ -189,56 +189,7 @@ public function getTripsByType($status)
 }
  
 
-    public function deleteTrip(Trip $trip)
-    { {
-            $trip->delete();
-
-            return $this->SendResponse(response::HTTP_OK, 'trip deleted successfully');
-        }
-    }
-
-    public function getPinnedTrips(){
-         $trips = Trip::where('status', 'pending')->get();
-        if ($trips->isEmpty()) {
-            return $this->SendResponse(response::HTTP_NOT_FOUND, 'No trips found');
-        }
-        $data = TripResource::collection($trips);
-        return $this->SendResponse(response::HTTP_OK, 'pending trips retrieved successfully',$data);
-
-    } //the trips that the admin did not make it active(able to book by the user)
-
-    public function getRunningTrips(){
-        $trips = Trip::where('status', 'active')->get();
-        if ($trips->isEmpty()) {
-            return $this->SendResponse(response::HTTP_NOT_FOUND, 'No trips found');
-        }
-        $data = TripResource::collection($trips);
-        return $this->SendResponse(response::HTTP_OK, 'active trips retrieved successfully',$data);
-
-        
-    } 
-
-
-    public function getInprogressTrip(){
-        $trips = Trip::where('status', 'in_progress')->get();
-       if ($trips->isEmpty()) {
-           return $this->SendResponse(response::HTTP_NOT_FOUND, 'No trips found');
-       }
-       $data = TripResource::collection($trips);
-       return $this->SendResponse(response::HTTP_OK, 'in_progress trips retrieved successfully',$data);
-
-   } 
-
-    public function getFinishidTrips(){
-
-        $trips = Trip::where('status', 'finished')->get();
-        if ($trips->isEmpty()) {
-            return $this->SendResponse(response::HTTP_NOT_FOUND, 'No trips found');
-        }
-        $data = TripResource::collection($trips);
-        return $this->SendResponse(response::HTTP_OK, 'finished trips retrieved successfully',$data);
-
-    } //the trips that has been finished
+  
 
 
     public function getTrips()
