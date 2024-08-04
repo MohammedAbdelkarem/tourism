@@ -33,6 +33,7 @@ class TripDetailsResource extends JsonResource
         'offer_ratio' => $this->resource->offer_ratio,
         'guide_backup_id' => $this->resource->guide_backup_id,
         'country_id' => $this->resource->country_id,
+        'photos' => PhotoResource::collection($this->resource->photos), 
     ];
     }
 }

@@ -7,6 +7,7 @@ use App\Models\Trip;
 use App\Models\User;
 use App\Models\Admin;
 use App\Models\Guide;
+use App\Models\Photo;
 use App\Models\Country;
 use Illuminate\Http\Request;
 use App\Models\FacilityInDay;
@@ -188,6 +189,33 @@ public function getTripsByType($status)
     return $this->SendResponse(response::HTTP_OK, "$status trips retrieved successfully", $trips);
 }
  
+public function addPhotos(Request $request, Trip $trip)
+{
+    if ($request->has('photos')) {
+        foreach ($request->photos as $photo) {
+            $newPhoto = Photo::create([
+                'photo' => photoPath($photo),
+                'trip_id' => $trip->id,
+            ]);
+            $photos[] = $newPhoto;
+        }
+    }
+
+    return $this->SendResponse(response::HTTP_CREATED, 'Photos added successfully',$photos);
+}
+
+
+
+public function deletePhoto(Photo $photo)
+{
+
+    if ($photo->delete()) {
+        return $this->SendResponse(response::HTTP_OK, 'Photo deleted successfully');
+    }
+
+    return $this->SendResponse(response::HTTP_INTERNAL_SERVER_ERROR, 'Failed to delete photo');
+}
+ 
 
   
 
@@ -340,6 +368,8 @@ public function getTripsByType($status)
         // $totalTripPrice -= $adminProfit;
         // $trip->total_price=$totalTripPrice;
         $trip->save();
+
+
 
         $this->guideNotificationService->SendWalletNotification(
             $guideBackup->wallet,
