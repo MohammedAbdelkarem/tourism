@@ -71,7 +71,7 @@ class UsersController extends Controller
 
 
         $this->userNotificatoinService->SendWalletNotification(
-            user_id(),
+            $userId,
             request('amount'),
             'add'
         );
