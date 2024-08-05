@@ -19,11 +19,13 @@ use Illuminate\Support\Facades\Cache;
 use App\Http\Requests\Admin\TripRequest;
 use App\Http\Resources\Admin\DayResource;
 use App\Http\Resources\Admin\TripResource;
+use App\Http\Resources\Admin\UserResource;
+use App\Http\Resources\Admin\GuideResource;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Resources\Admin\TripDetailsResource;
 use App\Services\Notifications\AdminNotification;
-use App\Services\Notifications\GuideNotificationService;
 use App\Services\Notifications\UserNotificatoinService;
+use App\Services\Notifications\GuideNotificationService;
 
 
 
@@ -400,7 +402,7 @@ public function getcountries()
 public function search(Request $request)
     {
         $field = $request->field;
-        $results = Trip::
+        $trips = Trip::
         where('name', 'LIKE', "%$field%")
         ->orWhere('price_per_one_new', 'LIKE', "%$field%")
         ->orWhere('bio', 'LIKE', "%$field%")
@@ -410,7 +412,10 @@ public function search(Request $request)
         $guides = Guide::where('name', 'LIKE', "%$field%")
         ->orWhere('unique_id', 'LIKE', "%$field%")
         ->get();
-        $mergedResults = $results->merge($users)->merge($guides);
+        $guideData= GuideResource::collection($guides);
+        $userData= UserResource::collection($users);
+        $tripData = TripResource::collection($trips);
+        $mergedResults = $tripData->merge($userData)->merge($guideData);
         if($mergedResults->isEmpty())
         {
             return $this->SendResponse(response::HTTP_OK  , 'no results');

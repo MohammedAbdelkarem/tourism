@@ -19,6 +19,7 @@ class GuideResource extends JsonResource
             'name' => $this->resource->name,
             'photo' => $this->resource->photo,
             'wallet' =>$this->resource->wallet,
+            'type' => 'guide',
         ];
     }
 }

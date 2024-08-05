@@ -25,5 +25,6 @@ return [
     'name' => $this->resource->name,
     'photo' => $this->resource->photo,
     'wallet' => $wallet,
+    'type' => 'user',
 ];}
 }
