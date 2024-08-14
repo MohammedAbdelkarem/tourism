@@ -92,6 +92,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('days', 'getDays');
         Route::get('countries', 'getcountries');
         Route::post('all/search', 'search');
+        Route::post('search/trips', 'searchTrips');
         Route::post('addPhotos/{trip}', 'addPhotos');
         Route::get('trip/deletePhoto/{photo}', 'deletePhoto');
     });
@@ -111,6 +112,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::controller(UsersController::class)->group(function () {
         Route::get('users', 'getUsers');
         Route::get('user_details/{userId}', 'getUserDetails');
+        Route::post('search/users', 'search');
     });
 
  
@@ -126,6 +128,9 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('accept_by_admin/{guideId}', 'update_accept_by_admin');
         Route::get('guides', 'getguides');
         Route::get('getguideDetails/{guideId}', 'getguideDetails');
+        Route::get('getguidesAcceptedbyAdmin', 'getguidesAcceptedbyAdmin');
+        Route::get('getguidesRejectedbyAdmin', 'getguidesRejectedbyAdmin');
+        Route::post('search/guides', 'search');
     });
     
     //Admin notifications with middleware

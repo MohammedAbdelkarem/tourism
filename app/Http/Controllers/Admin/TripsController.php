@@ -423,4 +423,24 @@ public function search(Request $request)
         return $this->SendResponse(response::HTTP_OK , 'results retrieved with success' , $mergedResults);
     }
 
+
+
+    public function searchTrips(Request $request)
+    {
+        $field = $request->field;
+        $trips = Trip::
+        where('name', 'LIKE', "%$field%")
+        ->orWhere('price_per_one_new', 'LIKE', "%$field%")
+        ->orWhere('bio', 'LIKE', "%$field%")
+        ->get();
+      
+        $tripData = TripResource::collection($trips);
+    
+        if($tripData->isEmpty())
+        {
+            return $this->SendResponse(response::HTTP_OK  , 'no results');
+        }
+        return $this->SendResponse(response::HTTP_OK , 'results retrieved with success' , $tripData);
+    }
+
 }

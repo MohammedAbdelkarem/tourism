@@ -19,6 +19,7 @@ class GuideResource extends JsonResource
             'name' => $this->resource->name,
             'photo' => $this->resource->photo,
             'wallet' =>$this->resource->wallet,
+            'accept_by_admin'=>$this->resource->accept_by_admin,
             'type' => 'guide',
         ];
     }

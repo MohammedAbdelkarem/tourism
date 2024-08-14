@@ -28,10 +28,28 @@ class GuidesController extends Controller
 
 
     public function getguides(){
-        $guides = Guides_backups::all();
+        $guidesa = Guide::where('accept_by_admin','accepted')->get();
+        $guidesr = Guide::where('accept_by_admin','rejected')->get();
+        $mergedResults = $guidesa->merge($guidesr);
+        $data= GuideResource::collection($mergedResults);
+
+        return $this->SendResponse(response::HTTP_OK, 'guides retrieved successfully',$data);
+    }
+    public function getguidesAcceptedbyAdmin(){
+        $guides = Guide::where('accept_by_admin','accepted')->get();
         $data= GuideResource::collection($guides);
 
         return $this->SendResponse(response::HTTP_OK, 'guides retrieved successfully',$data);
+
+    }
+
+
+    public function getguidesRejectedbyAdmin(){
+        $guides = Guide::where('accept_by_admin','rejected')->get();
+        $data= GuideResource::collection($guides);
+
+        return $this->SendResponse(response::HTTP_OK, 'guides retrieved successfully',$data);
+
     }
 
 
@@ -136,4 +154,21 @@ class GuidesController extends Controller
         
         return $this->SendResponse(response::HTTP_OK, 'successfully');
     }
+
+    public function search(Request $request)
+    {
+        $field = $request->field;
+    
+        $guides = Guide::where('name', 'LIKE', "%$field%")
+        ->orWhere('unique_id', 'LIKE', "%$field%")
+        ->get();
+        $guideData= GuideResource::collection($guides);
+      
+        if($guideData->isEmpty())
+        {
+            return $this->SendResponse(response::HTTP_OK  , 'no results');
+        }
+        return $this->SendResponse(response::HTTP_OK , 'results retrieved with success' , $guideData);
+    }
+
 }

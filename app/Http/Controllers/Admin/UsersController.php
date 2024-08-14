@@ -77,4 +77,21 @@ class UsersController extends Controller
         );
         return $this->SendResponse(response::HTTP_OK, 'Wallet updated successfully',['wallet' => $newWalletValue]);
     }
+
+
+    public function search(Request $request)
+    {
+        $field = $request->field;
+      
+        $users = User::where('name', 'LIKE', "%$field%")
+        ->orWhere('phone', 'LIKE', "%$field%")->get();
+
+        $userData= UserResource::collection($users);
+    
+        if($userData->isEmpty())
+        {
+            return $this->SendResponse(response::HTTP_OK  , 'no results');
+        }
+        return $this->SendResponse(response::HTTP_OK , 'results retrieved with success' , $userData);
+    }
 }
