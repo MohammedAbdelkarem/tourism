@@ -9,17 +9,20 @@ use App\Models\Admin;
 use App\Models\Guide;
 use App\Models\Photo;
 use App\Models\Country;
+use App\Models\FacilityDay;
 use Illuminate\Http\Request;
 use App\Models\FacilityInDay;
 use App\Traits\ResponseTrait;
 use App\Models\AvailableGuide;
 use App\Models\GuideTransaction;
 use Illuminate\Routing\Controller;
+use App\Services\TripPriceCalculator;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Requests\Admin\TripRequest;
 use App\Http\Resources\Admin\DayResource;
 use App\Http\Resources\Admin\TripResource;
 use App\Http\Resources\Admin\UserResource;
+use App\Http\Requests\Admin\newTripRequest;
 use App\Http\Resources\Admin\GuideResource;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Resources\Admin\TripDetailsResource;
@@ -443,4 +446,59 @@ public function search(Request $request)
         return $this->SendResponse(response::HTTP_OK , 'results retrieved with success' , $tripData);
     }
 
+
+
+
+    
+        public function addNewTrip(newTripRequest $request)
+{
+    // Create the trip
+    $trip = Trip::create([
+        'name' => $request->name,
+         'photo' => photoPath($request->photo),
+        'lat' => $request->lat,
+        'long' => $request->long,
+        'bio' => $request->bio,
+        'start_date' => $request->start_date,
+        'end_date' => $request->end_date,
+        'guide_backup_id' => null,
+        'country_id' => $request->country_id,
+    ]);
+
+    // Create available guide record
+    $availableGuide = AvailableGuide::create([
+        'trip_id' => $trip->id,
+        'guide_id' => $request->guide_id,
+        'accept_trip' => null,
+    ]);
+
+    foreach ($request->days as $day) {
+        $dayInstance = Day::find($day['day_id']);
+    
+        $facilityDay = FacilityDay::create([
+            'date' => $day['date'],
+            'day_id' => $dayInstance->id,
+            'trip_id' => $trip->id,
+        ]);
+    
+        foreach ($day['facilities'] as $facility) {
+            FacilityInDay::create([
+                'start_time' => $facility['start_time'],
+                'end_time' => $facility['end_time'],
+                'facility_id' => $facility['facility_id'],
+                'facility_day_id' => $facilityDay->id,
+            ]);
+        }
+    }
+    // Update trip prices
+    $tripPriceCalculator = new TripPriceCalculator();
+    $trip->price_per_one_new = $tripPriceCalculator->calculateTripPrice($trip);
+    $trip->save();
+
+    return $this->SendResponse(response::HTTP_CREATED, 'Trip added successfully');
 }
+
+
+    }
+
+

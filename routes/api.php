@@ -95,6 +95,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::post('search/trips', 'searchTrips');
         Route::post('addPhotos/{trip}', 'addPhotos');
         Route::get('trip/deletePhoto/{photo}', 'deletePhoto');
+        Route::post('/newstore', 'addNewTrip');
     });
     
     Route::controller(DaysController::class)->middleware('auth:admin')->group(function () {
