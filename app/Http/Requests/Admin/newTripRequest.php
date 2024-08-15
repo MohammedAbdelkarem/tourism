@@ -46,6 +46,8 @@ class newTripRequest extends FormRequest
             'days.*.facilities.*.start_time' => 'required|date_format:H:i:s',
             'days.*.facilities.*.end_time' => 'required|date_format:H:i:s',
             'days.*.facilities.*.facility_id' => 'required|integer',
+            'images' => 'required|array',
+            'images.*' => 'required|mimes:jpg,jpeg,png|max:2048',
         ];
 
     }

@@ -490,6 +490,15 @@ public function search(Request $request)
             ]);
         }
     }
+
+    if ($request->has('images')) {
+        foreach ($request->images as $image) {
+            $newImage = Photo::create([
+                'photo' => photoPath($image),
+                'trip_id' => $trip->id,
+            ]);
+        }
+    }
     // Update trip prices
     $tripPriceCalculator = new TripPriceCalculator();
     $trip->price_per_one_new = $tripPriceCalculator->calculateTripPrice($trip);
