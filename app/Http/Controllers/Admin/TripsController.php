@@ -471,7 +471,7 @@ public function search(Request $request)
         'guide_id' => $request->guide_id,
         'accept_trip' => null,
     ]);
-
+    if ($request->has('days')) {
     foreach ($request->days as $day) {
         $dayInstance = Day::find($day['day_id']);
     
@@ -489,15 +489,16 @@ public function search(Request $request)
                 'facility_day_id' => $facilityDay->id,
             ]);
         }
-    }
+    }}
 
+    if ($request->has('images')) {
     if ($request->has('images')) {
         foreach ($request->images as $image) {
             $newImage = Photo::create([
                 'photo' => photoPath($image),
                 'trip_id' => $trip->id,
             ]);
-        }
+        }}
     }
     // Update trip prices
     $tripPriceCalculator = new TripPriceCalculator();
