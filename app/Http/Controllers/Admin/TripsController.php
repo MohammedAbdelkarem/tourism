@@ -186,7 +186,7 @@ class TripsController extends Controller
 
 public function getTripsByType($status)
 {
-    $trips = Trip::OfStatus($status)->get();
+    $trips = Trip::OfStatus($status)->paginate(5);
     if ($trips->isEmpty()) {
         return $this->SendResponse(response::HTTP_NOT_FOUND, 'No trips found');
     }
