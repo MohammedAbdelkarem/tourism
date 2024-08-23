@@ -1,5 +1,7 @@
 <?php
 
+use App\Exports\UsersExport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+Route::get('/export-users', function () {
+       return Excel::download(new UsersExport,'users.xlsx' );;
 });

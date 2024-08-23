@@ -1,27 +1,28 @@
 <?php
 
-use App\Http\Controllers\Guide\NotificatoinController as GuideNotificatoinController;
 use App\Models\Guide;
-
-
 use Illuminate\Support\Facades\Route;
+
+
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Admin\DaysController;
 use App\Http\Controllers\Auth\AdminController;
 use App\Http\Controllers\Auth\GuideController;
+use App\Http\Controllers\Admin\ExcelController;
 use App\Http\Controllers\Admin\TripsController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Admin\GuidesController;
+use App\Http\Controllers\User\CountryController;
 use App\Http\Controllers\User\FacilityController;
 use App\Http\Controllers\Admin\FacilitesController;
 use App\Http\Controllers\User\AppointmentController;
+use App\Http\Controllers\User\NotificationController;
 use App\Http\Controllers\Admin\AdminNotificationController;
 use App\Http\Controllers\User\TripsController as UserTripsController;
 use App\Http\Controllers\Admin\TripsController as AdminTripsController;
 use \App\Http\Controllers\Guide\GuideController as GeneralGuideController;
-use App\Http\Controllers\User\CountryController;
-use App\Http\Controllers\User\NotificationController;
+use App\Http\Controllers\Guide\NotificatoinController as GuideNotificatoinController;
 
 /*
 |--------------------------------------------------------------------------
@@ -142,6 +143,9 @@ Route::group(['prefix' => 'admin'], function () {
         Route::delete('deleteAllNotification', 'deleteAllNotification');
         Route::delete('deleteNotification/{id}', 'deleteNotification');
     });
+
+    Route::get('/export-users', [ExcelController::class, 'export']);
+
 });
 
 
